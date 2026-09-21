@@ -168,7 +168,7 @@
     display:inline-block;
     background:var(--vert);
     color:var(--vert-ink);
-    border-radius:5px;
+    border-radius:0;
     padding:7px 14px;
     font-family:var(--cond);
     font-weight:700;
@@ -255,14 +255,14 @@
     font-weight:600;
     color:var(--white);
     border:1px solid var(--line);
-    border-radius:5px;
+    border-radius:0;
     padding:8px 14px;
   }
   .socials{display:flex;gap:6px;justify-content:center}
   .socials a{
     width:34px;height:34px;
     border:1px solid var(--line);
-    border-radius:5px;
+    border-radius:0;
     display:grid;place-items:center;
     color:var(--grey);
     text-decoration:none;
@@ -279,7 +279,7 @@
   .shotgun{
     margin-top:clamp(24px,3.4vw,38px);
     border:1px solid var(--line-soft);
-    border-radius:10px;
+    border-radius:0;
     overflow:hidden;
     background:var(--ink-2);
   }
@@ -319,7 +319,7 @@
   .card-vis{
     position:relative;
     overflow:hidden;
-    border-radius:8px;
+    border-radius:0;
     aspect-ratio:4/5;
     transition:transform .3s cubic-bezier(.2,.7,.3,1);
   }
@@ -346,7 +346,7 @@
     font-weight:700;
     color:var(--vert);
     border:1px solid rgba(255,255,255,.45);
-    border-radius:3px;
+    border-radius:0;
     padding:2px 6px;
     white-space:nowrap;
   }
@@ -395,7 +395,7 @@
   .panel{
     position:relative;
     overflow:hidden;
-    border-radius:10px;
+    border-radius:0;
     min-height:clamp(220px,30vw,320px);
     display:flex;
     align-items:center;
@@ -498,7 +498,7 @@
     font-weight:700;
     text-decoration:none;
     padding:13px 24px;
-    border-radius:5px;
+    border-radius:0;
     border:1px solid var(--vert);
     background:var(--vert);
     color:var(--vert-ink);
@@ -612,7 +612,7 @@
   }
   .infos > div{
     border:1px solid var(--line-soft);
-    border-radius:8px;
+    border-radius:0;
     background:var(--ink-2);
     padding:24px 18px;
   }
@@ -669,7 +669,7 @@
     color:var(--white);
     background:var(--ink-2);
     border:1px solid var(--line);
-    border-radius:6px;
+    border-radius:0;
     padding:12px 14px;
     width:100%;
     transition:border-color .16s ease,background .16s ease;
@@ -770,7 +770,7 @@
   @media (max-width:760px){.next-grid{grid-template-columns:1fr}}
   .next-grid a{
     display:block;text-decoration:none;
-    border:1px solid var(--line);border-radius:8px;
+    border:1px solid var(--line);border-radius:0;
     background:var(--ink-2);padding:20px 18px;
     transition:border-color .16s ease,background .16s ease;
   }
@@ -787,6 +787,10 @@
 
   /* ---------- ouverture : damier qui se construit puis se déconstruit ---------- */
 
+  /* durée du voile : court sur les pages intérieures, long sur l'accueil (carton Welcome) */
+  :root{--ld:1.25s}
+  body.accueil{--ld:2.6s}
+
   .loader{
     position:fixed;
     inset:0;
@@ -795,98 +799,100 @@
     display:grid;
     place-items:center;
     overflow:hidden;
-    animation:loader-end 0s linear 2.9s forwards;
+    animation:loader-end 0s linear calc(var(--ld) + .58s) forwards;
   }
   @keyframes loader-end{to{visibility:hidden}}
 
-  /* aplat opaque : la page ne transparaît pas pendant la construction */
   .loader::before{
     content:"";
     position:absolute;inset:0;
     background:var(--ink);
-    animation:loader-plate 2.85s linear both;
+    animation:loader-plate calc(var(--ld) + .55s) linear both;
   }
   @keyframes loader-plate{
-    0%,72%{opacity:1}
-    94%,100%{opacity:0}
+    0%,74%{opacity:1}
+    95%,100%{opacity:0}
   }
 
   .loader-grid{
     position:absolute;
+    perspective:1400px;
+    transform-style:preserve-3d;
     width:160vmax;height:160vmax;
     display:grid;
-    grid-template-columns:repeat(12,1fr);
-    grid-template-rows:repeat(12,1fr);
+    grid-template-columns:repeat(20,1fr);
+    grid-template-rows:repeat(20,1fr);
     transform:rotate(45deg);
   }
   .loader-grid i{
     display:block;
+    transform-origin:50% 50%;
+    backface-visibility:hidden;
     background:var(--ink);
     transform:scale(0);
-    animation:tile 2.45s cubic-bezier(.76,0,.24,1) both;
+    animation:tile var(--ld) cubic-bezier(.76,0,.24,1) both;
     animation-delay:var(--d);
   }
   .loader-grid i.w{animation-name:tile-blanc}
 
+  /* les carreaux basculent dans la profondeur au lieu de simplement grandir */
   @keyframes tile{
-    0%{transform:scale(0)}
-    15%,72%{transform:scale(1)}
-    100%{transform:scale(0)}
+    0%{transform:scale(.2) rotateX(-82deg) translateZ(-90px)}
+    17%,70%{transform:scale(1) rotateX(0deg) translateZ(0)}
+    100%{transform:scale(.2) rotateX(82deg) translateZ(-90px)}
   }
-  /* les cases blanches dessinent le damier, puis rentrent dans le noir */
   @keyframes tile-blanc{
-    0%{transform:scale(0);background:#FFFFFF}
-    15%{transform:scale(1);background:#FFFFFF}
-    24%{background:#FFFFFF}
-    36%,72%{transform:scale(1);background:var(--ink)}
-    100%{transform:scale(0);background:var(--ink)}
+    0%{transform:scale(.2) rotateX(-82deg) translateZ(-90px);background:#FFFFFF}
+    17%{transform:scale(1) rotateX(0deg) translateZ(0);background:#FFFFFF}
+    26%{background:#FFFFFF}
+    40%,70%{transform:scale(1) rotateX(0deg) translateZ(0);background:var(--ink)}
+    100%{transform:scale(.2) rotateX(82deg) translateZ(-90px);background:var(--ink)}
   }
 
-  .loader-logo{
-    position:relative;
-    width:min(620px,80vw);
-    aspect-ratio:1200/455;
-    background-image:var(--logo);
-    background-repeat:no-repeat;
-    background-position:center;
-    background-size:contain;
-    animation:loader-logo 2.8s cubic-bezier(.2,.7,.3,1) both;
-  }
-  @keyframes loader-logo{
-    0%,40%{opacity:0;transform:translateY(16px)}
-    52%,70%{opacity:1;transform:none}
-    84%,100%{opacity:0;transform:translateY(-10px)}
-  }
-
-  /* carton d'ouverture, à la manière d'UNVRS : une ligne énorme, centrée */
+  /* carton d'ouverture, proportions UNVRS : deux lignes pleine largeur */
   .loader-intro{
     position:relative;
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:clamp(6px,1.4vw,16px);
+    gap:clamp(4px,1vw,14px);
     text-align:center;
-    padding-inline:24px;
+    width:100%;
+    padding-inline:clamp(16px,5vw,64px);
   }
   .loader-welcome{
     margin:0;
     font-family:var(--display);
     font-weight:900;
     text-transform:uppercase;
-    letter-spacing:-.04em;
-    line-height:.9;
-    font-size:clamp(34px,7.6vw,104px);
+    letter-spacing:-.045em;
+    line-height:.88;
+    font-size:clamp(34px,9.8vw,138px);
     color:var(--white);
-    animation:loader-welcome 2.8s cubic-bezier(.2,.7,.3,1) both;
+    animation:loader-welcome calc(var(--ld) + .5s) cubic-bezier(.2,.7,.3,1) both;
   }
   @keyframes loader-welcome{
-    0%,34%{opacity:0;transform:translateY(20px)}
-    46%,70%{opacity:1;transform:none}
-    84%,100%{opacity:0;transform:translateY(-10px)}
+    0%,32%{opacity:0;transform:translateY(22px)}
+    44%,72%{opacity:1;transform:none}
+    86%,100%{opacity:0;transform:translateY(-12px)}
+  }
+  .loader-logo{
+    position:relative;
+    width:min(600px,54vw);
+    aspect-ratio:1400/280;
+    background-image:url(assets/wordmark.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+    animation:loader-logo calc(var(--ld) + .5s) cubic-bezier(.2,.7,.3,1) both;
+  }
+  @keyframes loader-logo{
+    0%,38%{opacity:0;transform:translateY(22px)}
+    50%,72%{opacity:1;transform:none}
+    86%,100%{opacity:0;transform:translateY(-12px)}
   }
 
-  /* premier écran : le contenu monte doucement une fois le damier parti */
-  main,.nav,footer{animation:page-in .7s ease-out 2.1s both}
+  main,.nav,footer{animation:page-in .7s ease-out calc(var(--ld) * .78) both}
   @keyframes page-in{
     from{opacity:0;transform:translateY(14px)}
     to{opacity:1;transform:none}
@@ -897,24 +903,31 @@
     main,.nav,footer{animation:none}
   }
 
+
   /* ---------- barre du haut ---------- */
 
-  .nav-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
-  .nav-mark{justify-self:start}
-  .nav-links{justify-self:center}
-  .nav-r{justify-self:end}
+  /* onglets à gauche, logo au centre, Contacts à droite */
+  .nav-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
+  .nav-gauche{justify-self:start}
+  .nav-mark{justify-self:center}
+  .nav-droite{justify-self:end}
   .nav-mark .wordmark-img{
     display:block;
     height:30px;
-    aspect-ratio:560/112;
+    aspect-ratio:1400/280;
     background-image:url(assets/wordmark.png);
     background-repeat:no-repeat;
     background-position:left center;
     background-size:contain;
   }
-  @media (max-width:900px){
-    .nav-in{grid-template-columns:auto 1fr;height:64px}
-    .nav-r{display:none}
+  @media (max-width:1080px){
+    .nav-links{gap:15px}
+    .nav-links a{font-size:12px;letter-spacing:.06em}
+  }
+  @media (max-width:860px){
+    .nav-in{grid-template-columns:1fr auto 1fr;height:64px;gap:10px}
+    .nav-gauche{display:none}
+    .nav-mark{justify-self:start}
     .nav-mark .wordmark-img{height:24px}
   }
 
@@ -953,7 +966,7 @@
     width:100%;
     padding:0;
     border:1px solid var(--line);
-    border-radius:10px;
+    border-radius:0;
     background:var(--ink-2);
     color:inherit;
     cursor:zoom-in;
@@ -990,7 +1003,7 @@
   .lb img{
     max-width:min(560px,100%);
     width:100%;height:auto;
-    border-radius:8px;
+    border-radius:0;
     display:block;
   }
   .lb-close{
@@ -1022,3 +1035,249 @@
   @media (max-width:560px){
     #lieu .rail,#galerie .rail{grid-template-columns:1fr;max-width:380px;margin-inline:auto}
   }
+
+  /* ================= SIGNATURES DE MARQUE ================= */
+
+
+  /* 2. bandeau défilant */
+  .marquee{
+    overflow:hidden;
+    border-block:1px solid var(--line-soft);
+    background:var(--ink-2);
+    padding-block:13px;
+    position:relative;
+    z-index:1;
+  }
+  .marquee-piste{
+    display:flex;
+    width:max-content;
+    animation:marquee 34s linear infinite;
+  }
+  .marquee-piste span{
+    font-family:var(--cond);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.22em;
+    font-size:12px;
+    color:var(--grey);
+    white-space:nowrap;
+    padding-right:.22em;
+  }
+  .marquee-piste b{color:var(--white);font-weight:700}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){.marquee-piste{animation:none}}
+
+
+  /* 4. filet marqué d'un S, entre les sections */
+  .filet{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    max-width:var(--col);
+    margin-inline:auto;
+    padding-inline:var(--gut);
+  }
+  .filet i{flex:1;height:1px;background:var(--line-soft)}
+  .filet b{
+    flex:0 0 auto;
+    width:13px;height:17px;
+    background-image:url(assets/s.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+    opacity:.4;
+  }
+
+  /* 5. le S en filigrane derrière les grands titres de page */
+  .page-head{position:relative;isolation:isolate}
+  .page-head::before{
+    content:"";
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-52%);
+    width:clamp(150px,20vw,260px);
+    aspect-ratio:144/180;
+    background-image:url(assets/s.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+    opacity:.05;
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  /* ================= RELIEF, APPARITIONS, CURSEUR ================= */
+
+  /* apparition au défilement */
+  [data-reveal]{opacity:0;transform:translateY(24px)}
+  [data-reveal].vu{
+    opacity:1;transform:none;
+    transition:opacity .75s cubic-bezier(.2,.7,.3,1),transform .75s cubic-bezier(.2,.7,.3,1);
+  }
+  @media (prefers-reduced-motion:reduce){
+    [data-reveal]{opacity:1;transform:none}
+  }
+
+  /* inclinaison 3D : la carte pivote sous la souris */
+  .card-vis,.planche,.next-grid a{
+    transform-style:preserve-3d;
+    will-change:transform;
+    transition:transform .45s cubic-bezier(.2,.7,.3,1),border-color .18s ease,background .18s ease;
+  }
+  .card:hover .card-vis{transform:none}
+
+  /* profondeur : le hero glisse plus lentement que la page */
+  .hero-art,.hero-video{will-change:transform}
+
+  /* éclat de damier au survol des photos */
+  .card-vis::after{
+    content:"";
+    position:absolute;inset:0;
+    z-index:2;
+    pointer-events:none;
+    opacity:0;
+    background-image:
+      linear-gradient(45deg,#fff 25%,transparent 25% 75%,#fff 75%),
+      linear-gradient(45deg,#fff 25%,transparent 25% 75%,#fff 75%);
+    background-size:34px 34px;
+    background-position:0 0,17px 17px;
+    transition:opacity .34s ease;
+  }
+  .card:hover .card-vis::after{opacity:.16}
+  @media (prefers-reduced-motion:reduce){.card-vis::after{display:none}}
+
+  /* ---------- compte à rebours ---------- */
+  .rebours{
+    display:inline-flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:center;
+    gap:6px 12px;
+    border:1px solid var(--line);
+    border-radius:0;
+    padding:11px 18px;
+    background:rgba(16,16,16,.72);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+  }
+  .rebours span{
+    font-family:var(--cond);
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:11px;
+    font-weight:600;
+    color:var(--grey);
+  }
+  .rebours [data-nom]{color:var(--white);letter-spacing:.06em;font-size:13px;font-weight:700}
+  .rebours [data-temps]{
+    color:var(--white);font-size:15px;font-weight:700;letter-spacing:.04em;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- mur d'affiches : posters collés bord à bord ---------- */
+  .affiches{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    max-width:var(--col);
+    margin:clamp(26px,3.6vw,42px) auto 0;
+    padding-inline:var(--gut);
+  }
+  @media (max-width:900px){.affiches{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:560px){.affiches{grid-template-columns:1fr;max-width:460px}}
+
+  .affiche{
+    position:relative;
+    display:block;
+    text-decoration:none;
+    overflow:hidden;
+    background:var(--ink-2);
+  }
+  .affiche-vis{
+    display:block;
+    position:relative;
+    aspect-ratio:16/9;      /* format imposé : toutes les affiches s'alignent */
+    overflow:hidden;
+  }
+  .affiche-vis img{
+    display:block;
+    width:100%;height:100%;
+    object-fit:cover;
+    transition:transform .6s cubic-bezier(.2,.7,.3,1),filter .3s ease;
+    filter:grayscale(.15);
+  }
+  .affiche:hover{z-index:2}
+  .affiche:hover .affiche-vis img{transform:scale(1.06);filter:none}
+  @media (prefers-reduced-motion:reduce){
+    .affiche-vis img{transition:none}
+    .affiche:hover .affiche-vis img{transform:none}
+  }
+
+  /* la légende se pose sur l'affiche pour ne pas rompre le mur */
+  .affiche-cap{
+    position:absolute;
+    inset:auto 0 0 0;
+    display:block;
+    padding:26px 12px 12px;
+    text-align:center;
+    background:linear-gradient(180deg,rgba(8,8,8,0) 0%,rgba(8,8,8,.62) 42%,rgba(8,8,8,.92) 100%);
+  }
+  .affiche-cap b{
+    display:block;
+    font-family:var(--cond);font-weight:700;
+    text-transform:uppercase;letter-spacing:.03em;
+    font-size:clamp(12px,1.15vw,15px);
+    color:var(--white);line-height:1.15;
+  }
+  .affiche-cap span{
+    display:block;margin-top:4px;
+    font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;
+    font-size:10px;font-weight:500;color:rgba(255,255,255,.72);
+  }
+
+  /* ---------- le film ---------- */
+  .film{
+    max-width:var(--col);
+    margin:clamp(26px,3.6vw,42px) auto 0;
+    padding-inline:var(--gut);
+  }
+  .film-cadre{
+    position:relative;
+    aspect-ratio:4/3;
+    border:1px solid var(--line);
+    border-radius:0;
+    overflow:hidden;
+    background:var(--ink-2);
+  }
+  .film-cadre iframe,
+  .film-cadre video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+  .generique{
+    margin:clamp(24px,3.4vw,38px) auto 0;
+    max-width:760px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px 28px;
+    text-align:center;
+  }
+  @media (max-width:620px){.generique{grid-template-columns:1fr}}
+  .generique div b{
+    display:block;
+    font-family:var(--cond);text-transform:uppercase;letter-spacing:.2em;
+    font-size:10px;font-weight:600;color:var(--grey);
+  }
+  .generique div span{
+    display:block;margin-top:5px;
+    font-family:var(--cond);text-transform:uppercase;letter-spacing:.04em;
+    font-size:14px;font-weight:700;color:var(--white);line-height:1.4;
+  }
+
+  /* compte à rebours, pastilles et réseaux : même hauteur sur la ligne du hero */
+  .hero-row{align-items:center}
+  .chipinfo,.rebours{
+    display:inline-flex;
+    align-items:center;
+    min-height:46px;
+    padding-block:0;
+    box-sizing:border-box;
+  }
+  .hero-row .socials a{width:46px;height:46px}
