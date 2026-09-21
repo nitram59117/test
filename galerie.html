@@ -20,6 +20,7 @@
 
   <header class="nav">
     <div class="wrap nav-in">
+      <button class="burger" type="button" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
       <nav class="nav-links nav-gauche" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="calendrier.html">Calendrier</a>
@@ -31,6 +32,17 @@
       <div class="nav-links nav-droite"><a href="contact.html">Contacts</a></div>
     </div>
   </header>
+
+  <div class="menu" id="menu" hidden>
+    <nav aria-label="Menu mobile">
+      <a href="index.html">Accueil</a>
+      <a href="calendrier.html">Calendrier</a>
+      <a href="https://app.clubmetrics.cloud/p/slalom" target="_blank" rel="noopener">VIP</a>
+      <a href="carte.html">Carte</a>
+      <a href="galerie.html" aria-current="page">Galerie</a>
+      <a href="contact.html">Contacts</a>
+    </nav>
+  </div>
 
 <main>
   <section data-reveal class="wrap page-head">

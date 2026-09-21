@@ -113,7 +113,7 @@
   .nav{
     position:sticky;
     top:env(safe-area-inset-top,0px);
-    z-index:60;
+    z-index:260;
     background:#141414;
     border-bottom:1px solid var(--line-soft);
   }
@@ -179,10 +179,6 @@
     transition:filter .16s ease;
   }
   .pill:hover{filter:brightness(1.1)}
-  @media (max-width:860px){
-    .nav-links{display:none}
-    .nav-in{grid-template-columns:1fr auto}
-  }
 
   /* ---------- hero ---------- */
 
@@ -1149,29 +1145,71 @@
   /* ---------- compte à rebours ---------- */
   .rebours{
     display:inline-flex;
-    flex-wrap:wrap;
-    align-items:baseline;
+    align-items:center;
     justify-content:center;
-    gap:6px 12px;
+    gap:14px;
     border:1px solid var(--line);
-    border-radius:0;
-    padding:11px 18px;
+    padding:0 20px;
+    min-height:46px;
+    box-sizing:border-box;
     background:rgba(16,16,16,.72);
     backdrop-filter:blur(8px);
     -webkit-backdrop-filter:blur(8px);
+    text-align:center;
   }
-  .rebours span{
+  .rb-lab{
     font-family:var(--cond);
     text-transform:uppercase;
-    letter-spacing:.16em;
+    letter-spacing:.18em;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--grey);
+    white-space:nowrap;
+  }
+  .rb-nom{
+    font-family:var(--cond);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--white);
+    line-height:1.2;
+  }
+  /* « dans » et la durée forment un bloc insécable */
+  .rb-temps{
+    font-family:var(--cond);
+    text-transform:uppercase;
+    letter-spacing:.12em;
     font-size:11px;
     font-weight:600;
     color:var(--grey);
+    white-space:nowrap;
   }
-  .rebours [data-nom]{color:var(--white);letter-spacing:.06em;font-size:13px;font-weight:700}
-  .rebours [data-temps]{
-    color:var(--white);font-size:15px;font-weight:700;letter-spacing:.04em;
+  .rb-temps b{
+    font-size:14px;
+    letter-spacing:.04em;
+    color:var(--white);
     font-variant-numeric:tabular-nums;
+    margin-left:4px;
+  }
+  .rb-trait{
+    width:1px;
+    height:16px;
+    background:var(--line);
+    flex:0 0 auto;
+  }
+
+  /* sous 720 px : trois lignes centrées, plus rien d'orphelin */
+  @media (max-width:720px){
+    .rebours{
+      flex-direction:column;
+      gap:4px;
+      padding:13px 18px;
+      min-height:0;
+      width:100%;
+    }
+    .rb-trait{display:none}
+    .rb-nom{font-size:15px}
   }
 
   /* ---------- mur d'affiches : posters collés bord à bord ---------- */
@@ -1281,3 +1319,79 @@
     box-sizing:border-box;
   }
   .hero-row .socials a{width:46px;height:46px}
+
+  /* ---------- menu mobile ---------- */
+
+  .burger{
+    display:none;
+    width:40px;height:40px;
+    padding:0;
+    border:1px solid var(--line);
+    background:transparent;
+    cursor:pointer;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+  }
+  .burger span{
+    display:block;
+    width:18px;height:1.5px;
+    background:var(--white);
+    transition:transform .28s cubic-bezier(.2,.7,.3,1),opacity .2s ease;
+  }
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+  .menu{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:var(--ink);
+    display:grid;
+    place-items:center;
+    padding:calc(76px + env(safe-area-inset-top,0px)) var(--gut) var(--gut);
+    animation:menu-in .3s ease-out both;
+  }
+  @keyframes menu-in{from{opacity:0}to{opacity:1}}
+  .menu nav{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(14px,3.6vh,26px);
+    text-align:center;
+  }
+  .menu a{
+    font-family:var(--cond);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    font-size:clamp(26px,8vw,44px);
+    line-height:1;
+    color:var(--grey);
+    text-decoration:none;
+    padding-block:4px;
+    border-bottom:2px solid transparent;
+  }
+  .menu a:hover,.menu a:focus-visible{color:var(--white)}
+  .menu a[aria-current="page"]{color:var(--white);border-bottom-color:var(--white)}
+  body.menu-ouvert{overflow:hidden}
+
+  @media (max-width:960px){
+    .burger{display:flex}
+    /* colonnes latérales de même largeur : le logo tombe au centre exact */
+    .nav-in{grid-template-columns:40px 1fr 40px;gap:10px}
+    .nav-gauche{display:none}
+    /* Contacts vit dans le menu, inutile de le doubler dans la barre */
+    .nav-droite{display:none}
+    .nav-mark{justify-self:center}
+  }
+  @media (max-width:420px){
+    .nav-droite a{font-size:10.5px;letter-spacing:.08em}
+    .nav-mark .wordmark-img{height:21px}
+  }
+  /* au-dessus du seuil, le menu ne doit jamais rester ouvert */
+  @media (min-width:961px){
+    .menu{display:none!important}
+  }

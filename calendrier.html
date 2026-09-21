@@ -20,6 +20,7 @@
 
   <header class="nav">
     <div class="wrap nav-in">
+      <button class="burger" type="button" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
       <nav class="nav-links nav-gauche" aria-label="Navigation principale">
         <a href="index.html">Accueil</a>
         <a href="calendrier.html" aria-current="page">Calendrier</a>
@@ -32,17 +33,29 @@
     </div>
   </header>
 
+  <div class="menu" id="menu" hidden>
+    <nav aria-label="Menu mobile">
+      <a href="index.html">Accueil</a>
+      <a href="calendrier.html" aria-current="page">Calendrier</a>
+      <a href="https://app.clubmetrics.cloud/p/slalom" target="_blank" rel="noopener">VIP</a>
+      <a href="carte.html">Carte</a>
+      <a href="galerie.html">Galerie</a>
+      <a href="contact.html">Contacts</a>
+    </nav>
+  </div>
+
 <main>
   <section data-reveal class="wrap page-head">
       <h1>Calendrier</h1>
       <p>Toutes les dates à venir, mises à jour en direct depuis la billetterie.</p>
       <div style="margin-top:22px">
       <div class="rebours" id="rebours" hidden>
-        <span>Prochaine soirée</span>
-        <span data-nom></span>
-        <span>dans</span>
-        <span data-temps></span>
-      </div>
+          <span class="rb-lab">Prochaine soirée</span>
+          <span class="rb-trait" aria-hidden="true"></span>
+          <span class="rb-nom" data-nom></span>
+          <span class="rb-trait" aria-hidden="true"></span>
+          <span class="rb-temps">dans <b data-temps></b></span>
+        </div>
       </div>
   </section>
   <section id="agenda">

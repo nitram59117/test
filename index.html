@@ -24,6 +24,7 @@
 
   <header class="nav">
     <div class="wrap nav-in">
+      <button class="burger" type="button" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
       <nav class="nav-links nav-gauche" aria-label="Navigation principale">
         <a href="index.html" aria-current="page">Accueil</a>
         <a href="calendrier.html">Calendrier</a>
@@ -35,6 +36,17 @@
       <div class="nav-links nav-droite"><a href="contact.html">Contacts</a></div>
     </div>
   </header>
+
+  <div class="menu" id="menu" hidden>
+    <nav aria-label="Menu mobile">
+      <a href="index.html" aria-current="page">Accueil</a>
+      <a href="calendrier.html">Calendrier</a>
+      <a href="https://app.clubmetrics.cloud/p/slalom" target="_blank" rel="noopener">VIP</a>
+      <a href="carte.html">Carte</a>
+      <a href="galerie.html">Galerie</a>
+      <a href="contact.html">Contacts</a>
+    </nav>
+  </div>
 
 <main>
   <section class="hero">
@@ -49,10 +61,11 @@
       <p class="hero-tag">Slalom est un lieu où chacun peut se retrouver, explorer et vivre des moments inoubliables.</p>
       <div class="hero-row">
         <div class="rebours" id="rebours" hidden>
-          <span>Prochaine soirée</span>
-          <span data-nom></span>
-          <span>dans</span>
-          <span data-temps></span>
+          <span class="rb-lab">Prochaine soirée</span>
+          <span class="rb-trait" aria-hidden="true"></span>
+          <span class="rb-nom" data-nom></span>
+          <span class="rb-trait" aria-hidden="true"></span>
+          <span class="rb-temps">dans <b data-temps></b></span>
         </div>
         <span class="chipinfo">Jeu · Ven · Sam</span>
         <span class="chipinfo">00h00 → 06h00</span>

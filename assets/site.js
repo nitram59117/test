@@ -100,7 +100,35 @@
     setInterval(tic, 30000);
   }
 
-  function demarrer() { reveler(); inclinaison(); profondeur(); rebours(); }
+
+  /* ---------- 5. menu mobile ---------- */
+  function menuMobile() {
+    var b = document.getElementById('burger'), m = document.getElementById('menu');
+    if (!b || !m) return;
+
+    function ouvrir(v) {
+      m.hidden = !v;
+      b.setAttribute('aria-expanded', String(v));
+      b.setAttribute('aria-label', v ? 'Fermer le menu' : 'Ouvrir le menu');
+      document.body.classList.toggle('menu-ouvert', v);
+    }
+    b.addEventListener('click', function () {
+      ouvrir(b.getAttribute('aria-expanded') !== 'true');
+    });
+    // un lien cliqué referme le panneau
+    Array.prototype.forEach.call(m.querySelectorAll('a'), function (a) {
+      a.addEventListener('click', function () { ouvrir(false); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !m.hidden) { ouvrir(false); b.focus(); }
+    });
+    // passage en grand écran : on referme pour ne pas bloquer le défilement
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 960 && !m.hidden) ouvrir(false);
+    });
+  }
+
+  function demarrer() { reveler(); inclinaison(); profondeur(); rebours(); menuMobile(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
 })();
