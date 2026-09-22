@@ -1678,7 +1678,7 @@
             max-width:calc(var(--col) - var(--gut)*2);margin-inline:auto}
   .chiffre:first-child{border-top-left-radius:var(--r-l);border-bottom-left-radius:var(--r-l)}
   .chiffre:last-child{border-top-right-radius:var(--r-l);border-bottom-right-radius:var(--r-l)}
-  .film-cadre video{border-radius:var(--r-xl)}
+  .film-cadre video{border-radius:0}
   .menu{border-radius:0}
   .legal .a-completer{border-radius:var(--r-s);background:rgba(0,0,0,.035);padding:12px 14px}
   .consent{border-radius:var(--r-xl)}
@@ -1688,12 +1688,12 @@
   .lb-close{border-radius:50%}
   .progres{border-radius:0 2px 2px 0}
   .loader-grid i,.wipe-grille i{border-radius:2px}
-  .hero{border-radius:0 0 var(--r-xl) var(--r-xl);overflow:hidden}
+  .hero{border-radius:0;overflow:hidden}
   .affiche-cap{border-radius:0 0 var(--r-l) var(--r-l)}
   .card-in{border-radius:0 0 var(--r-l) var(--r-l)}
 
   /* ---------- bandes pleine largeur : seuls leurs coins visibles s'arrondissent ---------- */
-  .nav{border-radius:0 0 var(--r) var(--r)}
+  .nav{border-radius:0}
   footer{border-radius:var(--r-xl) var(--r-xl) 0 0}
   .foot-legal{border-radius:var(--r-s)}
 
