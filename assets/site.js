@@ -356,10 +356,73 @@
     etat();
   }
 
+
+  /* ---------- 15. mur d'affiches en perspective ---------- */
+  function murPerspective() {
+    var murs = document.querySelectorAll('.mur-3d');
+    if (!murs.length || douce) return;
+    var att = false;
+    function placer() {
+      att = false;
+      var h = window.innerHeight;
+      Array.prototype.forEach.call(murs, function (m) {
+        var r = m.getBoundingClientRect();
+        // -1 quand le mur arrive par le bas, 0 au centre, +1 quand il sort par le haut
+        var p = ((r.top + r.height / 2) - h / 2) / h;
+        p = Math.max(-1, Math.min(1, p));
+        m.style.setProperty('--incl', (p * 9).toFixed(2) + 'deg');
+      });
+    }
+    window.addEventListener('scroll', function () {
+      if (!att) { att = true; requestAnimationFrame(placer); }
+    }, { passive: true });
+    window.addEventListener('resize', placer, { passive: true });
+    placer();
+  }
+
+  /* ---------- 16. monogramme en volume ---------- */
+  function monogramme() {
+    var s = document.getElementById('s3d');
+    if (!s || douce) return;
+
+    var ry = -28, rx = 10, cible = { ry: -28, rx: 10 }, survol = false, visible = true;
+    s.style.transition = 'none';
+
+    if (finPointeur) {
+      var sec = s.closest('section');
+      sec.addEventListener('mousemove', function (e) {
+        var r = sec.getBoundingClientRect();
+        cible.ry = ((e.clientX - r.left) / r.width - 0.5) * 74;
+        cible.rx = -((e.clientY - r.top) / r.height - 0.5) * 36;
+        survol = true;
+      });
+      sec.addEventListener('mouseleave', function () { survol = false; });
+    }
+
+    /* on ne fait tourner le S que lorsqu'il est a l'ecran */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; })
+        .observe(s);
+    }
+
+    var t = 0;
+    (function boucle() {
+      requestAnimationFrame(boucle);
+      if (!visible) return;
+      t += 0.006;
+      if (!survol) { cible.ry = Math.sin(t) * 26 - 8; cible.rx = Math.cos(t * 0.7) * 9; }
+      ry += (cible.ry - ry) * 0.07;
+      rx += (cible.rx - rx) * 0.07;
+      s.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      s.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+    })();
+  }
+
+
   function demarrer() {
     reveler(); inclinaison(); profondeur(); rebours(); menuMobile();
     progres(); transitions(); compteurs(); manifeste(); projecteur(); magnetique(); cinetique();
-    billetterie(); revoquer();
+    billetterie(); revoquer(); murPerspective(); monogramme();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();

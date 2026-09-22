@@ -1805,3 +1805,116 @@
     height:100%;
     object-fit:cover;
   }
+
+  /* ================================================================
+     3D — tunnel de damier, monogramme en volume, mur en perspective
+     ================================================================ */
+
+  /* ---------- 1. tunnel de damier ---------- */
+  .tunnel{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    animation:tunnel-sortie calc(var(--ld) + .5s) linear both;
+    perspective:520px;
+    perspective-origin:50% 50%;
+    pointer-events:none;
+  }
+  .tunnel i{
+    position:absolute;
+    left:50%;top:50%;
+    width:96vmax;height:96vmax;
+    margin:-48vmax 0 0 -48vmax;
+    background-image:repeating-conic-gradient(#000 0 25%, #fff 0 50%);
+    background-size:15vmax 15vmax;
+    /* anneau : contour plein, centre évidé */
+    clip-path:polygon(0 0,100% 0,100% 100%,0 100%,0 0,
+                      36% 36%,36% 64%,64% 64%,64% 36%,36% 36%);
+    animation:tunnel 2.6s linear infinite both;
+    animation-delay:calc(var(--i) * -0.26s);
+    will-change:transform,opacity;
+  }
+  @keyframes tunnel{
+    0%{transform:translateZ(-2100px) rotate(45deg);opacity:0}
+    14%{opacity:1}
+    78%{opacity:1}
+    100%{transform:translateZ(620px) rotate(45deg);opacity:0}
+  }
+  /* le tunnel ne tourne que sur l'écran d'ouverture de l'accueil */
+  body:not(.accueil) .tunnel,
+  body.arrivee .tunnel{display:none}
+  @media (prefers-reduced-motion:reduce){.tunnel{display:none}}
+
+  /* sur l'accueil, le tunnel tient lieu d'ouverture : le damier plat reste pour les autres pages */
+  body.accueil:not(.arrivee) .loader-grid{display:none}
+
+  /* ---------- 2. monogramme en volume ---------- */
+  .signature{
+    padding-block:clamp(56px,9vw,110px);
+    display:grid;
+    place-items:center;
+    gap:clamp(18px,3vw,30px);
+    perspective:900px;
+  }
+  .s3d{
+    position:relative;
+    width:clamp(96px,13vw,170px);
+    aspect-ratio:144/180;
+    transform-style:preserve-3d;
+    transform:rotateY(var(--ry,-28deg)) rotateX(var(--rx,10deg));
+    transition:transform .5s cubic-bezier(.2,.7,.3,1);
+  }
+  /* chaque calque est le meme S, decale en profondeur : la tranche s'eclaircit
+     vers l'arriere, ce qui donne la matiere et le volume */
+  .s3d img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    filter:brightness(0) invert(calc(var(--i) * 2.4%));
+    transform:translateZ(calc(var(--i) * -2.2px));
+    pointer-events:none;
+  }
+  .signature-tag{
+    font-family:var(--cond);
+    text-transform:uppercase;
+    letter-spacing:.3em;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--grey);
+    margin:0;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .s3d{transform:none;transition:none}
+  }
+
+  /* ---------- 3. mur d'affiches en perspective ---------- */
+  .mur-3d{perspective:1500px;perspective-origin:50% 50%}
+  .mur-3d .affiches{
+    transform:rotateX(var(--incl,0deg));
+    transform-origin:50% 50%;
+    transition:transform .12s linear;
+    will-change:transform;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .mur-3d .affiches{transform:none}
+  }
+
+  /* ---------- 4. les mots du manifeste basculent dans l'espace ---------- */
+  .manifeste-txt{perspective:800px}
+  .manifeste .mot{
+    transform-origin:50% 100%;
+    transform:rotateX(-78deg) translateY(.1em);
+    opacity:.1;
+    transition:opacity .6s ease,transform .7s cubic-bezier(.16,.9,.3,1);
+  }
+  .manifeste .mot.vu{transform:none;opacity:1}
+  @media (prefers-reduced-motion:reduce){
+    .manifeste .mot{transform:none;opacity:1}
+  }
+
+  @keyframes tunnel-sortie{
+    0%,38%{opacity:1}
+    54%,100%{opacity:0}
+  }
