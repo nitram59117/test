@@ -1,221 +1,781 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Slalom — Living Culture</title>
-<meta name="description" content="Slalom, club et salle de concert a Lille, 84 rue de Trevise. Living Culture.">
-<meta name="theme-color" content="#FFFFFF">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&family=Figtree:wght@900&display=swap">
-<link rel="preload" as="image" href="assets/hero-folie.webp" fetchpriority="high">
-<script>
-/* 3D : décidé avant le premier affichage pour éviter tout flash */
-(function(){var d=document.documentElement,ok=false,a=false;try{a=!!sessionStorage.getItem('slalom-transition')}catch(e){}if(a)d.classList.add('vient-de-transition');try{ok=!!window.WebGL2RenderingContext&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(navigator.connection&&navigator.connection.saveData)&&!((navigator.hardwareConcurrency||4)<3)&&!((navigator.deviceMemory||4)<2)}catch(e){}if(!ok)return;d.classList.add('gl3d');[['modulepreload','main.js'],['modulepreload','hero.js'],['modulepreload','three.js'],['preload','logo-formes.json','fetch'],['preload','logo-relief.webp','image']].forEach(function(x){var l=document.createElement('link');l.rel=x[0];l.href='assets/3d/'+x[1];if(x[2]){l.as=x[2];if(x[2]==='fetch')l.crossOrigin='anonymous'}document.head.appendChild(l)});if(!a)d.classList.add('gl3d-intro');setTimeout(function(){if(!d.classList.contains('hero3d-actif')){d.classList.remove('gl3d-intro');d.classList.add('gl3d-echec')}},4000)})();
-</script>
-<link rel="stylesheet" href="style.css">
-<style>html,body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>ONYX — Lille</title>
+<meta name="description" content="ONYX — Retro techno night. Lille. One date every two months. UNIQUE EXPERIENCE.">
+<meta name="theme-color" content="#050505">
+<meta property="og:title" content="ONYX — Lille">
+<meta property="og:description" content="Retro techno night. Lille. UNIQUE EXPERIENCE.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20fill%3D%22%23050505%22/%3E%3Crect%20x%3D%226%22%20y%3D%226%22%20width%3D%22108%22%20height%3D%22108%22%20fill%3D%22none%22%20stroke%3D%22%239A9A9A%22%20stroke-width%3D%226%22/%3E%3Cpath%20fill%3D%22%239A9A9A%22%20d%3D%22M56.57%2040.45Q56.57%2043.39%2055.49%2045.64Q54.41%2047.89%2052.4%2049.4Q50.39%2050.91%2047.53%2051.68Q44.66%2052.45%2041.09%2052.45Q37.52%2052.45%2034.64%2051.68Q31.76%2050.91%2029.74%2049.4Q27.71%2047.89%2026.62%2045.64Q25.52%2043.39%2025.52%2040.45Q25.52%2037.51%2026.62%2035.26Q27.71%2033.01%2029.74%2031.5Q31.76%2029.99%2034.64%2029.22Q37.52%2028.45%2041.09%2028.45Q44.66%2028.45%2047.53%2029.22Q50.39%2029.99%2052.4%2031.5Q54.41%2033.01%2055.49%2035.26Q56.57%2037.51%2056.57%2040.45ZM50.34%2040.45Q50.34%2039.17%2049.93%2037.9Q49.53%2036.63%2048.49%2035.62Q47.45%2034.61%2045.66%2033.98Q43.87%2033.34%2041.09%2033.34Q39.23%2033.34%2037.82%2033.64Q36.41%2033.93%2035.38%2034.44Q34.35%2034.95%2033.66%2035.64Q32.96%2036.33%2032.54%2037.12Q32.13%2037.91%2031.95%2038.76Q31.78%2039.62%2031.78%2040.45Q31.78%2041.3%2031.95%2042.16Q32.13%2043.02%2032.54%2043.81Q32.96%2044.6%2033.66%2045.28Q34.35%2045.96%2035.38%2046.47Q36.41%2046.97%2037.82%2047.26Q39.23%2047.56%2041.09%2047.56Q43.87%2047.56%2045.66%2046.92Q47.45%2046.29%2048.49%2045.28Q49.53%2044.27%2049.93%2043Q50.34%2041.73%2050.34%2040.45Z%22/%3E%3Cpath%20fill%3D%22%239A9A9A%22%20d%3D%22M87.81%2051.84%2072.42%2036.17V51.84H66.26V29.03H72.95L88.35%2044.77V29.03H94.48V51.84Z%22/%3E%3Cpath%20fill%3D%22%239A9A9A%22%20d%3D%22M45.95%2081.63V90.94H39.81V81.63L28.75%2068.13H35.66L42.89%2077.31L50.1%2068.13H57.01Z%22/%3E%3Cpath%20fill%3D%22%239A9A9A%22%20d%3D%22M80.43%2079.23%2091.25%2090.94H83.86L76.72%2083.25L69.62%2090.94H62.25L73.06%2079.23L62.78%2068.13H70.17L76.72%2075.27L83.31%2068.13H90.7Z%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&amp;display=swap">
+<style>:root{
+  --onyx:#050505; --graphite:#1E1E1E; --cendre:#7A7A7A; --argent:#9A9A9A; --strobe:#F2F2F0;
+  --g:clamp(10px, 2vw, 30px); --bar:64px; --pad:clamp(16px, 4vw, 72px);
+  --sat:env(safe-area-inset-top, 0px); --sab:env(safe-area-inset-bottom, 0px);
+  --ease:cubic-bezier(.65,0,.35,1); --out:cubic-bezier(.2,.7,.2,1);
+  --font:'Syncopate', 'Arial', 'Helvetica Neue', sans-serif;
+  color-scheme:dark; background:var(--onyx);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--onyx); color:var(--argent); font-family:var(--font); font-size:14px; line-height:1.6; text-transform:uppercase;
+  -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision; overflow-x:clip}
+a{color:inherit}
+:focus-visible{outline:1px solid var(--strobe); outline-offset:4px}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.label{margin:0; font-size:11px; font-weight:400; letter-spacing:.5em; color:var(--argent); text-transform:uppercase; white-space:nowrap}
+.label.r{margin-right:-.5em}
+.ico{width:12px; height:12px; flex:none}
+.ico path{fill:none; stroke:currentColor; stroke-width:1.2}
+
+/* ---------- viewfinder ---------- */
+.mask{position:fixed; inset:0; z-index:60; pointer-events:none; border:var(--g) solid var(--onyx);
+  border-top-width:calc(var(--g) + var(--sat)); border-bottom-width:calc(var(--g) + var(--sab))}
+.vf{position:fixed; z-index:61; pointer-events:none; top:calc(var(--g) + var(--sat)); left:var(--g); right:var(--g);
+  bottom:calc(var(--g) + var(--sab)); border:1px solid var(--graphite)}
+.cross{position:absolute; width:17px; height:17px}
+.cross path{fill:none; stroke:var(--argent); stroke-width:1}
+.vf .tl{left:-9px; top:-9px} .vf .tr{right:-9px; top:-9px} .vf .bl{left:-9px; bottom:-9px} .vf .br{right:-9px; bottom:-9px}
+.vf .cross{animation:spinIn 1.2s var(--out) both}
+.vf .tr{animation-delay:.08s} .vf .br{animation-delay:.16s} .vf .bl{animation-delay:.24s}
+@keyframes spinIn{from{transform:rotate(-90deg)}}
+.progress{position:absolute; right:-1px; top:0; width:1px; height:100%; background:var(--strobe); transform-origin:top; transform:scaleY(0)}
+
+.topbar{position:fixed; z-index:62; top:calc(var(--g) + var(--sat) + 1px); left:calc(var(--g) + 1px); right:calc(var(--g) + 1px);
+  height:var(--bar); display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:0 clamp(14px, 2.4vw, 32px); background:var(--onyx); border-bottom:1px solid var(--graphite)}
+.brand{display:flex; align-items:center; gap:14px; text-decoration:none; min-height:44px}
+.mono{width:32px; height:32px; display:block}
+.mono rect,.mono path{fill:none; stroke:var(--argent); stroke-width:3.5}
+.brand-t{font-weight:700; font-size:13px; letter-spacing:.4em; color:var(--argent)}
+.nav{display:flex; gap:clamp(14px, 2.2vw, 34px)}
+.nav a{position:relative; font-size:10px; letter-spacing:.35em; text-decoration:none; color:var(--argent); padding-block:14px; white-space:nowrap}
+.nav a::after{content:""; position:absolute; left:0; right:.35em; bottom:8px; height:1px; background:var(--strobe);
+  transform:scaleX(0); transform-origin:left; transition:transform .4s var(--out)}
+.nav a:hover::after,.nav a[aria-current="true"]::after{transform:scaleX(1)}
+.nav a[aria-current="true"]{color:var(--strobe)}
+.bar-actions{display:flex; align-items:center; gap:10px}
+.menu-btn{display:none; align-items:center; min-height:44px; padding:0 14px; border:1px solid var(--graphite); background:transparent;
+  color:var(--argent); font:400 10px/1 var(--font); letter-spacing:.35em; cursor:pointer}
+.menu-btn span{margin-right:-.35em}
+
+.btn{position:relative; isolation:isolate; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; gap:14px;
+  min-height:48px; padding:0 28px; border:1px solid var(--strobe); background:transparent; color:var(--strobe);
+  font:700 11px/1 var(--font); letter-spacing:.4em; text-decoration:none; cursor:pointer; white-space:nowrap;
+  transition:color .35s, transform .4s var(--out)}
+.btn::before{content:""; position:absolute; inset:0; z-index:-1; background:var(--strobe); transform:scaleX(0); transform-origin:left;
+  transition:transform .5s var(--out)}
+.btn:hover{color:var(--onyx)} .btn:hover::before{transform:scaleX(1)}
+.btn > span:first-child{margin-right:-.4em}
+.btn-sm{min-height:44px; padding:0 18px; font-size:10px}
+
+.menu{position:fixed; z-index:59; top:calc(var(--g) + var(--sat) + var(--bar) + 1px); left:calc(var(--g) + 1px); right:calc(var(--g) + 1px);
+  bottom:calc(var(--g) + var(--sab) + 1px); background:var(--onyx); display:flex; flex-direction:column; justify-content:center;
+  padding:32px var(--pad); overflow:auto}
+.menu nav{display:flex; flex-direction:column}
+.menu a{display:flex; align-items:baseline; gap:18px; padding-block:16px; border-bottom:1px solid var(--graphite); text-decoration:none;
+  font-weight:700; font-size:clamp(20px, 6.4vw, 40px); letter-spacing:.1em; color:var(--argent);
+  animation:menuIn .7s var(--out) both; animation-delay:calc(var(--i) * 70ms)}
+.menu a small{font-size:10px; font-weight:400; letter-spacing:.3em; color:var(--cendre)}
+@keyframes menuIn{from{transform:translateY(28px); clip-path:inset(0 0 100% 0)}}
+
+.hud{position:fixed; z-index:62; left:calc(var(--g) + 2px); right:calc(var(--g) + 2px); bottom:var(--sab); height:var(--g);
+  display:flex; align-items:center; justify-content:space-between; gap:20px; pointer-events:none;
+  font-size:9px; letter-spacing:.3em; color:var(--cendre); white-space:nowrap; font-variant-numeric:tabular-nums}
+
+.cursor{position:fixed; inset:0; z-index:57; pointer-events:none; opacity:0; transition:opacity .3s}
+.cursor.on{opacity:1}
+.cursor .ch{position:absolute; left:0; right:0; top:0; height:1px; background:var(--graphite); transform:translateY(var(--cy, -10px))}
+.cursor .cv{position:absolute; top:0; bottom:0; left:0; width:1px; background:var(--graphite); transform:translateX(var(--cx, -10px))}
+.cursor .cr{position:absolute; left:0; top:0; transform:translate(calc(var(--cx, 0px) + 14px), calc(var(--cy, 0px) + 14px));
+  font-size:9px; letter-spacing:.25em; color:var(--cendre); white-space:nowrap; font-variant-numeric:tabular-nums}
+.cursor.hot .ch,.cursor.hot .cv{background:var(--cendre)}
+.cursor.hot .cr{color:var(--strobe)}
+
+/* ---------- layout ---------- */
+main{padding-top:calc(var(--g) + var(--bar)); padding-bottom:var(--g); padding-inline:calc(var(--g) + var(--pad))}
+
+/* ---------- hero ---------- */
+.hero{position:relative; isolation:isolate; display:grid; grid-template-rows:auto 1fr auto; gap:28px;
+  min-height:calc(100vh - 2 * var(--g) - var(--bar) - 96px); min-height:calc(100svh - 2 * var(--g) - var(--bar) - 96px);
+  padding-block:clamp(24px, 4vh, 44px)}
+.dots{position:absolute; top:0; left:calc(-1 * var(--pad)); width:calc(100% + 2 * var(--pad)); height:100%; z-index:-1; display:block}
+.sweep{position:absolute; top:0; bottom:0; left:calc(-1 * var(--pad)); width:1px; background:var(--strobe); z-index:0; pointer-events:none;
+  animation:sweep 1.9s var(--ease) .15s both}
+@keyframes sweep{0%{opacity:0; transform:translateX(0)} 10%{opacity:1} 90%{opacity:1} 100%{opacity:0; transform:translateX(calc(100vw - 2 * var(--g)))}}
+.hero-row{display:flex; justify-content:space-between; align-items:center; gap:16px}
+.hero-row.bottom{align-items:flex-end}
+.hero-mid{display:flex; align-items:center; justify-content:center; min-height:0}
+.lockup{width:min(100%, 1180px, 150vh); display:flex; flex-direction:column; gap:clamp(20px, 3.6vh, 40px)}
+.wordmark{margin:0}
+.wm{display:block; width:100%; height:auto; overflow:visible}
+.wm path{fill:none; stroke:var(--argent); stroke-width:var(--sw, 1.3)}
+.wm .fill{stroke:none; fill:transparent; transition:fill .6s var(--out)}
+.wm .base{stroke-opacity:.2}
+.wm .draw{stroke-dasharray:1; stroke-dashoffset:0}
+.hero-wm .draw{animation:draw 2.4s var(--ease) both; animation-delay:calc(var(--i) * .16s + .35s)}
+@keyframes draw{from{stroke-dashoffset:1}}
+.sig{margin:0; display:flex; align-items:center; gap:clamp(14px, 2vw, 32px); font-size:clamp(10px, .95vw, 14px);
+  letter-spacing:.6em; color:var(--argent); white-space:nowrap}
+.sig::before,.sig::after{content:""; flex:1; height:1px; background:var(--graphite)}
+.sig span{margin-right:-.6em}
+.coords{margin:0; font-size:10px; letter-spacing:.3em; color:var(--cendre); white-space:nowrap}
+.scroll-cue{display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; font-size:9px; letter-spacing:.4em; color:var(--cendre)}
+.scroll-cue span{margin-right:-.4em}
+.scroll-cue i{display:block; position:relative; width:1px; height:44px; overflow:hidden; background:var(--graphite)}
+.scroll-cue i::after{content:""; position:absolute; left:0; top:-40%; width:1px; height:40%; background:var(--strobe); animation:cue 1.8s var(--ease) infinite}
+@keyframes cue{to{top:100%}}
+
+/* ---------- tickers ---------- */
+.ticker{margin-inline:calc(-1 * var(--pad)); overflow:hidden; border-block:1px solid var(--graphite); padding-block:clamp(14px, 2vw, 22px)}
+.track{display:flex; align-items:center; gap:clamp(20px, 3vw, 48px); width:max-content; will-change:transform}
+.ti{font-weight:700; font-size:clamp(26px, 4.6vw, 64px); line-height:1.1; letter-spacing:.12em; color:var(--argent); white-space:nowrap}
+.ti.o{color:transparent; -webkit-text-stroke:1px var(--argent)}
+.tx{width:clamp(14px, 1.6vw, 22px); height:auto; flex:none}
+.tx path{fill:none; stroke:var(--cendre); stroke-width:1}
+
+/* ---------- sections ---------- */
+.section{padding-block:clamp(80px, 13vh, 160px); scroll-margin-top:calc(var(--bar) + var(--g))}
+.shead{display:flex; align-items:center; gap:24px; margin:0 0 clamp(40px, 7vh, 80px)}
+.shead h2{margin:0; font-size:11px; font-weight:400; letter-spacing:.5em; color:var(--argent); white-space:nowrap}
+.shead h2 b{font-weight:700}
+.shead .fil{flex:1; height:1px; background:var(--graphite); transform-origin:left}
+.in .shead .fil{animation:fil 1.2s var(--ease) both}
+@keyframes fil{from{transform:scaleX(0)}}
+.shead .meta{font-size:9px; letter-spacing:.35em; color:var(--cendre); white-space:nowrap}
+
+/* concept */
+.manifesto{margin:0; max-width:1180px; font-size:clamp(19px, 3vw, 42px); line-height:1.5; letter-spacing:.05em; color:var(--cendre)}
+.manifesto .w{transition:color .45s}
+.manifesto .w.lit{color:var(--strobe)}
+.facts{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); margin-top:clamp(56px, 9vh, 100px); border-top:1px solid var(--graphite)}
+.fact{display:flex; flex-direction:column; gap:14px; padding:28px 24px 0 0; border-right:1px solid var(--graphite)}
+.fact + .fact{padding-left:24px}
+.fact:last-child{border-right:0}
+.fact .n{font-weight:700; font-size:clamp(44px, 7vw, 104px); line-height:1; letter-spacing:.04em; color:transparent;
+  -webkit-text-stroke:1.2px var(--argent); font-variant-numeric:tabular-nums}
+.fact .k{font-size:10px; letter-spacing:.4em; color:var(--argent)}
+
+/* experience */
+.cells{display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:1px; background:var(--graphite); border:1px solid var(--graphite)}
+.cell{display:flex; flex-direction:column; gap:24px; min-height:360px; padding:clamp(20px, 2.2vw, 32px); background:var(--onyx)}
+.cell-h{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.cell-h h3{margin:0}
+.mini{font-size:9px; letter-spacing:.3em; color:var(--cendre); white-space:nowrap}
+.vis{flex:1; min-height:170px; display:flex; align-items:center; justify-content:center}
+.val{margin:0; font-weight:700; font-size:clamp(13px, 1.25vw, 18px); letter-spacing:.18em; color:var(--argent)}
+.cell:hover .val{color:var(--strobe)}
+
+.seq{display:grid; grid-template-columns:22px repeat(16, minmax(0, 1fr)); gap:3px; width:100%; align-content:center}
+.seq .rl{font-size:8px; letter-spacing:.1em; color:var(--cendre); align-self:center}
+.seq .st{aspect-ratio:1; border:1px solid var(--graphite)}
+.seq .st.hit{background:var(--argent); border-color:var(--argent)}
+.seq .st.cur{border-color:var(--cendre)}
+.seq .st.hit.cur{background:var(--strobe); border-color:var(--strobe)}
+
+.lights{width:100%; height:auto; overflow:visible}
+.lights .truss{fill:none; stroke:var(--cendre); stroke-width:1}
+.lights .hang{stroke:var(--cendre); stroke-width:1}
+.lights circle{fill:var(--onyx); stroke:var(--argent); stroke-width:1; transition:fill .12s}
+.lights .beam{stroke:var(--strobe); stroke-width:1; stroke-opacity:0; transition:stroke-opacity .12s}
+.lights .fx.on circle{fill:var(--strobe); stroke:var(--strobe)}
+.lights .fx.on .beam{stroke-opacity:.55}
+
+.crowd{display:grid; grid-template-columns:repeat(12, minmax(0, 1fr)); gap:4px; width:100%}
+.crowd i{display:block; aspect-ratio:1; border:1px solid var(--graphite)}
+.crowd i.on{background:var(--argent); border-color:var(--argent)}
+.crowd.full i.on{background:var(--strobe); border-color:var(--strobe)}
+
+.chap{display:flex; flex-direction:column; align-items:center; gap:22px; width:100%}
+.flipnum{height:1em; overflow:hidden; font-weight:700; font-size:clamp(72px, 7.6vw, 112px); line-height:1; letter-spacing:.04em;
+  color:transparent; -webkit-text-stroke:1.2px var(--argent)}
+.flipnum .strip{display:flex; flex-direction:column; transition:transform .7s var(--ease)}
+.flipnum .strip span{display:block; height:1em; line-height:1}
+.ticks6{display:grid; grid-template-columns:repeat(6, minmax(0, 1fr)); gap:6px; width:80%}
+.ticks6 i{display:block; height:3px; background:var(--graphite)}
+.ticks6 i.done{background:var(--argent)}
+.ticks6 i.on{background:var(--strobe)}
+
+/* next chapter */
+.ticket{display:grid; grid-template-columns:minmax(0, 1fr) clamp(220px, 26vw, 320px); border:1px solid var(--graphite)}
+.t-main{display:grid; grid-template-columns:auto minmax(0, 1fr); align-items:end; gap:clamp(24px, 4vw, 64px); padding:clamp(24px, 3vw, 44px)}
+.t-head{grid-column:1 / -1; display:flex; justify-content:space-between; gap:16px}
+.t-num{margin:0; font-weight:700; font-size:clamp(110px, 16vw, 240px); line-height:.85; letter-spacing:.02em; color:transparent;
+  -webkit-text-stroke:1.5px var(--argent); font-variant-numeric:tabular-nums}
+.board{margin:0; display:flex; flex-direction:column; gap:10px}
+.board .row{display:grid; grid-template-columns:88px minmax(0, 1fr); align-items:center; gap:16px; padding-bottom:10px; border-bottom:1px solid var(--graphite)}
+.board dt{font-size:9px; letter-spacing:.4em; color:var(--cendre)}
+.board dd{margin:0}
+.fw{display:flex; flex-wrap:wrap; gap:3px}
+.fc{display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.75em; border:1px solid var(--graphite);
+  font-weight:700; font-size:clamp(11px, 1.05vw, 15px); line-height:1; color:var(--argent)}
+.fc.sp{border-color:transparent}
+.fc.go{color:var(--strobe); border-color:var(--cendre)}
+.t-stub{display:flex; flex-direction:column; justify-content:space-between; gap:28px; padding:clamp(24px, 3vw, 40px); border-left:1px dashed var(--graphite)}
+.stub-top{display:flex; justify-content:space-between; gap:12px}
+.code{position:relative; width:100%; height:64px}
+.code svg{display:block; width:100%; height:100%}
+.code rect{fill:var(--argent); transform-box:fill-box; transform-origin:50% 100%}
+.in .code rect{animation:print .5s var(--out) both; animation-delay:calc(var(--k) * 22ms + .2s)}
+@keyframes print{from{transform:scaleY(0)}}
+.scan{position:absolute; top:-6px; bottom:-6px; left:0; width:1px; background:var(--strobe); animation:scan 3.6s cubic-bezier(.45,0,.55,1) infinite alternate}
+@keyframes scan{to{left:calc(100% - 1px)}}
+.t-stub .btn{width:100%}
+.tix{margin-top:clamp(40px, 6vh, 64px); border:1px solid var(--graphite); scroll-margin-top:calc(var(--bar) + var(--g) + 24px)}
+.tix-head{display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px 24px; border-bottom:1px solid var(--graphite)}
+.tix-head h3{margin:0}
+.tix-body{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px; padding:clamp(24px, 3vw, 40px)}
+.tix-body.widget{display:block; padding:16px}
+.tix-text{margin:0; max-width:44ch; font-size:12px; letter-spacing:.2em; line-height:1.9; color:var(--argent)}
+
+/* venue */
+.venue{display:grid; grid-template-columns:minmax(0, 1.1fr) minmax(0, .9fr); gap:1px; background:var(--graphite); border:1px solid var(--graphite)}
+.v-info{display:flex; flex-direction:column; gap:32px; padding:clamp(24px, 3vw, 44px); background:var(--onyx)}
+.v-name{margin:0; font-weight:700; font-size:clamp(30px, 4.6vw, 64px); line-height:1; letter-spacing:.14em; color:var(--argent)}
+.v-list{margin:0; display:grid; gap:14px}
+.v-list div{display:grid; grid-template-columns:100px minmax(0, 1fr); gap:16px; padding-bottom:14px; border-bottom:1px solid var(--graphite)}
+.v-list dt{padding-top:4px; font-size:9px; letter-spacing:.4em; color:var(--cendre)}
+.v-list dd{margin:0; font-size:clamp(12px, 1.15vw, 15px); line-height:1.8; letter-spacing:.18em; color:var(--argent)}
+.v-row{display:flex; flex-wrap:nowrap; justify-content:space-between; align-items:flex-end; gap:24px; margin-top:auto}
+.partner{display:block; height:56px; width:auto; opacity:.6; margin-bottom:3px}
+.radar{position:relative; display:flex; align-items:center; justify-content:center; min-height:380px; padding:48px 24px; background:var(--onyx)}
+.radar svg{width:min(100%, 340px); height:auto; overflow:visible}
+.radar .ring{fill:none; stroke:var(--graphite); stroke-width:1}
+.radar .axis{stroke:var(--graphite); stroke-width:1}
+.radar .ping{fill:none; stroke:var(--argent); stroke-width:1; transform-origin:180px 180px; animation:ping 3.3s var(--out) infinite}
+.radar .ping:nth-of-type(5){animation-delay:1.1s}
+.radar .ping:nth-of-type(6){animation-delay:2.2s}
+@keyframes ping{from{transform:scale(.04); opacity:.9} to{transform:scale(1); opacity:0}}
+.radar .sweepl{stroke:var(--strobe); stroke-width:1; transform-origin:180px 180px; animation:spin 5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar .target{fill:none; stroke:var(--strobe); stroke-width:1}
+.radar .dot{fill:var(--strobe)}
+.radar-read{position:absolute; left:24px; bottom:18px; font-size:9px; letter-spacing:.3em; color:var(--cendre); white-space:nowrap}
+.radar-read.r{left:auto; right:24px}
+
+/* conditions */
+.rules{list-style:none; margin:0; padding:0; border-top:1px solid var(--graphite)}
+.rule{position:relative; display:grid; grid-template-columns:17px minmax(0, 1fr) auto; align-items:center; gap:clamp(16px, 2.4vw, 32px);
+  padding-block:clamp(22px, 3vh, 34px); border-bottom:1px solid var(--graphite)}
+.rule::after{content:""; position:absolute; left:0; bottom:-1px; width:100%; height:1px; background:var(--strobe);
+  transform:scaleX(0); transform-origin:left; transition:transform .7s var(--out)}
+.rule:hover::after{transform:scaleX(1)}
+.rule .cross{position:static; transition:transform .6s var(--out)}
+.rule:hover .cross{transform:rotate(90deg)}
+.rule p{margin:0; font-size:clamp(13px, 1.7vw, 24px); line-height:1.5; letter-spacing:.1em; color:var(--argent); transition:color .3s}
+.rule:hover p{color:var(--strobe)}
+.tag{font-size:9px; letter-spacing:.35em; color:var(--cendre)}
+
+/* footer */
+.foot{display:flex; flex-direction:column; gap:clamp(28px, 5vh, 56px); padding-block:clamp(72px, 12vh, 140px) clamp(24px, 4vh, 40px)}
+.big .wm .L:hover .fill{fill:var(--argent)}
+.big.in .wm .draw, .foot.in .big .wm .draw{animation:draw 2.2s var(--ease) both; animation-delay:calc(var(--i) * .14s)}
+.foot-row{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px 28px; padding-top:24px; border-top:1px solid var(--graphite)}
+.flink{display:inline-flex; align-items:center; gap:12px; min-height:44px; font-size:10px; letter-spacing:.35em; text-decoration:none; color:var(--argent)}
+.flink:hover{color:var(--strobe)}
+
+.magnet{transition:color .35s, transform .45s var(--out)}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px){ .cells{grid-template-columns:repeat(2, minmax(0, 1fr))} }
+@media (max-width: 960px){
+  .nav{display:none}
+  .menu-btn{display:inline-flex}
+  .hud{display:none}
+  .ticket{grid-template-columns:1fr}
+  .t-stub{border-left:0; border-top:1px dashed var(--graphite)}
+  .venue{grid-template-columns:1fr}
+}
+@media (max-width: 640px){
+  .t-main{grid-template-columns:1fr}
+  .cells{grid-template-columns:1fr}
+  .facts{grid-template-columns:1fr}
+  .fact{border-right:0; border-bottom:1px solid var(--graphite); padding:24px 0}
+  .fact + .fact{padding-left:0}
+  .rule{grid-template-columns:17px minmax(0, 1fr)}
+  .rule .tag{grid-column:2}
+  .shead .meta{display:none}
+  .hero-row .coords{display:none}
+  .label{font-size:10px; letter-spacing:.4em}
+  .label.r{margin-right:-.4em}
+  .board .row{grid-template-columns:64px minmax(0, 1fr); gap:12px}
+  .fw{gap:2px}
+  .fc{width:1.2em; height:1.7em; font-size:10px}
+  .partner{height:46px}
+  .v-row .btn{padding:0 18px}
+  .v-list div{grid-template-columns:80px minmax(0, 1fr)}
+  .radar-read.r{display:none}
+}
+@media (max-width: 480px){ .brand-t{display:none} }
+@media (hover:none), (pointer:coarse){ .cursor{display:none} }
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .vf .cross, .sweep, .hero-wm .draw, .scroll-cue i::after, .scan, .in .shead .fil, .in .code rect, .menu a,
+  .big.in .wm .draw, .foot.in .big .wm .draw, .radar .ping, .radar .sweepl{animation:none}
+  .sweep{display:none}
+  .radar .ping{opacity:0}
+  .scan{left:50%}
+}
+
+[hidden]{display:none!important}
+:root{padding:env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px)}
+</style>
 </head>
-<body class="accueil">
-
-  <div class="loader" aria-hidden="true">
-    <div class="tunnel"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i><i style="--i:8"></i><i style="--i:9"></i></div>
-    <div class="loader-grid"></div>
-    <div class="loader-intro">
-      <p class="loader-welcome">Welcome to</p>
-      <div class="loader-logo"></div>
-    </div>
-  </div>
-
-  <script>
-/* damier d'ouverture : les cases se retournent en vague depuis le point cliqué sur la page précédente */
-(function(){var g=document.querySelector('.loader-grid');if(!g)return;var N=20,d=document.documentElement,W=innerWidth,H=innerHeight,S=1.7*Math.max(W,H),s=S/N,k=Math.SQRT1_2,ox=W/2,oy=H/2,arr=d.classList.contains('vient-de-transition');if(arr){try{var o=JSON.parse(sessionStorage.getItem('slalom-transition'));if(o&&o.x!=null){ox=o.x*W;oy=o.y*H}}catch(e){}}var v=arr?2900:Math.max(2400,Math.hypot(W,H)/.8),f=document.createDocumentFragment();for(var r=0;r<N;r++)for(var c=0;c<N;c++){var i=document.createElement('i');if((r+c)%2)i.className='w';var lx=(c+.5-N/2)*s,ly=(r+.5-N/2)*s,x=W/2+(lx-ly)*k,y=H/2+(lx+ly)*k;i.style.setProperty('--d',(Math.hypot(x-ox,y-oy)/v).toFixed(3)+'s');f.appendChild(i)}g.appendChild(f)})();
-</script>
-
-  <header class="nav">
-    <div class="wrap nav-in">
-      <button class="burger" type="button" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-      <nav class="nav-links nav-gauche" aria-label="Navigation principale">
-        <a href="index.html" aria-current="page">Accueil</a>
-        <a href="calendrier.html">Calendrier</a>
-        <a href="https://app.clubmetrics.cloud/p/slalom" target="_blank" rel="noopener">VIP</a>
-        <a href="carte.html">Carte</a>
-        <a href="galerie.html">Galerie</a>
-      </nav>
-      <a class="nav-mark" href="index.html"><span class="wordmark-img" role="img" aria-label="Slalom"></span></a>
-      <div class="nav-links nav-droite"><a href="contact.html">Contacts</a></div>
-    </div>
-  </header>
-
-  <div class="menu" id="menu" hidden>
-    <nav aria-label="Menu mobile">
-      <a href="index.html" aria-current="page">Accueil</a>
-      <a href="calendrier.html">Calendrier</a>
-      <a href="https://app.clubmetrics.cloud/p/slalom" target="_blank" rel="noopener">VIP</a>
-      <a href="carte.html">Carte</a>
-      <a href="galerie.html">Galerie</a>
-      <a href="contact.html">Contacts</a>
-    </nav>
-  </div>
+<body>
+<div class="site" lang="en">
+<div class="mask" aria-hidden="true"></div>
+<div class="vf" aria-hidden="true"><svg class="cross tl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross tr" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross bl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross br" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="progress"></span></div>
+<div class="cursor" aria-hidden="true"><span class="ch"></span><span class="cv"></span><span class="cr">X 0000 · Y 0000</span></div>
+<header class="topbar">
+<a class="brand" href="#top" aria-label="ONYX, back to top"><svg class="mono" viewBox="0 0 120 120" aria-hidden="true"><rect x="1.75" y="1.75" width="116.5" height="116.5"></rect><path d="M56.57 40.45Q56.57 43.39 55.49 45.64Q54.41 47.89 52.4 49.4Q50.39 50.91 47.53 51.68Q44.66 52.45 41.09 52.45Q37.52 52.45 34.64 51.68Q31.76 50.91 29.74 49.4Q27.71 47.89 26.62 45.64Q25.52 43.39 25.52 40.45Q25.52 37.51 26.62 35.26Q27.71 33.01 29.74 31.5Q31.76 29.99 34.64 29.22Q37.52 28.45 41.09 28.45Q44.66 28.45 47.53 29.22Q50.39 29.99 52.4 31.5Q54.41 33.01 55.49 35.26Q56.57 37.51 56.57 40.45ZM50.34 40.45Q50.34 39.17 49.93 37.9Q49.53 36.63 48.49 35.62Q47.45 34.61 45.66 33.98Q43.87 33.34 41.09 33.34Q39.23 33.34 37.82 33.64Q36.41 33.93 35.38 34.44Q34.35 34.95 33.66 35.64Q32.96 36.33 32.54 37.12Q32.13 37.91 31.95 38.76Q31.78 39.62 31.78 40.45Q31.78 41.3 31.95 42.16Q32.13 43.02 32.54 43.81Q32.96 44.6 33.66 45.28Q34.35 45.96 35.38 46.47Q36.41 46.97 37.82 47.26Q39.23 47.56 41.09 47.56Q43.87 47.56 45.66 46.92Q47.45 46.29 48.49 45.28Q49.53 44.27 49.93 43Q50.34 41.73 50.34 40.45Z"></path><path d="M87.81 51.84 72.42 36.17V51.84H66.26V29.03H72.95L88.35 44.77V29.03H94.48V51.84Z"></path><path d="M45.95 81.63V90.94H39.81V81.63L28.75 68.13H35.66L42.89 77.31L50.1 68.13H57.01Z"></path><path d="M80.43 79.23 91.25 90.94H83.86L76.72 83.25L69.62 90.94H62.25L73.06 79.23L62.78 68.13H70.17L76.72 75.27L83.31 68.13H90.7Z"></path></svg><span class="brand-t">ONYX</span></a>
+<nav class="nav" aria-label="Sections">
+<a href="#concept" data-sec="concept">CONCEPT</a><a href="#experience" data-sec="experience">EXPERIENCE</a><a href="#chapter" data-sec="chapter">CHAPTER 01</a><a href="#venue" data-sec="venue">VENUE</a><a href="#info" data-sec="info">INFO</a>
+</nav>
+<div class="bar-actions"><a class="btn btn-sm magnet" href="#tickets"><span>TICKETS</span></a>
+<button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu"><span>MENU</span></button></div>
+</header>
+<div class="menu" id="menu" hidden>
+<nav aria-label="Menu">
+<a href="#concept" style="--i:0"><small>01</small>CONCEPT</a><a href="#experience" style="--i:1"><small>02</small>EXPERIENCE</a><a href="#chapter" style="--i:2"><small>03</small>CHAPTER 01</a><a href="#venue" style="--i:3"><small>04</small>VENUE</a><a href="#info" style="--i:4"><small>05</small>INFO</a>
+</nav>
+</div>
+<div class="hud" aria-hidden="true"><span class="hud-sec">ONYX · LILLE</span><span class="hud-scroll">SCROLL 000%</span><span class="hud-clock">LILLE --:--:--</span></div>
 
 <main>
-  <section class="hero">
-    <div class="hero-art" aria-hidden="true" data-profondeur="0.22"></div>
-    <video class="hero-video" data-profondeur="0.14" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
-      <source src="assets/hero-folie.mp4" type="video/mp4">
-    </video>
-    <div class="hero-veil" aria-hidden="true"></div>
-    <div class="hero-in">
-      <p class="kicker kicker--vert">Lille — 84 rue de Trévise</p>
-      <h1><span class="logo-img" role="img" aria-label="Slalom — Living Culture"></span></h1>
-      <p class="hero-tag">Slalom — Not just a club</p>
-      <div class="hero-row">
-        <div class="rebours" id="rebours" hidden>
-          <span class="rb-lab">Prochaine soirée</span>
-          <span class="rb-trait" aria-hidden="true"></span>
-          <span class="rb-nom" data-nom></span>
-          <span class="rb-trait" aria-hidden="true"></span>
-          <span class="rb-temps">dans <b data-temps></b></span>
-        </div>
-        <span class="chipinfo">Jeu · Ven · Sam</span>
-        <span class="chipinfo">00h00 → 06h00</span>
-        <div class="socials">
-          <a href="https://www.instagram.com/slalom.lille" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="https://www.tiktok.com/@slalom.lille" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.8a4.8 4.8 0 0 1-1.1-2.8h-3v12.2a2.5 2.5 0 1 1-1.8-2.4V9.6a5.6 5.6 0 1 0 4.8 5.5V9.3a7.8 7.8 0 0 0 4.4 1.4V7.7a4.8 4.8 0 0 1-3.3-1.9Z"/></svg></a>
-          <a href="https://www.youtube.com/channel/UC-64XZr3gD5_dQ3JulHEuCQ" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.5 7.2a2.7 2.7 0 0 0-1.9-1.9C18.9 4.8 12 4.8 12 4.8s-6.9 0-8.6.5A2.7 2.7 0 0 0 1.5 7.2C1 8.9 1 12 1 12s0 3.1.5 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5a2.7 2.7 0 0 0 1.9-1.9c.5-1.7.5-4.8.5-4.8s0-3.1-.5-4.8ZM9.8 15.3V8.7l5.7 3.3Z"/></svg></a>
-          <a href="https://www.facebook.com/Slalom.Lille/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.3-.04-1.3-.13-2.45-.13-2.43 0-4.1 1.48-4.1 4.2v2.34H7.4V13h2.75v8Z"/></svg></a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section data-reveal>
-    <div class="sombre">
-      <div class="wrap manifeste">
-    <p class="manifeste-lab">Le manifeste</p>
-    <p class="manifeste-txt">La culture appartient à tout le monde</p>
-    <p class="manifeste-sig">Extrait de <a href="galerie.html">Living Culture</a>, le film</p>
-  </div>
-      <div class="chiffres">
-      <div class="chiffre"><b data-compte="5">0</b><span>Carrés</span></div>
-      <div class="chiffre"><b data-compte="3">0</b><span>Nuits par semaine</span></div>
-      <div class="chiffre"><b data-compte="6">0</b><span>Heures de musique</span></div>
-      <div class="chiffre"><b data-compte="26">0</b><span>Artistes passés</span></div>
-    </div>
- 
-    </div>
-  </section>
+<section class="hero" id="top" data-name="ONYX" data-index="00">
+<canvas class="dots" aria-hidden="true"></canvas><span class="sweep" aria-hidden="true"></span>
+<div class="hero-row"><p class="label" data-scramble>RETRO TECHNO</p><p class="label r" data-scramble>CHAPTER 01</p></div>
+<div class="hero-mid"><div class="lockup"><h1 class="wordmark"><svg class="wm hero-wm" viewBox="0 0 746.52 129.68" data-vbw="746.52" data-px="1.5" role="img" aria-label="ONYX"><g class="L" style="--i:0"><path class="base" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="base" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="draw" pathLength="1" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="draw" pathLength="1" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path></g><g class="L" style="--i:1"><path class="base" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="draw" pathLength="1" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path></g><g class="L" style="--i:2"><path class="base" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="draw" pathLength="1" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path></g><g class="L" style="--i:3"><path class="base" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="draw" pathLength="1" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path></g></svg></h1>
+<p class="sig"><span data-scramble>UNIQUE EXPERIENCE</span></p></div></div>
+<div class="hero-row bottom"><p class="coords">50.6292° N · 3.0573° E</p><a class="scroll-cue" href="#concept"><span>SCROLL</span><i></i></a><p class="label r">LILLE</p></div>
+</section>
 
-  <section data-reveal id="prochaines">
-    <div class="anneau-scene">
-    <div class="wrap">
-      <h2 class="sec">Prochaines soirées</h2>
-    </div>
+<div class="ticker" aria-hidden="true"><div class="track"><span class="ti o" data-first="1">UNIQUE EXPERIENCE</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="ti">RETRO TECHNO</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="ti o">LILLE</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="ti">CHAPTER 01</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg></div></div>
 
-    <div class="mur-3d">
-    <div class="affiches">
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-jeudi-free-la-boum-80" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_2_80_zqhivb.jpg" alt="Affiche — Jeudi Free — La Boum 80'" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>Jeudi Free — La Boum 80'</b><span>Jeudi 24 septembre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-xxl-popof" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_3_XXL_qcpy7b.jpg" alt="Affiche — Slalom XXL — Popof" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>Slalom XXL — Popof</b><span>Vendredi 25 septembre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-gang-gang-hoodini-guests-vol-21" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_1_GGC_ycixfe.jpg" alt="Affiche — Gang Gang — Baddies Edition" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>Gang Gang — Baddies Edition</b><span>Samedi 26 septembre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-erasmus-italien" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_6_ERASMUS_cvbpcg.png" alt="Affiche — Kiss My Erasmus — Italian Night" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>Kiss My Erasmus — Italian Night</b><span>Vendredi 2 octobre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-jet-lag-vol-16-reggaeton-y-perreo" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_5_JETLAG_c1j6nx.png" alt="Affiche — JetLag — Reggaeton y Perreo" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>JetLag — Reggaeton y Perreo</b><span>Samedi 3 octobre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-la-studenti-ta-soiree-etudiante" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_3_STUD_mtzbre.jpg" alt="Affiche — La Studenti" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>La Studenti</b><span>Jeudi 8 octobre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-trendy-afro-shatta-bouyon-hip-hop2" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_4_hsgk88.jpg" alt="Affiche — Trendy invite Phaphane" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>Trendy invite Phaphane</b><span>Samedi 10 octobre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/slalom-la-bug-de-l-an-2000-vol-15-pop" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_26_16-9_1_2000_mfyjmb.jpg" alt="Affiche — La Bug de l'an 2000 — Vol. 15" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>La Bug de l'an 2000 — Vol. 15</b><span>Samedi 17 octobre</span></span>
-      </a>
-      <a class="affiche" href="https://shotgun.live/fr/events/arch-club-slalom" target="_blank" rel="noopener">
-        <span class="affiche-vis"><img src="https://res.cloudinary.com/shotgun/image/upload/c_fill,ar_16:9,w_820/f_auto/q_auto/dev/artworks/SLALOM_SHOTGUN_1920x1080_h1vr5c.png" alt="Affiche — Arch Club" loading="lazy" width="820" height="461"></span>
-        <span class="affiche-cap"><b>Arch Club</b><span>Samedi 21 novembre</span></span>
-      </a>
-    </div>
-    </div>
+<section class="section" id="concept" data-name="CONCEPT" data-index="01" data-anim>
+<div class="shead"><h2><b>01</b> — <span data-scramble>CONCEPT</span></h2><span class="fil"></span><span class="meta">RETRO TECHNO · LILLE</span></div>
+<p class="manifesto">ONYX is a retro techno night based in Lille. The sound that shaped a generation, played on a serious system, under precise light, for a limited crowd. One date every two months. Each edition is a numbered chapter.</p>
+<div class="facts">
+<div class="fact"><span class="n" data-count="6">6</span><span class="k">CHAPTERS A YEAR</span></div>
+<div class="fact"><span class="n" data-count="2">2</span><span class="k">MONTHS BETWEEN DATES</span></div>
+<div class="fact"><span class="n" data-count="18" data-suffix="+">18+</span><span class="k">ADULTS ONLY</span></div>
+</div>
+</section>
 
-    <div class="anneau-legende" hidden aria-live="polite">
-      <p class="al-compte"><b data-al-n>01</b><span> / </span><span data-al-total>09</span></p>
-      <p class="al-date" data-al-date></p>
-      <p class="al-nom" data-al-nom></p>
-      <a class="btn al-btn" data-al-lien href="#" target="_blank" rel="noopener">Réserver</a>
-    </div>
+<section class="section" id="experience" data-name="EXPERIENCE" data-index="02" data-anim>
+<div class="shead"><h2><b>02</b> — <span data-scramble>EXPERIENCE</span></h2><span class="fil"></span><span class="meta">4 ELEMENTS</span></div>
+<div class="cells">
+<article class="cell"><div class="cell-h"><h3 class="label">SOUND</h3><span class="mini">4/4</span></div><div class="vis"><div class="seq" aria-hidden="true"><span class="rl">BD</span><span class="st hit" data-s="0"></span><span class="st" data-s="1"></span><span class="st" data-s="2"></span><span class="st" data-s="3"></span><span class="st hit" data-s="4"></span><span class="st" data-s="5"></span><span class="st" data-s="6"></span><span class="st" data-s="7"></span><span class="st hit" data-s="8"></span><span class="st" data-s="9"></span><span class="st" data-s="10"></span><span class="st" data-s="11"></span><span class="st hit" data-s="12"></span><span class="st" data-s="13"></span><span class="st" data-s="14"></span><span class="st" data-s="15"></span><span class="rl">CP</span><span class="st" data-s="0"></span><span class="st" data-s="1"></span><span class="st" data-s="2"></span><span class="st" data-s="3"></span><span class="st hit" data-s="4"></span><span class="st" data-s="5"></span><span class="st" data-s="6"></span><span class="st" data-s="7"></span><span class="st" data-s="8"></span><span class="st" data-s="9"></span><span class="st" data-s="10"></span><span class="st" data-s="11"></span><span class="st hit" data-s="12"></span><span class="st" data-s="13"></span><span class="st" data-s="14"></span><span class="st" data-s="15"></span><span class="rl">OH</span><span class="st" data-s="0"></span><span class="st" data-s="1"></span><span class="st hit" data-s="2"></span><span class="st" data-s="3"></span><span class="st" data-s="4"></span><span class="st" data-s="5"></span><span class="st hit" data-s="6"></span><span class="st" data-s="7"></span><span class="st" data-s="8"></span><span class="st" data-s="9"></span><span class="st hit" data-s="10"></span><span class="st" data-s="11"></span><span class="st" data-s="12"></span><span class="st" data-s="13"></span><span class="st hit" data-s="14"></span><span class="st" data-s="15"></span></div></div><p class="val">SERIOUS SYSTEM</p></article>
+<article class="cell"><div class="cell-h"><h3 class="label">LIGHT</h3><span class="mini">CHASE</span></div><div class="vis"><svg class="lights" viewBox="0 0 320 170" aria-hidden="true"><line class="truss" x1="8" y1="18" x2="312" y2="18"></line><line class="truss" x1="8" y1="30" x2="312" y2="30"></line><polyline class="truss" points="8,18 24,30 40,18 56,30 72,18 88,30 104,18 120,30 136,18 152,30 168,18 184,30 200,18 216,30 232,18 248,30 264,18 280,30 296,18 312,30"></polyline><g class="fx"><line class="beam" x1="26" y1="52" x2="-5.5" y2="168"></line><line class="hang" x1="26" y1="30" x2="26" y2="36"></line><circle cx="26" cy="44" r="8"></circle></g><g class="fx on"><line class="beam" x1="64.3" y1="52" x2="41.8" y2="168"></line><line class="hang" x1="64.3" y1="30" x2="64.3" y2="36"></line><circle cx="64.3" cy="44" r="8"></circle></g><g class="fx"><line class="beam" x1="102.6" y1="52" x2="89.1" y2="168"></line><line class="hang" x1="102.6" y1="30" x2="102.6" y2="36"></line><circle cx="102.6" cy="44" r="8"></circle></g><g class="fx on"><line class="beam" x1="140.9" y1="52" x2="136.4" y2="168"></line><line class="hang" x1="140.9" y1="30" x2="140.9" y2="36"></line><circle cx="140.9" cy="44" r="8"></circle></g><g class="fx on"><line class="beam" x1="179.2" y1="52" x2="183.7" y2="168"></line><line class="hang" x1="179.2" y1="30" x2="179.2" y2="36"></line><circle cx="179.2" cy="44" r="8"></circle></g><g class="fx"><line class="beam" x1="217.5" y1="52" x2="231" y2="168"></line><line class="hang" x1="217.5" y1="30" x2="217.5" y2="36"></line><circle cx="217.5" cy="44" r="8"></circle></g><g class="fx on"><line class="beam" x1="255.8" y1="52" x2="278.3" y2="168"></line><line class="hang" x1="255.8" y1="30" x2="255.8" y2="36"></line><circle cx="255.8" cy="44" r="8"></circle></g><g class="fx"><line class="beam" x1="294.1" y1="52" x2="325.6" y2="168"></line><line class="hang" x1="294.1" y1="30" x2="294.1" y2="36"></line><circle cx="294.1" cy="44" r="8"></circle></g></svg></div><p class="val">PRECISE LIGHT</p></article>
+<article class="cell"><div class="cell-h"><h3 class="label">CROWD</h3><span class="mini">CAPACITY</span></div><div class="vis"><div class="crowd" aria-hidden="true"><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div><p class="val">LIMITED CROWD</p></article>
+<article class="cell"><div class="cell-h"><h3 class="label">CHAPTERS</h3><span class="mini">EVERY 2 MONTHS</span></div><div class="vis"><div class="chap" aria-hidden="true"><div class="flipnum"><span class="strip"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span></span></div><div class="ticks6"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div></div></div><p class="val">NUMBERED EDITIONS</p></article>
+</div>
+</section>
 
-    <div class="cta-row">
-      <a class="btn ghost" href="calendrier.html">Tout le calendrier</a>
-    </div>
-    </div>
-  </section>
+<div class="ticker rev" aria-hidden="true"><div class="track"><span class="ti o" data-first="1">18+ ONLY</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="ti">ID REQUIRED</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="ti o">STROBE LIGHTING</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="ti">LIMITED CAPACITY</span><svg class="tx" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg></div></div>
 
-  <section data-reveal class="wrap signature">
-    <div class="s3d" id="s3d" aria-hidden="true"><img src="assets/s-noir.png" alt="" style="--i:27"><img src="assets/s-noir.png" alt="" style="--i:26"><img src="assets/s-noir.png" alt="" style="--i:25"><img src="assets/s-noir.png" alt="" style="--i:24"><img src="assets/s-noir.png" alt="" style="--i:23"><img src="assets/s-noir.png" alt="" style="--i:22"><img src="assets/s-noir.png" alt="" style="--i:21"><img src="assets/s-noir.png" alt="" style="--i:20"><img src="assets/s-noir.png" alt="" style="--i:19"><img src="assets/s-noir.png" alt="" style="--i:18"><img src="assets/s-noir.png" alt="" style="--i:17"><img src="assets/s-noir.png" alt="" style="--i:16"><img src="assets/s-noir.png" alt="" style="--i:15"><img src="assets/s-noir.png" alt="" style="--i:14"><img src="assets/s-noir.png" alt="" style="--i:13"><img src="assets/s-noir.png" alt="" style="--i:12"><img src="assets/s-noir.png" alt="" style="--i:11"><img src="assets/s-noir.png" alt="" style="--i:10"><img src="assets/s-noir.png" alt="" style="--i:9"><img src="assets/s-noir.png" alt="" style="--i:8"><img src="assets/s-noir.png" alt="" style="--i:7"><img src="assets/s-noir.png" alt="" style="--i:6"><img src="assets/s-noir.png" alt="" style="--i:5"><img src="assets/s-noir.png" alt="" style="--i:4"><img src="assets/s-noir.png" alt="" style="--i:3"><img src="assets/s-noir.png" alt="" style="--i:2"><img src="assets/s-noir.png" alt="" style="--i:1"><img src="assets/s-noir.png" alt="" style="--i:0"></div>
-    <p class="signature-tag">Living culture</p>
-  </section>
+<section class="section" id="chapter" data-name="CHAPTER 01" data-index="03" data-anim>
+<div class="shead"><h2><b>03</b> — <span data-scramble>NEXT CHAPTER</span></h2><span class="fil"></span><span class="meta">TICKETS ON SHOTGUN</span></div>
+<div class="ticket">
+<div class="t-main">
+<div class="t-head"><p class="label">CHAPTER</p><p class="label r">N° 0001</p></div>
+<p class="t-num" data-scramble aria-label="Chapter 01">01</p>
+<dl class="board">
+<div class="row"><dt>DATE</dt><dd class="flap" aria-label="TBA"><span class="fw" aria-hidden="true"><span class="fc">T</span><span class="fc">B</span><span class="fc">A</span></span></dd></div>
+<div class="row"><dt>DOORS</dt><dd class="flap" aria-label="00:00 — 06:00"><span class="fw" aria-hidden="true"><span class="fc">0</span><span class="fc">0</span><span class="fc">:</span><span class="fc">0</span><span class="fc">0</span><span class="fc sp"></span><span class="fc">—</span><span class="fc sp"></span><span class="fc">0</span><span class="fc">6</span><span class="fc">:</span><span class="fc">0</span><span class="fc">0</span></span></dd></div>
+<div class="row"><dt>VENUE</dt><dd class="flap" aria-label="SLALOM"><span class="fw" aria-hidden="true"><span class="fc">S</span><span class="fc">L</span><span class="fc">A</span><span class="fc">L</span><span class="fc">O</span><span class="fc">M</span></span></dd></div>
+<div class="row"><dt>CITY</dt><dd class="flap" aria-label="LILLE"><span class="fw" aria-hidden="true"><span class="fc">L</span><span class="fc">I</span><span class="fc">L</span><span class="fc">L</span><span class="fc">E</span></span></dd></div>
+<div class="row"><dt>LINE-UP</dt><dd class="flap" aria-label="TBA"><span class="fw" aria-hidden="true"><span class="fc">T</span><span class="fc">B</span><span class="fc">A</span></span></dd></div>
+</dl>
+</div>
+<div class="t-stub">
+<div class="stub-top"><p class="label">ADMIT ONE</p><p class="label r">18+</p></div>
+<div class="code"><svg viewBox="0 0 79 20" preserveAspectRatio="none" shape-rendering="crispEdges" role="img" aria-label="Barcode ONYX"><rect style="--k:0" x="0" y="0" width="2" height="20"></rect><rect style="--k:1" x="3" y="0" width="1" height="20"></rect><rect style="--k:2" x="6" y="0" width="1" height="20"></rect><rect style="--k:3" x="11" y="0" width="1" height="20"></rect><rect style="--k:4" x="15" y="0" width="3" height="20"></rect><rect style="--k:5" x="19" y="0" width="2" height="20"></rect><rect style="--k:6" x="22" y="0" width="1" height="20"></rect><rect style="--k:7" x="24" y="0" width="3" height="20"></rect><rect style="--k:8" x="30" y="0" width="2" height="20"></rect><rect style="--k:9" x="33" y="0" width="3" height="20"></rect><rect style="--k:10" x="37" y="0" width="2" height="20"></rect><rect style="--k:11" x="40" y="0" width="1" height="20"></rect><rect style="--k:12" x="44" y="0" width="3" height="20"></rect><rect style="--k:13" x="50" y="0" width="1" height="20"></rect><rect style="--k:14" x="52" y="0" width="2" height="20"></rect><rect style="--k:15" x="55" y="0" width="2" height="20"></rect><rect style="--k:16" x="59" y="0" width="1" height="20"></rect><rect style="--k:17" x="62" y="0" width="3" height="20"></rect><rect style="--k:18" x="66" y="0" width="2" height="20"></rect><rect style="--k:19" x="71" y="0" width="3" height="20"></rect><rect style="--k:20" x="75" y="0" width="1" height="20"></rect><rect style="--k:21" x="77" y="0" width="2" height="20"></rect></svg><span class="scan" aria-hidden="true"></span></div>
+<a class="btn magnet" href="#tickets"><span>TICKETS</span></a>
+</div>
+</div>
+<div class="tix" id="tickets">
+<div class="tix-head"><h3 class="label">TICKETS</h3><span class="label r">SHOTGUN</span></div>
+<div class="tix-body widget"><iframe title="ONYX tickets on Shotgun" src="https://shotgun.live/venues/onyx-lille?embedded=1&amp;ui=dark" allow="payment" style="width:100%; height:800px; max-height:calc(100vh - 200px); border:0;"></iframe></div>
+</div>
+</section>
 
-  <section class="wrap">
-    <h2 class="sec">Ils sont passés au club</h2>
-    <p class="sec-sub">Des jeunes talents aux artistes emblématiques, tous ont partagé la scène de Slalom.</p>
+<section class="section" id="venue" data-name="VENUE" data-index="04" data-anim>
+<div class="shead"><h2><b>04</b> — <span data-scramble>VENUE</span></h2><span class="fil"></span><span class="meta">LILLE · FRANCE</span></div>
+<div class="venue">
+<div class="v-info">
+<p class="v-name" data-scramble>SLALOM</p>
+<dl class="v-list">
+<div><dt>ADDRESS</dt><dd>84 RUE DE TRÉVISE<br>59000 LILLE</dd></div>
+<div><dt>OPEN</dt><dd>00:00 — 06:00</dd></div>
+</dl>
+<div class="v-row"><a class="btn magnet" href="https://www.google.com/maps/search/?api=1&amp;query=84%20rue%20de%20Tr%C3%A9vise%2059000%20Lille" target="_blank" rel="noopener"><span>OPEN IN MAPS</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
+<img class="partner" src="data:image/png;base64,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" alt="Slalom" width="272" height="400"></div>
+</div>
+<div class="radar"><svg viewBox="0 0 360 360" aria-hidden="true"><rect class="ring" x="0.5" y="0.5" width="359" height="359"></rect><circle class="ring" cx="180" cy="180" r="170"></circle><circle class="ring" cx="180" cy="180" r="118"></circle><circle class="ring" cx="180" cy="180" r="62"></circle><line class="axis" x1="0" y1="180" x2="360" y2="180"></line><line class="axis" x1="180" y1="0" x2="180" y2="360"></line><circle class="ping" cx="180" cy="180" r="170"></circle><circle class="ping" cx="180" cy="180" r="170"></circle><circle class="ping" cx="180" cy="180" r="170"></circle><line class="sweepl" x1="180" y1="180" x2="180" y2="10"></line><path class="target" d="M172 180h16M180 172v16"></path><rect class="dot" x="177" y="177" width="6" height="6"></rect></svg><span class="radar-read">LILLE</span><span class="radar-read r">50.6292° N · 3.0573° E</span></div>
+</div>
+</section>
 
-    <p class="artistes">
-      <span>Vitalic</span><i>◆</i><span>Étienne de Crécy</span><i>◆</i><span>Mall Grab</span><i>◆</i><span>Kobosil</span><i>◆</i><span>Acid Arab</span><i>◆</i><span>Folamour</span><i>◆</i><span>Paula Temple</span><i>◆</i><span>Hatik</span><i>◆</i><span>Lord Esperanza</span><i>◆</i><span>Moji x Sboy</span><i>◆</i><span>Ki/Ki</span><i>◆</i><span>Airod</span><i>◆</i><span>Jacidorex</span><i>◆</i><span>Carbonne</span><i>◆</i><span>Mandragora</span><i>◆</i><span>Cera Khin</span><i>◆</i><span>SNTS</span><i>◆</i><span>Vladimir Cauchemar</span><i>◆</i><span>Le Wanski</span><i>◆</i><span>Von Bikräv</span><i>◆</i><span>Jolagreen23</span><i>◆</i><span>Dyen</span><i>◆</i><span>Omaks</span><i>◆</i><span>Holy Priest</span><i>◆</i><span>6ejou</span><i>◆</i><span>Tif</span>
-    </p>
-  </section>
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-piste">
-      <span><b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · <b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · <b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · <b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · </span>
-      <span><b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · <b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · <b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · <b>Slalom</b> · Living culture · 84 rue de Trévise, Lille · Jeudi · Vendredi · Samedi · 00h00 → 06h00 · </span>
-    </div>
-  </div>
+<section class="section" id="info" data-name="INFO" data-index="05" data-anim>
+<div class="shead"><h2><b>05</b> — <span data-scramble>CONDITIONS</span></h2><span class="fil"></span><span class="meta">ENTRY</span></div>
+<ul class="rules">
+<li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>18+ ONLY. ID REQUIRED.</p><span class="tag">AGE</span></li>
+<li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>ENTRY MAY BE REFUSED TO ENSURE THE SAFETY OF ALL GUESTS.</p><span class="tag">DOOR</span></li>
+<li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>STROBE LIGHTING IN USE.</p><span class="tag">LIGHT</span></li>
+<li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>LIMITED CAPACITY.</p><span class="tag">CAPACITY</span></li>
+</ul>
+</section>
 
-  <section data-reveal class="wrap next">
-      <p class="kicker">Continuer</p>
-      <div class="next-grid">
-        <a href="calendrier.html"><b>Calendrier</b><span>Les soirées à venir</span></a>
-        <a href="carte.html"><b>La carte</b><span>Bouteilles et cocktails</span></a>
-        <a href="galerie.html"><b>La galerie</b><span>Le lieu en images</span></a>
-      </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span class="foot-mark"><span class="logo-img" role="img" aria-label="Slalom — Living Culture"></span></span>
-    <div class="socials" style="margin-top:20px">
-      <a href="https://www.instagram.com/slalom.lille" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a>
-      <a href="https://www.tiktok.com/@slalom.lille" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.8a4.8 4.8 0 0 1-1.1-2.8h-3v12.2a2.5 2.5 0 1 1-1.8-2.4V9.6a5.6 5.6 0 1 0 4.8 5.5V9.3a7.8 7.8 0 0 0 4.4 1.4V7.7a4.8 4.8 0 0 1-3.3-1.9Z"/></svg></a>
-      <a href="https://www.youtube.com/channel/UC-64XZr3gD5_dQ3JulHEuCQ" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.5 7.2a2.7 2.7 0 0 0-1.9-1.9C18.9 4.8 12 4.8 12 4.8s-6.9 0-8.6.5A2.7 2.7 0 0 0 1.5 7.2C1 8.9 1 12 1 12s0 3.1.5 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 8.6.5 8.6.5s6.9 0 8.6-.5a2.7 2.7 0 0 0 1.9-1.9c.5-1.7.5-4.8.5-4.8s0-3.1-.5-4.8ZM9.8 15.3V8.7l5.7 3.3Z"/></svg></a>
-      <a href="https://www.facebook.com/Slalom.Lille/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.3-.04-1.3-.13-2.45-.13-2.43 0-4.1 1.48-4.1 4.2v2.34H7.4V13h2.75v8Z"/></svg></a>
-      <a href="https://shotgun.live/en/venues/slalom-lille" target="_blank" rel="noopener" aria-label="Billetterie Shotgun"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5V10a2 2 0 0 0 0 4v3.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5V14a2 2 0 0 0 0-4Zm11 1.2v8.6h1.4V7.7Z"/></svg></a>
-    </div>
-    <p class="kicker" style="margin-top:18px">84 rue de Trévise · Lille 59000</p>
-    <div class="foot-legal">
-      <p class="kicker">L'abus d'alcool est dangereux pour la santé, à consommer avec modération.</p>
-      <p class="kicker" style="margin-top:12px"><a href="mentions-legales.html" class="lien-legal">Mentions légales</a> &nbsp;·&nbsp; <a href="mentions-legales.html#cookies" class="lien-legal">Cookies</a></p>
-      <p class="powered">Billetterie <a href="https://shotgun.live/venues/slalom-lille" target="_blank" rel="noopener">Shotgun</a> &nbsp;·&nbsp; Son <a href="https://www.l-acoustics.com" target="_blank" rel="noopener">L-Acoustics</a></p>
-    </div>
-  </div>
+<footer class="foot" data-anim>
+<p class="sig"><span data-scramble>UNIQUE EXPERIENCE</span></p>
+<div class="big"><svg class="wm foot-wm" viewBox="0 0 746.52 129.68" data-vbw="746.52" data-px="1.2" role="img" aria-label="ONYX"><g class="L" style="--i:0"><path class="fill" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84ZM131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="base" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="base" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="draw" pathLength="1" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="draw" pathLength="1" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path></g><g class="L" style="--i:1"><path class="fill" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="base" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="draw" pathLength="1" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path></g><g class="L" style="--i:2"><path class="fill" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="base" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="draw" pathLength="1" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path></g><g class="L" style="--i:3"><path class="fill" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="base" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="draw" pathLength="1" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path></g></svg></div>
+<div class="foot-row"><p class="label">© 2026 ONYX · LILLE</p>
+<a class="flink" href="https://shotgun.live/venues/onyx-lille" target="_blank" rel="noopener"><span data-hover>SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
+<a class="flink" href="#top"><span data-hover>BACK TO TOP</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V1M2 5l4-4 4 4"></path></svg></a></div>
 </footer>
+</main>
+</div>
+<script>(function(){
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var FINE = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function $(s, c){ return (c || document).querySelector(s); }
+  function $$(s, c){ return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+  var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  function rnd(){ return CH[(Math.random() * CH.length) | 0]; }
 
-<script src="assets/site.js" defer></script>
-<script type="module" src="assets/3d/main.js"></script>
+  /* --- wordmark stroke: keep a hairline at any size --- */
+  $$('.wm').forEach(function(svg){
+    var vbw = parseFloat(svg.getAttribute('data-vbw')), px = parseFloat(svg.getAttribute('data-px'));
+    function fit(){ var w = svg.getBoundingClientRect().width || 1; svg.style.setProperty('--sw', (px * vbw / w).toFixed(3)); }
+    fit();
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(svg); else window.addEventListener('resize', fit);
+  });
+
+  /* --- text decode --- */
+  function scramble(el, dur){
+    if (RM) return;
+    var fin = el.getAttribute('data-final');
+    if (fin === null){ fin = el.textContent; el.setAttribute('data-final', fin); }
+    var n = fin.length, t0 = null;
+    dur = dur || Math.min(1300, 380 + n * 45);
+    cancelAnimationFrame(el._sr);
+    function step(t){
+      if (t0 === null) t0 = t;
+      var p = (t - t0) / dur, s = '';
+      for (var i = 0; i < n; i++){
+        var c = fin[i];
+        s += (c === ' ' || c === '.' || p > (i / n) * .6 + .4) ? c : rnd();
+      }
+      el.textContent = s;
+      if (p < 1) el._sr = requestAnimationFrame(step); else el.textContent = fin;
+    }
+    el._sr = requestAnimationFrame(step);
+  }
+  $$('.nav a, .rule p, [data-hover]').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ scramble(el, 520); });
+  });
+
+  /* --- split-flap board --- */
+  function flap(dd){
+    if (RM) return;
+    $$('.fc', dd).forEach(function(c, i){
+      var fin = c.textContent;
+      if (!fin.trim()) return;
+      var k = 0, total = 7 + i * 2;
+      c.classList.add('go');
+      var iv = setInterval(function(){
+        k++;
+        if (k >= total){ clearInterval(iv); c.textContent = fin; c.classList.remove('go'); }
+        else c.textContent = rnd();
+      }, 48);
+    });
+  }
+
+  /* --- counters --- */
+  function count(el){
+    if (RM) return;
+    var to = parseFloat(el.getAttribute('data-count')), suf = el.getAttribute('data-suffix') || '', t0 = null, d = 1200;
+    function tick(t){
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(to * e) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* --- one-shot reveals when a block enters the view (content is readable before) --- */
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        io.unobserve(el);
+        el.classList.add('in');
+        $$('[data-scramble]', el).forEach(function(s){ scramble(s); });
+        $$('.flap', el).forEach(flap);
+        $$('[data-count]', el).forEach(count);
+      });
+    }, { threshold: .2 });
+    $$('[data-anim]').forEach(function(el){ io.observe(el); });
+  }
+  setTimeout(function(){ $$('.hero [data-scramble]').forEach(function(s){ scramble(s, 1100); }); }, 450);
+
+  /* --- run a loop only while its element is on screen --- */
+  function whileVisible(el, start, stop){
+    if (!el || RM) return;
+    if (!('IntersectionObserver' in window)){ start(); return; }
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) start(); else stop(); });
+    }).observe(el);
+  }
+
+  /* sequencer: 4/4, 16 steps */
+  var seq = $('.seq');
+  if (seq){
+    var cols = [];
+    for (var s = 0; s < 16; s++) cols.push($$('.st[data-s="' + s + '"]', seq));
+    var cur = -1, sIv = null;
+    whileVisible(seq, function(){
+      if (sIv) return;
+      sIv = setInterval(function(){
+        if (cur >= 0) cols[cur].forEach(function(c){ c.classList.remove('cur'); });
+        cur = (cur + 1) % 16;
+        cols[cur].forEach(function(c){ c.classList.add('cur'); });
+      }, 60000 / 132 / 4);
+    }, function(){ clearInterval(sIv); sIv = null; });
+  }
+
+  /* light chase */
+  var lights = $('.lights');
+  if (lights){
+    var fx = $$('.fx', lights), steps = [], i;
+    for (i = 0; i < 8; i++) steps.push([i]);
+    for (i = 7; i >= 0; i--) steps.push([i]);
+    for (var r = 0; r < 2; r++){ steps.push([3, 4], [2, 5], [1, 6], [0, 7]); }
+    for (r = 0; r < 4; r++){ steps.push([0, 2, 4, 6], [1, 3, 5, 7]); }
+    var li = 0, lIv = null;
+    whileVisible(lights, function(){
+      if (lIv) return;
+      lIv = setInterval(function(){
+        var on = steps[li % steps.length]; li++;
+        fx.forEach(function(f, n){ f.classList.toggle('on', on.indexOf(n) > -1); });
+      }, 170);
+    }, function(){ clearInterval(lIv); lIv = null; });
+  }
+
+  /* crowd filling up to capacity */
+  var crowd = $('.crowd');
+  if (crowd){
+    var sq = $$('i', crowd), order = [], ci = 0, cIv = null, hold = 0;
+    function reshuffle(){ order = sq.map(function(_, n){ return n; }).sort(function(){ return Math.random() - .5; }); }
+    whileVisible(crowd, function(){
+      if (cIv) return;
+      sq.forEach(function(q){ q.classList.remove('on'); }); crowd.classList.remove('full'); reshuffle(); ci = 0; hold = 0;
+      cIv = setInterval(function(){
+        if (ci < order.length){ sq[order[ci++]].classList.add('on'); return; }
+        if (hold === 0) crowd.classList.add('full');
+        hold++;
+        if (hold > 22){ sq.forEach(function(q){ q.classList.remove('on'); }); crowd.classList.remove('full'); reshuffle(); ci = 0; hold = 0; }
+      }, 55);
+    }, function(){ clearInterval(cIv); cIv = null; });
+  }
+
+  /* chapters counter */
+  var strip = $('.flipnum .strip'), ticks = $$('.ticks6 i');
+  if (strip){
+    var ck = 0, kIv = null;
+    whileVisible(strip.parentNode, function(){
+      if (kIv) return;
+      kIv = setInterval(function(){
+        ck = (ck + 1) % 6;
+        strip.style.transform = 'translateY(' + (-ck) + 'em)';
+        ticks.forEach(function(t, n){ t.className = n < ck ? 'done' : (n === ck ? 'on' : ''); });
+      }, 1500);
+    }, function(){ clearInterval(kIv); kIv = null; });
+  }
+
+  /* --- tickers: follow scroll speed and direction --- */
+  var tickers = $$('.ticker').map(function(t){
+    var tr = $('.track', t), base = tr.innerHTML;
+    for (var n = 0; n < 6; n++) tr.insertAdjacentHTML('beforeend', base);
+    return { el: t, tr: tr, x: 0, rev: t.classList.contains('rev'), period: 0, visible: true };
+  });
+  function measure(){
+    tickers.forEach(function(k){
+      var firsts = $$('[data-first]', k.tr);
+      k.period = firsts.length > 1 ? firsts[1].offsetLeft - firsts[0].offsetLeft : k.tr.scrollWidth / 7;
+    });
+  }
+  measure();
+  window.addEventListener('resize', measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  var vel = 0, dir = 1, lastY = window.scrollY, lastT = performance.now();
+  if ('IntersectionObserver' in window){
+    var tio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ tickers.forEach(function(k){ if (k.el === e.target) k.visible = e.isIntersecting; }); });
+    });
+    tickers.forEach(function(k){ tio.observe(k.el); });
+  }
+  var prevT = performance.now();
+  function loop(t){
+    var dt = Math.min(64, t - prevT) / 1000; prevT = t;
+    var speed = 55 + Math.min(Math.abs(vel) * .35, 900);
+    vel *= .92;
+    tickers.forEach(function(k){
+      if (!k.visible || !k.period) return;
+      k.x -= speed * dt * dir * (k.rev ? -1 : 1);
+      k.x = ((k.x % k.period) - k.period) % k.period;
+      k.tr.style.transform = 'translateX(' + k.x.toFixed(2) + 'px)';
+    });
+    requestAnimationFrame(loop);
+  }
+  if (!RM) requestAnimationFrame(loop);
+
+  /* --- scroll: progress, manifesto, velocity --- */
+  var prog = $('.vf .progress'), hs = $('.hud-scroll');
+  var man = $('.manifesto'), words = [];
+  if (man){
+    man.innerHTML = man.textContent.split(' ').map(function(w){ return '<span class="w">' + w + '</span>'; }).join(' ');
+    words = $$('.w', man);
+  }
+  function onScroll(){
+    var y = window.scrollY, now = performance.now();
+    var dy = y - lastY, dtt = Math.max(1, now - lastT);
+    if (dy !== 0) dir = dy > 0 ? 1 : -1;
+    vel = vel * .6 + (dy / dtt * 1000) * .4;
+    lastY = y; lastT = now;
+    var max = document.documentElement.scrollHeight - window.innerHeight, p = max > 0 ? Math.min(1, y / max) : 0;
+    if (prog) prog.style.transform = 'scaleY(' + p.toFixed(4) + ')';
+    if (hs) hs.textContent = 'SCROLL ' + ('00' + Math.round(p * 100)).slice(-3) + '%';
+    if (man){
+      var r = man.getBoundingClientRect(), vh = window.innerHeight;
+      var q = Math.min(1, Math.max(0, (vh * .82 - r.top) / (r.height + vh * .3)));
+      var lit = Math.round(q * words.length);
+      for (var n = 0; n < words.length; n++) words[n].classList.toggle('lit', n < lit);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* --- current section in the HUD and nav --- */
+  var hsec = $('.hud-sec'), navLinks = $$('.nav a');
+  if ('IntersectionObserver' in window){
+    var sio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var s = e.target, idx = s.getAttribute('data-index'), name = s.getAttribute('data-name');
+        if (hsec) hsec.textContent = idx === '00' ? 'ONYX · LILLE' : idx + ' / 05 — ' + name;
+        navLinks.forEach(function(a){
+          if (a.getAttribute('data-sec') === s.id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    $$('main > section').forEach(function(s){ sio.observe(s); });
+  }
+
+  /* --- Lille clock --- */
+  var clk = $('.hud-clock');
+  if (clk){
+    var fmt;
+    try { fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }); }
+    catch (e) { fmt = null; }
+    var tickClock = function(){ clk.textContent = 'LILLE ' + (fmt ? fmt.format(new Date()) : new Date().toTimeString().slice(0, 8)); };
+    tickClock(); setInterval(tickClock, 1000);
+  }
+
+  /* --- crosshair cursor --- */
+  var cursor = $('.cursor'), cr = cursor ? $('.cr', cursor) : null, mx = -9999, my = -9999, cTick = false;
+  function pad4(n){ n = Math.max(0, Math.round(n)); return ('0000' + n).slice(-4); }
+  if (cursor && FINE){
+    window.addEventListener('pointermove', function(e){
+      if (e.pointerType !== 'mouse') return;
+      mx = e.clientX; my = e.clientY;
+      var hot = !!(e.target.closest && e.target.closest('a, button'));
+      if (cTick) return;
+      cTick = true;
+      requestAnimationFrame(function(){
+        cTick = false;
+        cursor.style.setProperty('--cx', mx + 'px');
+        cursor.style.setProperty('--cy', my + 'px');
+        cr.textContent = 'X ' + pad4(mx) + ' · Y ' + pad4(my);
+        cursor.classList.add('on');
+        cursor.classList.toggle('hot', hot);
+      });
+    }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', function(){ cursor.classList.remove('on'); });
+  }
+
+  /* --- magnetic buttons --- */
+  if (FINE && !RM){
+    $$('.magnet').forEach(function(b){
+      b.addEventListener('pointermove', function(e){
+        var r = b.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width / 2) / r.width, y = (e.clientY - r.top - r.height / 2) / r.height;
+        b.style.transform = 'translate(' + (x * 12).toFixed(1) + 'px,' + (y * 8).toFixed(1) + 'px)';
+      });
+      b.addEventListener('pointerleave', function(){ b.style.transform = ''; });
+    });
+  }
+
+  /* --- hero dot matrix: cursor glow + slow scan band --- */
+  var cv = $('.dots');
+  if (cv && cv.getContext){
+    var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, heroOn = true, raf = null;
+    function size(){
+      var r = cv.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2); W = r.width; H = r.height;
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function shade(v){ var g = Math.round(30 + 124 * v); return 'rgb(' + g + ',' + g + ',' + g + ')'; }
+    function draw(t){
+      var r = cv.getBoundingClientRect(), lx = mx - r.left, ly = my - r.top, sp = 24;
+      var band = RM ? -9999 : ((t / 1000) % 8) / 8 * (W + 480) - 240;
+      ctx.clearRect(0, 0, W, H);
+      for (var y = sp / 2; y < H; y += sp){
+        for (var x = sp / 2; x < W; x += sp){
+          var dx = x - lx, dy = y - ly, d = Math.sqrt(dx * dx + dy * dy);
+          var a = d < 170 ? 1 - d / 170 : 0;
+          var b = Math.max(0, 1 - Math.abs(x - band) / 140) * .45;
+          var v = Math.max(a, b);
+          ctx.fillStyle = v > .02 ? shade(v) : '#1E1E1E';
+          ctx.fillRect(x - 1, y - 1, 2, 2);
+        }
+      }
+    }
+    function frame(t){ draw(t); raf = heroOn ? requestAnimationFrame(frame) : null; }
+    size(); draw(0);
+    window.addEventListener('resize', function(){ size(); draw(performance.now()); });
+    if (!RM){
+      if ('IntersectionObserver' in window){
+        new IntersectionObserver(function(entries){
+          heroOn = entries[0].isIntersecting;
+          if (heroOn && !raf) raf = requestAnimationFrame(frame);
+        }).observe(cv);
+      }
+      raf = requestAnimationFrame(frame);
+    }
+  }
+
+  /* --- mobile menu --- */
+  var mb = $('.menu-btn'), menu = $('#menu');
+  if (mb && menu){
+    var setMenu = function(open){
+      menu.hidden = !open;
+      mb.setAttribute('aria-expanded', open ? 'true' : 'false');
+      $('span', mb).textContent = open ? 'CLOSE' : 'MENU';
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open){ var f = $('a', menu); if (f) f.focus(); }
+    };
+    mb.addEventListener('click', function(){ setMenu(menu.hidden); });
+    $$('a', menu).forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !menu.hidden){ setMenu(false); mb.focus(); } });
+  }
+})();
+</script>
+<script src="https://shotgun.live/widget.js"></script>
 </body>
 </html>
