@@ -28,8 +28,12 @@
   /* ---------- 2. inclinaison 3D des cartes ---------- */
   function inclinaison() {
     if (douce || !finPointeur) return;
-    var cartes = document.querySelectorAll('.card-vis, .planche, .next-grid a');
-    Array.prototype.forEach.call(cartes, function (c) {
+    var gl = document.documentElement.classList.contains('gl3d');
+    var cartes = Array.prototype.filter.call(document.querySelectorAll('.card-vis, .planche, .next-grid a'), function (c) {
+      // les photos de la galerie sont animées en WebGL : pas d'inclinaison CSS en plus
+      return !(gl && c.closest('#galerie'));
+    });
+    cartes.forEach(function (c) {
       var att = null;
       c.addEventListener('mousemove', function (e) {
         if (att) return;
@@ -147,7 +151,7 @@
     maj();
   }
 
-  /* ---------- 7. transition au damier entre les pages ---------- */
+  /* ---------- 7. transition : les cases du damier se retournent en 3D depuis le clic ---------- */
   function transitions() {
     if (douce) return;
     var N = 20;
@@ -156,12 +160,13 @@
     w.setAttribute('aria-hidden', 'true');
     var g = document.createElement('div');
     g.className = 'wipe-grille';
+    var cases = [];
     for (var r = 0; r < N; r++) {
       for (var c = 0; c < N; c++) {
         var i = document.createElement('i');
         if ((r + c) % 2 === 0) i.className = 'n';
-        i.style.setProperty('--d', ((r + c) * 0.011).toFixed(3) + 's');
         g.appendChild(i);
+        cases.push({ el: i, r: r, c: c });
       }
     }
     w.appendChild(g);
@@ -173,14 +178,31 @@
       if (!h || h.charAt(0) === '#' || h.indexOf('mailto:') === 0 || h.indexOf('tel:') === 0) return false;
       return a.host === location.host;
     }
+    function lancer(href, ox, oy) {
+      var W = window.innerWidth, H = window.innerHeight;
+      var S = 1.7 * Math.max(W, H), s = S / N, k = Math.SQRT1_2, max = 0;
+      cases.forEach(function (t) {
+        var lx = (t.c + .5 - N / 2) * s, ly = (t.r + .5 - N / 2) * s;
+        var x = W / 2 + (lx - ly) * k, y = H / 2 + (lx + ly) * k;
+        var d = Math.sqrt((x - ox) * (x - ox) + (y - oy) * (y - oy)) / 3400;
+        // les cases hors de l'écran n'attendent pas
+        if (x < -s || x > W + s || y < -s || y > H + s) d = 0;
+        if (d > max) max = d;
+        t.el.style.setProperty('--d', d.toFixed(3) + 's');
+      });
+      try { sessionStorage.setItem('slalom-transition', JSON.stringify({ x: ox / W, y: oy / H })); } catch (err) {}
+      w.classList.add('actif');
+      setTimeout(function () { location.href = href; }, Math.min(1000, max * 1000 + 470));
+    }
     document.addEventListener('click', function (e) {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
       var a = e.target.closest && e.target.closest('a');
       if (!interne(a)) return;
       e.preventDefault();
-      try { sessionStorage.setItem('slalom-transition', '1'); } catch (err) {}
-      w.classList.add('actif');
-      setTimeout(function () { location.href = a.href; }, 690);
+      var ox = e.clientX, oy = e.clientY;
+      // clic clavier : on part du centre du lien
+      if (!ox && !oy) { var b = a.getBoundingClientRect(); ox = b.left + b.width / 2; oy = b.top + b.height / 2; }
+      lancer(a.href, ox, oy);
     });
     // retour arrière : le navigateur peut restituer la page avec le voile en place
     window.addEventListener('pageshow', function () { w.classList.remove('actif'); });
@@ -359,7 +381,9 @@
 
   /* ---------- 15. mur d'affiches en perspective ---------- */
   function murPerspective() {
-    var murs = document.querySelectorAll('.mur-3d');
+    var murs = Array.prototype.filter.call(document.querySelectorAll('.mur-3d'), function (m) {
+      return !m.closest('.anneau-actif');
+    });
     if (!murs.length || douce) return;
     var att = false;
     function placer() {
@@ -419,10 +443,104 @@
   }
 
 
+  /* ---------- 17. anneau d'affiches : la roue tourne avec le défilement ---------- */
+  function anneau() {
+    var sec = document.getElementById('prochaines');
+    if (!sec || douce || !document.body.classList.contains('accueil')) return;
+    var scene = sec.querySelector('.anneau-scene'), bague = sec.querySelector('.affiches');
+    var leg = sec.querySelector('.anneau-legende');
+    if (!scene || !bague || !leg) return;
+    var items = Array.prototype.slice.call(bague.querySelectorAll('.affiche'));
+    var n = items.length;
+    if (n < 4) return;
+    var pas = 360 / n;
+    var nav = document.querySelector('.nav');
+    var lNom = leg.querySelector('[data-al-nom]'), lDate = leg.querySelector('[data-al-date]');
+    var lLien = leg.querySelector('[data-al-lien]'), lN = leg.querySelector('[data-al-n]');
+    var lTot = leg.querySelector('[data-al-total]');
+    var infos = items.map(function (a) {
+      var b = a.querySelector('.affiche-cap b'), d = a.querySelector('.affiche-cap span');
+      return { nom: b ? b.textContent : '', date: d ? d.textContent : '', lien: a.href };
+    });
+
+    sec.classList.add('anneau-actif');
+    leg.hidden = false;
+    lTot.textContent = (n < 10 ? '0' : '') + n;
+    bague.style.setProperty('--pas', pas + 'deg');
+    items.forEach(function (a, i) { a.style.setProperty('--i', i); });
+    var sol = document.createElement('div');
+    sol.className = 'anneau-sol';
+    sol.setAttribute('aria-hidden', 'true');
+    bague.parentNode.appendChild(sol);
+
+    var R = 0, rot = 0, cible = 0, incl = -22, inclCible = -22, actif = -1, att = false, anime = false;
+    function mesurer() {
+      var w = bague.offsetWidth;
+      R = (w / 2) / Math.tan(Math.PI / n) * 1.035;
+      bague.style.setProperty('--R', R.toFixed(1) + 'px');
+      lire();
+    }
+    function course() { return Math.max(1, sec.offsetHeight - scene.offsetHeight); }
+    function lire() {
+      var r = sec.getBoundingClientRect(), hNav = nav ? nav.offsetHeight : 0;
+      var p = Math.max(0, Math.min(1, (hNav - r.top) / course()));
+      cible = -p * (360 - pas);
+      // à l'approche, la roue se redresse ; une fois épinglée elle garde une légère plongée
+      var e = Math.max(0, Math.min(1, 1 - (r.top - hNav) / window.innerHeight));
+      inclCible = -24 + e * 16;
+      if (!anime) { anime = true; requestAnimationFrame(boucle); }
+    }
+    function legende(i) {
+      var f = infos[i];
+      lNom.classList.add('change');
+      setTimeout(function () {
+        lNom.textContent = f.nom;
+        lDate.textContent = f.date;
+        lLien.href = f.lien;
+        lLien.setAttribute('aria-label', 'Réserver — ' + f.nom);
+        lN.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
+        lNom.classList.remove('change');
+      }, actif < 0 ? 0 : 160);
+    }
+    function boucle() {
+      rot += (cible - rot) * 0.12;
+      incl += (inclCible - incl) * 0.12;
+      bague.style.transform = 'translateZ(' + (-R).toFixed(1) + 'px) rotateX(' + incl.toFixed(2) +
+                              'deg) rotateY(' + rot.toFixed(2) + 'deg)';
+      for (var i = 0; i < n; i++) {
+        var a = (i * pas + rot) * Math.PI / 180;
+        var c = Math.cos(a);
+        items[i].style.setProperty('--ombre', ((1 - c) * 0.42).toFixed(3));
+      }
+      var k = ((Math.round(-rot / pas) % n) + n) % n;
+      if (k !== actif) {
+        if (actif >= 0) items[actif].classList.remove('face');
+        items[k].classList.add('face');
+        legende(k);
+        actif = k;
+      }
+      if (Math.abs(cible - rot) > 0.02 || Math.abs(inclCible - incl) > 0.02) requestAnimationFrame(boucle);
+      else anime = false;
+    }
+    // tabulation clavier : l'affiche qui reçoit le focus vient se placer de face
+    items.forEach(function (a, i) {
+      a.addEventListener('focus', function () {
+        var r = sec.getBoundingClientRect(), hNav = nav ? nav.offsetHeight : 0;
+        var y = window.pageYOffset + r.top - hNav + (i / (n - 1)) * course();
+        window.scrollTo(0, y);
+      });
+    });
+    window.addEventListener('scroll', function () {
+      if (!att) { att = true; requestAnimationFrame(function () { att = false; lire(); }); }
+    }, { passive: true });
+    window.addEventListener('resize', mesurer, { passive: true });
+    mesurer();
+  }
+
   function demarrer() {
     reveler(); inclinaison(); profondeur(); rebours(); menuMobile();
     progres(); transitions(); compteurs(); manifeste(); projecteur(); magnetique(); cinetique();
-    billetterie(); revoquer(); murPerspective(); monogramme();
+    billetterie(); revoquer(); anneau(); murPerspective(); monogramme();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();

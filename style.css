@@ -1918,3 +1918,224 @@
     0%,38%{opacity:1}
     54%,100%{opacity:0}
   }
+
+  /* ================================================================
+     3D TEMPS RÉEL (WebGL) — états pilotés par assets/3d/*.js
+     Sans WebGL ou avec « réduire les animations », rien de ceci ne s'applique.
+     ================================================================ */
+  html{scrollbar-gutter:stable}
+  :root{--nav-h:53px}
+  @media (max-width:860px){:root{--nav-h:65px}}
+
+  /* ---------- accueil : plein écran, le logo devient chrome ---------- */
+  html.gl3d body.accueil .hero{min-height:calc(100vh - var(--nav-h));min-height:calc(100svh - var(--nav-h))}
+  html.gl3d body.accueil .hero-in h1 .logo-img{width:min(880px,88%)}
+  .hero-3d{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;display:block}
+
+  /* l'image du logo cède sa place au chrome, et revient si la 3D échoue */
+  html.gl3d body.accueil .hero h1 .logo-img{opacity:0;transition:opacity .5s ease}
+  html.gl3d-echec body.accueil .hero h1 .logo-img{opacity:1}
+  html.gl3d-echec .hero-3d{display:none}
+
+  /* intro : écran noir, seules les particules existent */
+  html.gl3d body.accueil:not(.arrivee) .loader{display:none}
+  html.gl3d.vient-de-transition body.accueil .loader{display:grid}
+  html.gl3d body.accueil main,html.gl3d body.accueil .nav,html.gl3d body.accueil footer{animation:none}
+  html.gl3d-intro{overflow:hidden}
+  body{transition:background-color .9s ease}
+  html.gl3d-intro body{background-color:#000;transition:none}
+  html.gl3d-intro body::before{opacity:0}
+  body::before{transition:opacity 1.2s ease}
+  .hero::before{
+    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:#000;opacity:0;transition:opacity 1.4s ease .1s;
+  }
+  html.gl3d-intro .hero::before{opacity:1;transition:none}
+  html.gl3d body.accueil .nav{transition:opacity .8s ease .3s,transform .9s cubic-bezier(.2,.7,.3,1) .3s}
+  html.gl3d-intro .nav{opacity:0;transform:translateY(-100%);transition:none}
+  html.gl3d body.accueil .hero-in>:not(h1){transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.3,1)}
+  html.gl3d body.accueil .hero-in>.kicker{transition-delay:.4s}
+  html.gl3d body.accueil .hero-in>.hero-tag{transition-delay:.6s}
+  html.gl3d body.accueil .hero-in>.hero-row{transition-delay:.8s}
+  html.gl3d-intro .hero-in>:not(h1){opacity:0;transform:translateY(18px);transition:none}
+  html.gl3d body.accueil .hero-spot{display:none}
+  /* plein écran : le fondu vers la page ne mange plus que le bas du hero */
+  html.gl3d body.accueil .hero-veil{
+    background:
+      radial-gradient(72% 62% at 50% 44%, rgba(12,12,12,.26), rgba(12,12,12,.6) 78%),
+      linear-gradient(180deg,rgba(12,12,12,.42) 0%,rgba(12,12,12,.16) 45%,rgba(12,12,12,.3) 80%,rgba(255,255,255,.96) 100%);
+  }
+  html.gl3d body.accueil .nav{transition:opacity .6s ease .05s,transform .7s cubic-bezier(.2,.7,.3,1) .05s}
+  html.gl3d body.accueil::before{transition:opacity 1s ease .45s}
+
+  /* ---------- anneau d'affiches (accueil) : la roue tourne avec le défilement ---------- */
+  .anneau-scene{position:relative}
+  #prochaines.anneau-actif{
+    padding:0;
+    height:calc(100vh - var(--nav-h) + 180vh);
+    height:calc(100svh - var(--nav-h) + 180svh);
+  }
+  #prochaines.anneau-actif .anneau-scene{
+    position:sticky;top:var(--nav-h);
+    height:calc(100vh - var(--nav-h));height:calc(100svh - var(--nav-h));
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    overflow:hidden;
+    padding-block:clamp(22px,4vh,48px) clamp(18px,3vh,36px);
+  }
+  #prochaines.anneau-actif .anneau-scene>.wrap{flex:0 0 auto}
+  #prochaines.anneau-actif .mur-3d{
+    --aw:clamp(236px,37vw,560px);
+    flex:1 1 auto;min-height:0;width:100%;
+    display:grid;place-items:center;
+    perspective:1600px;perspective-origin:50% 26%;
+    position:relative;
+  }
+  #prochaines.anneau-actif .affiches{
+    position:relative;display:block;
+    width:var(--aw);aspect-ratio:16/9;max-width:none;
+    margin:0;padding:0;border-radius:0;overflow:visible;
+    transform-style:preserve-3d;will-change:transform;
+    transition:none;
+  }
+  #prochaines.anneau-actif .affiche{
+    position:absolute;inset:0;
+    overflow:visible;border-radius:0;background:transparent;
+    transform-style:preserve-3d;
+    transform:rotateY(calc(var(--i) * var(--pas))) translateZ(var(--R));
+    transition:none;
+  }
+  #prochaines.anneau-actif .affiche-vis{
+    position:absolute;inset:0;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    background:#161616;
+    box-shadow:0 34px 60px -26px rgba(0,0,0,.55);
+  }
+  #prochaines.anneau-actif .affiche-vis::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(90deg,rgba(0,0,0,.2),transparent 30% 70%,rgba(0,0,0,.2)),#000;
+    opacity:var(--ombre,0);
+  }
+  #prochaines.anneau-actif .affiche::after{
+    content:"";position:absolute;inset:0;
+    background:#0B0B0B url(assets/logo.png) center/42% no-repeat;
+    transform:rotateY(180deg);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  }
+  #prochaines.anneau-actif .affiche-cap{display:none}
+  #prochaines.anneau-actif .affiche.face .affiche-vis{outline:1px solid rgba(0,0,0,.9);outline-offset:0}
+  .anneau-sol{
+    position:absolute;left:50%;bottom:4%;
+    width:min(94vw,1200px);height:clamp(40px,8vh,90px);
+    transform:translateX(-50%);
+    background:radial-gradient(closest-side,rgba(0,0,0,.30),rgba(0,0,0,.08) 60%,transparent);
+    pointer-events:none;
+  }
+
+  .anneau-legende{text-align:center;margin-top:clamp(8px,2vh,20px);flex:0 0 auto}
+  .anneau-legende p{margin:0}
+  .al-compte{
+    font-family:var(--cond);font-size:11px;letter-spacing:.24em;font-weight:600;color:var(--grey);
+  }
+  .al-compte b{color:var(--white);font-weight:700}
+  .al-date{
+    margin-top:6px!important;
+    font-family:var(--cond);text-transform:uppercase;letter-spacing:.18em;font-size:11px;font-weight:600;color:var(--grey);
+  }
+  .al-nom{
+    margin-top:4px!important;
+    font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:1;
+    font-size:clamp(20px,3.2vw,38px);
+    transition:opacity .25s ease,transform .35s cubic-bezier(.2,.7,.3,1);
+  }
+  .al-nom.change{opacity:0;transform:translateY(8px)}
+  .al-btn{margin-top:14px}
+  #prochaines.anneau-actif .cta-row{margin-top:10px}
+  @media (max-width:700px){
+    #prochaines.anneau-actif .mur-3d{perspective:1000px;--aw:clamp(220px,64vw,300px)}
+    .al-btn{padding:12px 22px}
+  }
+  @media (max-height:640px){
+    #prochaines.anneau-actif .cta-row{display:none}
+  }
+  #prochaines.anneau-actif .affiches:hover .affiche,
+  #prochaines.anneau-actif .affiches:hover .affiche:hover{opacity:1}
+  #prochaines.anneau-actif .affiche:hover .affiche-vis img{transform:scale(1.04)}
+
+  /* ---------- fond : damier en relief (WebGL) ---------- */
+  .damier-3d{
+    position:fixed;left:0;top:0;width:100vw;height:100vh;height:100lvh;
+    z-index:-1;pointer-events:none;display:block;
+    opacity:0;transition:opacity .45s ease;
+  }
+  html.damier3d-actif .damier-3d{opacity:1}
+  html.damier3d-actif body::before{opacity:0}
+  html.gl3d-intro .damier-3d{opacity:0;transition:none}
+
+  /* ---------- galerie liquide (WebGL) ---------- */
+  .galerie-3d{position:fixed;left:0;top:0;width:100%;height:100%;z-index:5;pointer-events:none;display:block}
+  #galerie .card.liquide .shot-img{opacity:0}
+  #galerie .card.liquide .card-vis::after{display:none}
+  #galerie .card.liquide .card-vis{transform:none!important;background:transparent}
+
+  /* ---------- transitions 3D : les cases du damier se retournent ---------- */
+  .loader .loader-grid{width:170vmax;height:170vmax;perspective:1600px}
+  .loader .loader-grid i{
+    background:#101010;border-radius:0;
+    transform:translateZ(0) rotateY(-180deg);
+    animation:case-aller-retour var(--ld) cubic-bezier(.65,0,.35,1) both;
+    animation-delay:var(--d,0s);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  }
+  .loader .loader-grid i.w{background:#FFFFFF;animation-name:case-aller-retour}
+  @keyframes case-aller-retour{
+    0%{transform:translateZ(0) rotateY(-180deg)}
+    12%{transform:translateZ(70px) rotateY(-90deg)}
+    24%,60%{transform:translateZ(0) rotateY(0deg)}
+    72%{transform:translateZ(70px) rotateY(90deg)}
+    84%,100%{transform:translateZ(0) rotateY(180deg)}
+  }
+
+  /* arrivée : l'écran est encore couvert par les cases de la page précédente, elles se retournent */
+  html.vient-de-transition .loader::before{display:none}
+  html.vient-de-transition .loader{animation:loader-end 0s linear 1.3s forwards}
+  html.vient-de-transition .loader .loader-grid{display:grid!important}
+  html.vient-de-transition .loader-intro,html.vient-de-transition .tunnel{display:none}
+  html.vient-de-transition main,html.vient-de-transition .nav,html.vient-de-transition footer{animation:none}
+  html.vient-de-transition .loader .loader-grid i,
+  html.vient-de-transition .loader .loader-grid i.w{
+    transform:translateZ(0) rotateY(0deg);
+    animation:case-sortie .52s cubic-bezier(.65,0,.35,1) both;
+    animation-delay:var(--d,0s);
+  }
+  @keyframes case-sortie{
+    0%{transform:translateZ(0) rotateY(0deg)}
+    50%{transform:translateZ(70px) rotateY(90deg)}
+    100%{transform:translateZ(0) rotateY(180deg)}
+  }
+
+  /* départ : les cases se retournent depuis le point cliqué et couvrent la page */
+  .wipe .wipe-grille{width:170vmax;height:170vmax;perspective:1600px}
+  .wipe .wipe-grille i{
+    background:#FFFFFF;border-radius:0;
+    transform:translateZ(0) rotateY(-180deg);
+    animation:none;
+    backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  }
+  .wipe .wipe-grille i.n{background:#101010}
+  .wipe.actif .wipe-grille i{
+    animation:case-entree .46s cubic-bezier(.65,0,.35,1) both;
+    animation-delay:var(--d,0s);
+  }
+  @keyframes case-entree{
+    0%{transform:translateZ(0) rotateY(-180deg)}
+    50%{transform:translateZ(70px) rotateY(-90deg)}
+    100%{transform:translateZ(0) rotateY(0deg)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .loader .loader-grid i,.wipe .wipe-grille i{animation:none}
+  }
+  /* pages intérieures : le fond de l'ouverture s'efface dès que les cases couvrent l'écran,
+     elles se retournent ensuite directement sur la page */
+  body:not(.accueil) .loader::before{animation:plaque-cachee 0s linear calc(var(--ld) * .6) forwards}
+  @keyframes plaque-cachee{to{opacity:0}}
+  body:not(.accueil) main,body:not(.accueil) .nav,body:not(.accueil) footer{animation:none}
