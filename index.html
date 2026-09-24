@@ -200,6 +200,12 @@ main{padding-top:calc(var(--g) + var(--bar)); padding-bottom:var(--g); padding-i
 .ticks6 i.on{background:var(--strobe)}
 
 /* next chapter */
+.story{display:flex; flex-direction:column; gap:clamp(28px, 4vh, 44px); margin-bottom:clamp(56px, 9vh, 100px)}
+.story-lead{margin:0; max-width:40ch; font-size:clamp(17px, 2.2vw, 30px); line-height:1.55; letter-spacing:.06em; color:var(--strobe); text-wrap:balance}
+.story-body{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:1px; background:var(--graphite); border:1px solid var(--graphite)}
+.story-body p{margin:0; padding:clamp(20px, 2.4vw, 32px); background:var(--onyx); font-size:clamp(11px, 1.05vw, 14px); line-height:2; letter-spacing:.14em; color:var(--argent)}
+.story-end{margin:0; font-weight:700; font-size:clamp(12px, 1.2vw, 16px); letter-spacing:.3em; color:var(--strobe)}
+@media (max-width: 640px){ .story-body{grid-template-columns:1fr} }
 .ticket{display:grid; grid-template-columns:minmax(0, 1fr) clamp(220px, 26vw, 320px); border:1px solid var(--graphite)}
 .t-main{display:grid; grid-template-columns:auto minmax(0, 1fr); align-items:end; gap:clamp(24px, 4vw, 64px); padding:clamp(24px, 3vw, 44px)}
 .t-head{grid-column:1 / -1; display:flex; justify-content:space-between; gap:16px}
@@ -807,7 +813,7 @@ window.SlalomMap={mount:mount};
 <nav class="nav" aria-label="Sections">
 <a href="#concept" data-sec="concept">CONCEPT</a><a href="#chapter" data-sec="chapter">CHAPTER 01</a><a href="#venue" data-sec="venue">VENUE</a><a href="#info" data-sec="info">INFO</a><span class="nav-sep" aria-hidden="true"></span><a href="#map" data-map>MAP</a><a href="#drinks" data-drinks>DRINKS</a>
 </nav>
-<div class="bar-actions"><a class="ig" href="https://www.instagram.com/_onyx_club/" target="_blank" rel="noopener" aria-label="ONYX on Instagram (opens in a new tab)"><span>IG</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg></a><a class="btn btn-sm magnet" href="#tickets"><span>TICKETS</span></a>
+<div class="bar-actions"><a class="ig" href="https://www.instagram.com/_onyx_club/" target="_blank" rel="noopener" aria-label="ONYX on Instagram (opens in a new tab)"><span>IG</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg></a><a class="btn btn-sm magnet" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span>TICKETS</span><span class="sr"> (opens Shotgun in a new tab)</span></a>
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu"><span>MENU</span></button></div>
 </header>
 <div class="menu" id="menu" hidden>
@@ -854,6 +860,16 @@ window.SlalomMap={mount:mount};
 
 <section class="section" id="chapter" data-name="CHAPTER 01" data-index="02" data-anim>
 <div class="shead"><h2><b>02</b> — <span data-scramble>NEXT CHAPTER</span></h2><span class="fil"></span><span class="meta">TICKETS ON SHOTGUN</span></div>
+<div class="story">
+<p class="story-lead">Chapter 01 is a first experience: one night at Slalom, built to wake your senses. The opening page of ONYX, a story told in numbered chapters.</p>
+<div class="story-body">
+<p>It starts with sound. The sound that shaped a generation, on a serious system powered by <span style="white-space:nowrap">L-Acoustics</span>, felt as much as it is heard.</p>
+<p>Then comes vision. Precise light, strobe, and darkness in between, every cue in its place.</p>
+<p>The crowd is limited by design, so there is room to move, to listen, to lose track of time.</p>
+<p>Six hours, from 00:00 to 06:00, with nothing to do but be there. Only the music, the light, and the people who came for them.</p>
+</div>
+<p class="story-end">This is where it begins. Imagine what comes next.</p>
+</div>
 <div class="ticket">
 <div class="t-main">
 <div class="t-head"><p class="label">CHAPTER</p><p class="label r">N° 0001</p></div>
@@ -869,12 +885,12 @@ window.SlalomMap={mount:mount};
 <div class="t-stub">
 <div class="stub-top"><p class="label">ADMIT ONE</p><p class="label r">18+</p></div>
 <div class="code"><svg viewBox="0 0 79 20" preserveAspectRatio="none" shape-rendering="crispEdges" role="img" aria-label="Barcode ONYX"><rect style="--k:0" x="0" y="0" width="2" height="20"></rect><rect style="--k:1" x="3" y="0" width="1" height="20"></rect><rect style="--k:2" x="6" y="0" width="1" height="20"></rect><rect style="--k:3" x="11" y="0" width="1" height="20"></rect><rect style="--k:4" x="15" y="0" width="3" height="20"></rect><rect style="--k:5" x="19" y="0" width="2" height="20"></rect><rect style="--k:6" x="22" y="0" width="1" height="20"></rect><rect style="--k:7" x="24" y="0" width="3" height="20"></rect><rect style="--k:8" x="30" y="0" width="2" height="20"></rect><rect style="--k:9" x="33" y="0" width="3" height="20"></rect><rect style="--k:10" x="37" y="0" width="2" height="20"></rect><rect style="--k:11" x="40" y="0" width="1" height="20"></rect><rect style="--k:12" x="44" y="0" width="3" height="20"></rect><rect style="--k:13" x="50" y="0" width="1" height="20"></rect><rect style="--k:14" x="52" y="0" width="2" height="20"></rect><rect style="--k:15" x="55" y="0" width="2" height="20"></rect><rect style="--k:16" x="59" y="0" width="1" height="20"></rect><rect style="--k:17" x="62" y="0" width="3" height="20"></rect><rect style="--k:18" x="66" y="0" width="2" height="20"></rect><rect style="--k:19" x="71" y="0" width="3" height="20"></rect><rect style="--k:20" x="75" y="0" width="1" height="20"></rect><rect style="--k:21" x="77" y="0" width="2" height="20"></rect></svg><span class="scan" aria-hidden="true"></span></div>
-<a class="btn magnet" href="#tickets"><span>TICKETS</span></a>
+<a class="btn magnet" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span>TICKETS</span><span class="sr"> (opens Shotgun in a new tab)</span></a>
 </div>
 </div>
 <div class="tix" id="tickets">
 <div class="tix-head"><h3 class="label">TICKETS</h3><span class="label r">SHOTGUN</span></div>
-<div class="tix-body"><p class="tix-text">Tickets for every chapter are sold on Shotgun.</p><a class="btn magnet" href="https://shotgun.live/venues/onyx-lille" target="_blank" rel="noopener"><span>OPEN SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a></div>
+<div class="tix-body"><p class="tix-text">Tickets for every chapter are sold on Shotgun.</p><a class="btn magnet" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span>OPEN SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a></div>
 </div>
 </section>
 
@@ -910,7 +926,7 @@ window.SlalomMap={mount:mount};
 <div class="big"><svg class="wm foot-wm" viewBox="0 0 746.52 129.68" data-vbw="746.52" data-px="1.2" role="img" aria-label="ONYX"><g class="L" style="--i:0"><path class="fill" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84ZM131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="base" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="base" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="draw" pathLength="1" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="draw" pathLength="1" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path></g><g class="L" style="--i:1"><path class="fill" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="base" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="draw" pathLength="1" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path></g><g class="L" style="--i:2"><path class="fill" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="base" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="draw" pathLength="1" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path></g><g class="L" style="--i:3"><path class="fill" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="base" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="draw" pathLength="1" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path></g></svg></div>
 <div class="foot-row"><p class="label">© 2026 ONYX · LILLE</p><p class="label pw-f">SOUND POWERED BY L-ACOUSTICS</p>
 <a class="flink" href="https://www.instagram.com/_onyx_club/" target="_blank" rel="noopener"><span data-hover>INSTAGRAM</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
-<a class="flink" href="https://shotgun.live/venues/onyx-lille" target="_blank" rel="noopener"><span data-hover>SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
+<a class="flink" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span data-hover>SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
 <a class="flink" href="#top"><span data-hover>BACK TO TOP</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 11V1M2 5l4-4 4 4"></path></svg></a></div>
 </footer>
 </main>
@@ -1292,7 +1308,7 @@ window.SlalomMap={mount:mount};
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   }
   mapLinks.forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); openMap(); }); });
-  $$('.nav a:not([data-map]):not([data-drinks]), .brand, .bar-actions .btn, .menu a:not([data-map]):not([data-drinks])').forEach(function(a){ a.addEventListener('click', closeMap); });
+  $$('.nav a:not([data-map]):not([data-drinks]), .brand, .menu a:not([data-map]):not([data-drinks])').forEach(function(a){ a.addEventListener('click', closeMap); });
   if (location.hash === '#map') openMap();
 
   /* --- drinks tab --- */
@@ -1335,7 +1351,7 @@ window.SlalomMap={mount:mount};
   }
   drinkLinks.forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); openDrinks(); }); });
   mapLinks.forEach(function(a){ a.addEventListener('click', closeDrinks); });
-  $$('.nav a:not([data-map]):not([data-drinks]), .brand, .bar-actions .btn, .menu a:not([data-map]):not([data-drinks])').forEach(function(a){ a.addEventListener('click', closeDrinks); });
+  $$('.nav a:not([data-map]):not([data-drinks]), .brand, .menu a:not([data-map]):not([data-drinks])').forEach(function(a){ a.addEventListener('click', closeDrinks); });
   if (dv) $('.dk-close', dv).addEventListener('click', closeDrinks);
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && dv && !dv.hidden) closeDrinks(); });
   if (location.hash === '#drinks') openDrinks();
