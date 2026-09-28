@@ -1,12 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
-</head>
-<body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>ONYX Lille</title>
+<meta name="description" content="ONYX is a night concept based in Lille. Each edition is a numbered chapter.">
+<meta name="theme-color" content="#050505">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%23050505'/%3E%3Crect x='6' y='6' width='108' height='108' fill='none' stroke='%239A9A9A' stroke-width='6'/%3E%3Cpath fill='%239A9A9A' d='M56.57 40.45Q56.57 43.39 55.49 45.64Q54.41 47.89 52.4 49.4Q50.39 50.91 47.53 51.68Q44.66 52.45 41.09 52.45Q37.52 52.45 34.64 51.68Q31.76 50.91 29.74 49.4Q27.71 47.89 26.62 45.64Q25.52 43.39 25.52 40.45Q25.52 37.51 26.62 35.26Q27.71 33.01 29.74 31.5Q31.76 29.99 34.64 29.22Q37.52 28.45 41.09 28.45Q44.66 28.45 47.53 29.22Q50.39 29.99 52.4 31.5Q54.41 33.01 55.49 35.26Q56.57 37.51 56.57 40.45ZM50.34 40.45Q50.34 39.17 49.93 37.9Q49.53 36.63 48.49 35.62Q47.45 34.61 45.66 33.98Q43.87 33.34 41.09 33.34Q39.23 33.34 37.82 33.64Q36.41 33.93 35.38 34.44Q34.35 34.95 33.66 35.64Q32.96 36.33 32.54 37.12Q32.13 37.91 31.95 38.76Q31.78 39.62 31.78 40.45Q31.78 41.3 31.95 42.16Q32.13 43.02 32.54 43.81Q32.96 44.6 33.66 45.28Q34.35 45.96 35.38 46.47Q36.41 46.97 37.82 47.26Q39.23 47.56 41.09 47.56Q43.87 47.56 45.66 46.92Q47.45 46.29 48.49 45.28Q49.53 44.27 49.93 43Q50.34 41.73 50.34 40.45Z'/%3E%3Cpath fill='%239A9A9A' d='M87.81 51.84 72.42 36.17V51.84H66.26V29.03H72.95L88.35 44.77V29.03H94.48V51.84Z'/%3E%3Cpath fill='%239A9A9A' d='M45.95 81.63V90.94H39.81V81.63L28.75 68.13H35.66L42.89 77.31L50.1 68.13H57.01Z'/%3E%3Cpath fill='%239A9A9A' d='M80.43 79.23 91.25 90.94H83.86L76.72 83.25L69.62 90.94H62.25L73.06 79.23L62.78 68.13H70.17L76.72 75.27L83.31 68.13H90.7Z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&amp;display=swap">
 <style>:root{
   --onyx:#050505; --graphite:#1E1E1E; --cendre:#7A7A7A; --argent:#9A9A9A; --strobe:#F2F2F0;
@@ -248,7 +244,7 @@ main{padding-top:calc(var(--g) + var(--bar)); padding-bottom:var(--g); padding-i
 .v-row{display:flex; flex-wrap:nowrap; justify-content:space-between; align-items:flex-end; gap:24px; margin-top:auto}
 .partner{display:block; height:56px; width:auto; opacity:.6; margin-bottom:3px}
 .radar{position:relative; display:flex; align-items:center; justify-content:center; min-height:380px; padding:48px 24px; background:var(--onyx)}
-.radar svg{width:min(100%, 340px); height:auto; overflow:visible}
+.radar > svg{width:min(100%, 340px); height:auto; overflow:visible}
 .radar .ring{fill:none; stroke:var(--graphite); stroke-width:1}
 .radar .axis{stroke:var(--graphite); stroke-width:1}
 .radar .ping{fill:none; stroke:var(--argent); stroke-width:1; transform-origin:180px 180px; animation:ping 3.3s var(--out) infinite}
@@ -436,6 +432,136 @@ html.ov-open .nav a[data-sec]:not(:hover)::after{transform:scaleX(0)}
   .radar .ping{opacity:0}
   .scan{left:50%}
 }
+
+/* =====================================================================
+   FX LAYER — one particle system for the whole page (flat, five greys)
+   Active only when html.fx is set (WebGL available, motion allowed).
+   ===================================================================== */
+.fx-canvas{position:fixed; left:0; right:0; top:0; width:100%; height:100vh; height:100lvh; z-index:0; pointer-events:none; display:block}
+main{position:relative; z-index:1}
+::selection{background:var(--strobe); color:var(--onyx)}
+html{scrollbar-color:#2A2A2A var(--onyx)}
+html.fx .dots{visibility:hidden}
+
+/* single strobe hit at the end of the intro (one flash, never repeated) */
+.flash{position:fixed; inset:0; z-index:66; pointer-events:none; background:var(--strobe); opacity:0}
+.flash.go{animation:flash .36s linear both}
+@keyframes flash{0%{opacity:.72} 20%{opacity:.72} 21%{opacity:.32} 46%{opacity:.32} 47%{opacity:.1} 76%{opacity:.1} 77%,100%{opacity:0}}
+
+/* intro, fx version: crosses frame the dark, the wordmark draws alone, then the particles and the site arrive */
+html.fx.intro .vf{opacity:1}
+html.fx.intro .vf .progress, html.fx.intro .vf .marks{opacity:0}
+.fx-canvas{transition:opacity 1.2s var(--out) .3s}
+html.intro .fx-canvas{opacity:0}
+.vf-l{position:absolute; background:var(--graphite); display:none; transition:transform 1.1s var(--ease) .12s}
+html.fx .vf{border-color:transparent}
+html.fx .vf-l{display:block}
+.vf-l.t{left:-1px; right:-1px; top:-1px; height:1px; transform-origin:left}
+.vf-l.b{left:-1px; right:-1px; bottom:-1px; height:1px; transform-origin:right}
+.vf-l.l{top:-1px; bottom:-1px; left:-1px; width:1px; transform-origin:bottom}
+.vf-l.r{top:-1px; bottom:-1px; right:-1px; width:1px; transform-origin:top}
+html.intro .vf-l.t, html.intro .vf-l.b{transform:scaleX(0)}
+html.intro .vf-l.l, html.intro .vf-l.r{transform:scaleY(0)}
+.vf .progress, .vf .marks{transition:opacity .8s var(--out) .6s}
+html.fx .nav a{transition:clip-path .7s var(--out) var(--d, 0s), color .3s}
+html.fx.intro .nav a{clip-path:inset(0 0 100% 0)}
+html.fx .nav a:nth-child(2){--d:.05s} html.fx .nav a:nth-child(3){--d:.1s} html.fx .nav a:nth-child(4){--d:.15s}
+html.fx .nav a:nth-child(6){--d:.25s} html.fx .nav a:nth-child(7){--d:.3s} html.fx .nav a:nth-child(8){--d:.35s}
+
+/* section marks on the right edge of the frame */
+.vf .marks{position:absolute; right:-1px; top:0; bottom:0; width:1px}
+.vf .marks i{position:absolute; right:-3px; width:7px; height:1px; background:var(--cendre); transition:background .3s, width .4s var(--out), right .4s var(--out)}
+.vf .marks i.on{background:var(--strobe); width:15px; right:-7px}
+
+/* HUD tempo */
+.hud-bpm{display:inline-flex; align-items:center; gap:10px}
+.hud-bpm i{display:block; width:5px; height:5px; background:var(--graphite)}
+.hud-bpm.on i{background:var(--strobe)}
+
+/* focus lock: the crosshair brackets snap around whatever you point at (drawn above the bar and the tabs) */
+.lock{position:fixed; inset:0; z-index:63; pointer-events:none; opacity:0; transition:opacity .3s}
+.lock.on{opacity:1}
+.lock .cr{position:absolute; left:0; top:0; transform:translate(calc(var(--cx, 0px) + 14px), calc(var(--cy, 0px) + 14px));
+  font-size:9px; letter-spacing:.25em; color:var(--cendre); white-space:nowrap; font-variant-numeric:tabular-nums}
+.lock.hot .cr{color:var(--strobe)}
+.lock .lk{position:absolute; left:0; top:0; width:10px; height:10px; border:0 solid var(--cendre); transition:border-color .25s; will-change:transform}
+.lock .lk.a{border-left-width:1px; border-top-width:1px}
+.lock .lk.b{border-right-width:1px; border-top-width:1px}
+.lock .lk.c{border-left-width:1px; border-bottom-width:1px}
+.lock .lk.d{border-right-width:1px; border-bottom-width:1px}
+.lock.hot .lk{border-color:var(--strobe)}
+.lock .lk{display:none}   /* no brackets around the pointer or the tabs */
+@media (hover:none), (pointer:coarse){ .lock{display:none} }
+
+/* scan reveal: content is printed by a hairline of light */
+html.fx [data-rv]{position:relative}
+html.fx [data-rv]:not(.rv){opacity:0}   /* opacity, not clip-path: a clipped block would never be seen by the observer */
+html.fx [data-rv].rv:not(.rv-done){animation:rvClip 1s var(--ease) both}
+html.fx [data-rv].rv:not(.rv-done)::before{content:""; position:absolute; left:-1px; right:-1px; top:0; height:100%; border-top:1px solid var(--strobe); z-index:4; pointer-events:none; animation:rvLine 1s var(--ease) both}
+@keyframes rvClip{from{clip-path:inset(0 0 100% 0)} to{clip-path:inset(0 0 0 0)}}
+@keyframes rvLine{from{transform:translateY(0); opacity:1} 90%{opacity:1} to{transform:translateY(calc(100% - 1px)); opacity:0}}
+
+/* overlays open behind a strobe hairline */
+.mapview::after, .drinkview::after{content:""; position:absolute; left:0; right:0; top:0; height:100%; border-top:1px solid var(--strobe); z-index:8; pointer-events:none; opacity:0; animation:wipeLine .7s var(--out) both}
+@keyframes wipeLine{0%{transform:translateY(0); opacity:1} 94%{opacity:1} 100%{transform:translateY(calc(100% - 1px)); opacity:0}}
+
+/* ---------- chapter reel: SOUND / VISION / CROWD / TIME ---------- */
+.reel-top, .reel-key, .reel-stage{display:none}
+html.fx .reel{--pinh:calc(100vh - 2 * var(--g) - var(--sat) - var(--sab) - var(--bar)); height:calc(var(--pinh) * 4.4)}
+@supports (height:100svh){ html.fx .reel{--pinh:calc(100svh - 2 * var(--g) - var(--sat) - var(--sab) - var(--bar))} }
+html.fx .reel-pin{position:sticky; top:calc(var(--g) + var(--sat) + var(--bar)); height:var(--pinh); display:grid;
+  grid-template-columns:minmax(0, .82fr) minmax(0, 1.18fr); grid-template-rows:auto minmax(0, 1fr) auto; column-gap:clamp(24px, 4vw, 72px);
+  padding-block:clamp(22px, 4.5vh, 48px)}
+html.fx .reel-top{display:flex; grid-column:1; grid-row:1; align-items:center; gap:18px; font-size:9px; letter-spacing:.4em; color:var(--cendre); white-space:nowrap}
+html.fx .reel-n b{font-weight:700; color:var(--strobe)}
+.reel-bars{display:flex; gap:6px}
+.reel-bars i{display:block; width:22px; height:3px; background:var(--graphite); transition:background .4s}
+.reel-bars i.done{background:var(--cendre)}
+.reel-bars i.on{background:var(--strobe)}
+html.fx .reel-key{display:block; grid-column:1; grid-row:2; align-self:center; margin:0; font-weight:700; font-size:clamp(34px, 5.6vw, 104px); line-height:1;
+  letter-spacing:.06em; color:transparent; -webkit-text-stroke:1.2px var(--argent); white-space:nowrap}
+html.fx .reel .story-body{grid-column:1; grid-row:3; display:grid; background:none; border:0; gap:0}
+html.fx .reel .story-body p{grid-area:1 / 1; padding:0; background:none; max-width:42ch; font-size:clamp(11px, 1.02vw, 15px); line-height:2.05; letter-spacing:.14em;
+  color:var(--argent); opacity:0; transition:opacity .25s}
+html.fx .reel .story-body p.on{opacity:1; animation:rvClip .9s var(--ease) both}
+html.fx .reel-stage{display:block; position:relative; grid-column:2; grid-row:1 / 4; min-height:0}
+.reel-stage .cross{position:absolute}
+.reel-stage .tl{left:-8px; top:-8px} .reel-stage .tr{right:-8px; top:-8px} .reel-stage .bl{left:-8px; bottom:-8px} .reel-stage .br{right:-8px; bottom:-8px}
+.reel-cap, .reel-clock{position:absolute; bottom:14px; font-size:9px; letter-spacing:.35em; color:var(--cendre); white-space:nowrap; font-variant-numeric:tabular-nums}
+.reel-cap{left:18px}
+.reel-clock{right:18px; opacity:0; transition:opacity .5s}
+.reel-clock b{font-weight:700; color:var(--strobe)}
+.reel-stage.t4 .reel-clock{opacity:1}
+
+/* ---------- venue: Slalom materialises inside the radar ---------- */
+html.fx .venue{background:transparent; gap:0}
+html.fx .v-info{background:transparent; border-right:1px solid var(--graphite)}
+html.fx .radar{background:transparent}
+html.fx .radar .sweepl{animation:none}   /* the engine turns it, in step with the particles it lights */
+html.fx .radar > svg{width:min(100%, 400px)}
+.radar-go{position:absolute; inset:0; z-index:2; display:flex; justify-content:center; align-items:flex-start; padding-top:18px; text-decoration:none; color:var(--cendre)}
+.radar-go span{display:inline-flex; align-items:center; gap:10px; font-size:9px; letter-spacing:.35em; white-space:nowrap; transition:color .3s}
+.radar-go:hover span{color:var(--strobe)}
+
+/* ---------- ticket: tilts with the pointer, a scan pass reads it ---------- */
+.ticket{position:relative}
+html.fx .ticket{transition:transform .7s var(--out); will-change:transform}
+html.fx .ticket.tilt{transition:transform .12s linear}
+.ticket::after{content:""; position:absolute; top:-1px; bottom:-1px; left:0; width:100%; border-left:1px solid var(--strobe); opacity:0; pointer-events:none; z-index:3}
+.ticket.pass::after{animation:pass 1s var(--ease) both}
+@keyframes pass{from{transform:translateX(0); opacity:1} 92%{opacity:1} to{transform:translateX(calc(100% - 1px)); opacity:0}}
+
+@media (max-width: 960px){
+  html.fx .reel{height:calc(var(--pinh) * 4.1)}
+  html.fx .reel-pin{grid-template-columns:minmax(0, 1fr); grid-template-rows:auto auto minmax(0, 1fr) auto; row-gap:14px; padding-block:18px 20px}
+  html.fx .reel-top{grid-row:1}
+  html.fx .reel-key{grid-row:2; font-size:clamp(30px, 9.4vw, 64px)}
+  html.fx .reel-stage{grid-column:1; grid-row:3}
+  html.fx .reel .story-body{grid-row:4}
+  html.fx .reel .story-body p{font-size:11px; line-height:1.95; letter-spacing:.1em}
+  html.fx .v-info{border-right:0; border-bottom:1px solid var(--graphite)}
+}
+@media (max-width: 640px){ .reel-cap{display:none} .reel-clock{left:14px; right:auto} }
 </style>
 <script>/* three.js r128 (MIT) */
 /**
@@ -843,12 +969,14 @@ window.SlalomMap={mount:mount};
 })();
 
 </script>
-<script>(function(){try{var h=location.hash;if(h==='#map'||h==='#drinks'||h==='#contact')return;if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.documentElement.classList.add('intro');}catch(e){}})();</script>
+<script>(function(){try{var d=document.documentElement,rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;if(!rm&&window.WebGLRenderingContext)d.classList.add('fx');var h=location.hash;if(h==='#map'||h==='#drinks'||h==='#contact')return;if(rm)return;d.classList.add('intro');}catch(e){}})();</script>
 <div class="site" lang="en">
 <div class="mask" aria-hidden="true"></div>
+<div class="flash" aria-hidden="true"></div>
 <button class="intro-skip" type="button"><span>ENTER</span></button>
-<div class="vf" aria-hidden="true"><svg class="cross tl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross tr" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross bl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross br" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="progress"></span></div>
-<div class="cursor" aria-hidden="true"><span class="ch"></span><span class="cv"></span><span class="cr">X 0000 · Y 0000</span></div>
+<div class="vf" aria-hidden="true"><svg class="cross tl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross tr" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross bl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross br" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="vf-l t"></span><span class="vf-l r"></span><span class="vf-l b"></span><span class="vf-l l"></span><span class="marks"></span><span class="progress"></span></div>
+<div class="cursor" aria-hidden="true"><span class="ch"></span><span class="cv"></span></div>
+<div class="lock" aria-hidden="true"><span class="lk a"></span><span class="lk b"></span><span class="lk c"></span><span class="lk d"></span><span class="cr">X 0000 · Y 0000</span></div>
 <header class="topbar">
 <a class="brand" href="#top" aria-label="ONYX, back to top"><svg class="mono" viewBox="0 0 120 120" aria-hidden="true"><rect x="1.75" y="1.75" width="116.5" height="116.5"></rect><path d="M56.57 40.45Q56.57 43.39 55.49 45.64Q54.41 47.89 52.4 49.4Q50.39 50.91 47.53 51.68Q44.66 52.45 41.09 52.45Q37.52 52.45 34.64 51.68Q31.76 50.91 29.74 49.4Q27.71 47.89 26.62 45.64Q25.52 43.39 25.52 40.45Q25.52 37.51 26.62 35.26Q27.71 33.01 29.74 31.5Q31.76 29.99 34.64 29.22Q37.52 28.45 41.09 28.45Q44.66 28.45 47.53 29.22Q50.39 29.99 52.4 31.5Q54.41 33.01 55.49 35.26Q56.57 37.51 56.57 40.45ZM50.34 40.45Q50.34 39.17 49.93 37.9Q49.53 36.63 48.49 35.62Q47.45 34.61 45.66 33.98Q43.87 33.34 41.09 33.34Q39.23 33.34 37.82 33.64Q36.41 33.93 35.38 34.44Q34.35 34.95 33.66 35.64Q32.96 36.33 32.54 37.12Q32.13 37.91 31.95 38.76Q31.78 39.62 31.78 40.45Q31.78 41.3 31.95 42.16Q32.13 43.02 32.54 43.81Q32.96 44.6 33.66 45.28Q34.35 45.96 35.38 46.47Q36.41 46.97 37.82 47.26Q39.23 47.56 41.09 47.56Q43.87 47.56 45.66 46.92Q47.45 46.29 48.49 45.28Q49.53 44.27 49.93 43Q50.34 41.73 50.34 40.45Z"></path><path d="M87.81 51.84 72.42 36.17V51.84H66.26V29.03H72.95L88.35 44.77V29.03H94.48V51.84Z"></path><path d="M45.95 81.63V90.94H39.81V81.63L28.75 68.13H35.66L42.89 77.31L50.1 68.13H57.01Z"></path><path d="M80.43 79.23 91.25 90.94H83.86L76.72 83.25L69.62 90.94H62.25L73.06 79.23L62.78 68.13H70.17L76.72 75.27L83.31 68.13H90.7Z"></path></svg><span class="brand-t">ONYX</span></a>
 <nav class="nav" aria-label="Sections">
@@ -913,7 +1041,7 @@ window.SlalomMap={mount:mount};
 </div>
 </div></div>
 </div>
-<div class="hud" aria-hidden="true"><span class="hud-sec">ONYX · LILLE</span><span class="hud-scroll">SCROLL 000%</span><span class="hud-clock">LILLE --:--:--</span></div>
+<div class="hud" aria-hidden="true"><span class="hud-sec">ONYX · LILLE</span><span class="hud-bpm"><i></i>132 BPM</span><span class="hud-scroll">SCROLL 000%</span><span class="hud-clock">LILLE --:--:--</span></div>
 
 <main>
 <section class="hero" id="top" data-name="ONYX" data-index="00">
@@ -929,7 +1057,7 @@ window.SlalomMap={mount:mount};
 <section class="section" id="concept" data-name="CONCEPT" data-index="01" data-anim>
 <div class="shead"><h2><b>01</b> — <span data-scramble>CONCEPT</span></h2><span class="fil"></span><span class="meta">NIGHT CONCEPT · LILLE</span></div>
 <p class="manifesto">ONYX is a night concept based in Lille. The sound that shaped a generation, played on a serious system, under precise light, for a limited crowd. Each edition is a numbered chapter.</p>
-<div class="facts">
+<div class="facts" data-rv>
 <div class="fact"><span class="n" data-count="6">6</span><span class="k">HOURS · 00:00 — 06:00</span></div>
 <div class="fact"><span class="n" data-count="18" data-suffix="+">18+</span><span class="k">ADULTS ONLY</span></div>
 </div>
@@ -942,16 +1070,23 @@ window.SlalomMap={mount:mount};
 <section class="section" id="chapter" data-name="CHAPTER 01" data-index="02" data-anim>
 <div class="shead"><h2><b>02</b> — <span data-scramble>NEXT CHAPTER</span></h2><span class="fil"></span><span class="meta">TICKETS ON SHOTGUN</span></div>
 <div class="story">
-<p class="story-lead">Chapter 01 is a first experience: one night at Slalom, built to wake your senses. The opening page of ONYX, a story told in numbered chapters.</p>
+<p class="story-lead" data-rv>Chapter 01 is a first experience: one night at Slalom, built to wake your senses. The opening page of ONYX, a story told in numbered chapters.</p>
+<div class="reel">
+<div class="reel-pin">
+<div class="reel-top" aria-hidden="true"><span class="reel-n"><b>01</b> / 04</span><span class="reel-bars"><i class="on"></i><i></i><i></i><i></i></span></div>
+<p class="reel-key" aria-hidden="true">SOUND</p>
+<div class="reel-stage" aria-hidden="true"><svg class="cross tl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross tr" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross bl" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><svg class="cross br" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><span class="reel-cap">01 — L-ACOUSTICS</span><span class="reel-clock">00:00 → <b>00:00</b></span></div>
 <div class="story-body">
-<p>It starts with sound. The sound that shaped a generation, on a serious system powered by <span style="white-space:nowrap">L-Acoustics</span>, felt as much as it is heard.</p>
-<p>Then comes vision. Precise light, strobe, and darkness in between, every cue in its place.</p>
-<p>The crowd is limited by design, so there is room to move, to listen, to lose track of time.</p>
-<p>Six hours, from 00:00 to 06:00, with nothing to do but be there. Only the music, the light, and the people who came for them.</p>
+<p data-k="SOUND" class="on">It starts with sound. The sound that shaped a generation, on a serious system powered by <span style="white-space:nowrap">L-Acoustics</span>, felt as much as it is heard.</p>
+<p data-k="VISION">Then comes vision. Precise light, strobe, and darkness in between, every cue in its place.</p>
+<p data-k="CROWD">The crowd is limited by design, so there is room to move, to listen, to lose track of time.</p>
+<p data-k="TIME">Six hours, from 00:00 to 06:00, with nothing to do but be there. Only the music, the light, and the people who came for them.</p>
+</div>
+</div>
 </div>
 <p class="story-end">This is where it begins. Imagine what comes next.</p>
 </div>
-<div class="ticket">
+<div class="ticket" data-rv>
 <div class="t-main">
 <div class="t-head"><p class="label">CHAPTER</p><p class="label r">N° 0001</p></div>
 <p class="t-num" data-scramble aria-label="Chapter 01">01</p>
@@ -969,7 +1104,7 @@ window.SlalomMap={mount:mount};
 <a class="btn magnet" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span>TICKETS</span><span class="sr"> (opens Shotgun in a new tab)</span></a>
 </div>
 </div>
-<div class="tix" id="tickets">
+<div class="tix" id="tickets" data-rv>
 <div class="tix-head"><h3 class="label">TICKETS</h3><span class="label r">SHOTGUN</span></div>
 <div class="tix-body"><p class="tix-text">Tickets for every chapter are sold on Shotgun.</p><a class="btn magnet" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span>OPEN SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a></div>
 </div>
@@ -977,7 +1112,7 @@ window.SlalomMap={mount:mount};
 
 <section class="section" id="venue" data-name="VENUE" data-index="03" data-anim>
 <div class="shead"><h2><b>03</b> — <span data-scramble>VENUE</span></h2><span class="fil"></span><span class="meta">LILLE · FRANCE</span></div>
-<div class="venue">
+<div class="venue" data-rv>
 <div class="v-info">
 <p class="v-name" data-scramble>SLALOM</p>
 <dl class="v-list">
@@ -988,13 +1123,13 @@ window.SlalomMap={mount:mount};
 <div class="v-row"><a class="btn magnet" href="https://www.google.com/maps/search/?api=1&amp;query=84%20rue%20de%20Tr%C3%A9vise%2059000%20Lille" target="_blank" rel="noopener"><span>OPEN IN MAPS</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
 <a class="partner-link" href="https://slalomlille.com/fr/" target="_blank" rel="noopener" aria-label="Slalom website (opens in a new tab)"><img class="partner" src="data:image/png;base64,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" alt="" width="272" height="400"></a></div>
 </div>
-<div class="radar"><svg viewBox="0 0 360 360" aria-hidden="true"><rect class="ring" x="0.5" y="0.5" width="359" height="359"></rect><circle class="ring" cx="180" cy="180" r="170"></circle><circle class="ring" cx="180" cy="180" r="118"></circle><circle class="ring" cx="180" cy="180" r="62"></circle><line class="axis" x1="0" y1="180" x2="360" y2="180"></line><line class="axis" x1="180" y1="0" x2="180" y2="360"></line><circle class="ping" cx="180" cy="180" r="170"></circle><circle class="ping" cx="180" cy="180" r="170"></circle><circle class="ping" cx="180" cy="180" r="170"></circle><line class="sweepl" x1="180" y1="180" x2="180" y2="10"></line><path class="target" d="M172 180h16M180 172v16"></path><rect class="dot" x="177" y="177" width="6" height="6"></rect></svg><span class="radar-read">LILLE</span><span class="radar-read r">50.6292° N · 3.0573° E</span></div>
+<div class="radar"><svg viewBox="0 0 360 360" aria-hidden="true"><rect class="ring" x="0.5" y="0.5" width="359" height="359"></rect><circle class="ring" cx="180" cy="180" r="170"></circle><circle class="ring" cx="180" cy="180" r="118"></circle><circle class="ring" cx="180" cy="180" r="62"></circle><line class="axis" x1="0" y1="180" x2="360" y2="180"></line><line class="axis" x1="180" y1="0" x2="180" y2="360"></line><circle class="ping" cx="180" cy="180" r="170"></circle><circle class="ping" cx="180" cy="180" r="170"></circle><circle class="ping" cx="180" cy="180" r="170"></circle><line class="sweepl" x1="180" y1="180" x2="180" y2="10"></line><path class="target" d="M172 180h16M180 172v16"></path><rect class="dot" x="177" y="177" width="6" height="6"></rect></svg><a class="radar-go" href="#map" data-map aria-label="Open the 3D map of Slalom"><span>OPEN 3D MAP<svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg></span></a><span class="radar-read">LILLE</span><span class="radar-read r">50.6292° N · 3.0573° E</span></div>
 </div>
 </section>
 
 <section class="section" id="info" data-name="INFO" data-index="04" data-anim>
 <div class="shead"><h2><b>04</b> — <span data-scramble>CONDITIONS</span></h2><span class="fil"></span><span class="meta">ENTRY</span></div>
-<ul class="rules">
+<ul class="rules" data-rv>
 <li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>18+ ONLY. ID REQUIRED.</p><span class="tag">AGE</span></li>
 <li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>ENTRY MAY BE REFUSED TO ENSURE THE SAFETY OF ALL GUESTS.</p><span class="tag">DOOR</span></li>
 <li class="rule"><svg class="cross" viewBox="0 0 17 17" aria-hidden="true"><path d="M8.5 0v17M0 8.5h17"></path></svg><p>RISK OF EPILEPTIC SEIZURES DUE TO STROBE EFFECTS.</p><span class="tag">LIGHT</span></li>
@@ -1005,7 +1140,7 @@ window.SlalomMap={mount:mount};
 <footer class="foot" data-anim>
 <p class="sig"><span data-scramble>UNIQUE EXPERIENCE</span></p>
 <div class="big"><svg class="wm foot-wm" viewBox="0 0 746.52 129.68" data-vbw="746.52" data-px="1.2" role="img" aria-label="ONYX"><g class="L" style="--i:0"><path class="fill" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84ZM131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="base" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="base" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path><path class="draw" pathLength="1" d="M164.53 64.84Q164.53 80.22 158.88 92Q153.23 103.78 142.71 111.69Q132.2 119.59 117.2 123.64Q102.21 127.68 83.53 127.68Q64.84 127.68 49.76 123.64Q34.68 119.59 24.08 111.69Q13.47 103.78 7.74 92Q2 80.22 2 64.84Q2 49.46 7.74 37.68Q13.47 25.9 24.08 17.99Q34.68 10.08 49.76 6.04Q64.84 2 83.53 2Q102.21 2 117.2 6.04Q132.2 10.08 142.71 17.99Q153.23 25.9 158.88 37.68Q164.53 49.46 164.53 64.84Z"></path><path class="draw" pathLength="1" d="M131.94 64.84Q131.94 58.15 129.81 51.5Q127.68 44.85 122.25 39.55Q116.81 34.25 107.43 30.94Q98.04 27.64 83.53 27.64Q73.79 27.64 66.4 29.16Q59.02 30.68 53.63 33.38Q48.24 36.07 44.59 39.68Q40.94 43.28 38.76 47.41Q36.59 51.54 35.68 56.02Q34.77 60.49 34.77 64.84Q34.77 69.27 35.68 73.79Q36.59 78.31 38.76 82.44Q40.94 86.57 44.59 90.13Q48.24 93.69 53.63 96.35Q59.02 99 66.4 100.52Q73.79 102.04 83.53 102.04Q98.04 102.04 107.43 98.74Q116.81 95.43 122.25 90.13Q127.68 84.83 129.81 78.18Q131.94 71.53 131.94 64.84Z"></path></g><g class="L" style="--i:1"><path class="fill" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="base" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path><path class="draw" pathLength="1" d="M331.64 124.46 251.07 42.42V124.46H218.83V5.04H253.85L334.51 87.44V5.04H366.58V124.46Z"></path></g><g class="L" style="--i:2"><path class="fill" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="base" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path><path class="draw" pathLength="1" d="M503.79 75.7V124.46H471.63V75.7L413.75 5.04H449.91L487.8 53.11L525.52 5.04H561.68Z"></path></g><g class="L" style="--i:3"><path class="fill" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="base" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path><path class="draw" pathLength="1" d="M687.85 63.19 744.52 124.46H705.84L668.47 84.22L631.27 124.46H592.68L649.26 63.19L595.46 5.04H634.14L668.47 42.42L702.98 5.04H741.65Z"></path></g></svg></div>
-<div class="foot-row"><p class="label">© 2026 ONYX · LILLE</p><p class="label pw-f">SOUND POWERED BY L-ACOUSTICS</p>
+<div class="foot-row" data-rv><p class="label">© 2026 ONYX · LILLE</p><p class="label pw-f">SOUND POWERED BY L-ACOUSTICS</p>
 <a class="flink" href="#contact" data-contact><span data-hover>CONTACT</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg></a>
 <a class="flink" href="https://www.instagram.com/_onyx_club/" target="_blank" rel="noopener"><span data-hover>INSTAGRAM</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
 <a class="flink" href="https://shotgun.live/fr/venues/onyx-lille" target="_blank" rel="noopener"><span data-hover>SHOTGUN</span><svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"></path></svg><span class="sr"> (opens in a new tab)</span></a>
@@ -1013,9 +1148,593 @@ window.SlalomMap={mount:mount};
 </footer>
 </main>
 </div>
+<script>/* ONYX FX — one particle system for the whole page. Flat squares, five greys, 132 BPM. */
+(function(){
+'use strict';
+var root=document.documentElement;
+var hooks=window.__onyx||(window.__onyx={});
+if(!root.classList.contains('fx')) return;
+var T=window.THREE;
+function nofx(){
+  root.classList.remove('fx','fx-go'); root.classList.add('nofx'); window.OnyxFX=null;
+  if(typeof hooks.nofx==='function'){ try{ hooks.nofx(); }catch(e){} }
+}
+if(!T){ nofx(); return; }
+try{ boot(); }catch(err){ var dead=document.querySelector('.fx-canvas'); if(dead) dead.remove(); window.__onyxDead=true; nofx(); }
+function boot(){
+function $(s){ return document.querySelector(s); }
+function $$(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); }
+
+var BPM=132, SPB=60/BPM;
+var small=Math.min(screen.width||9999, screen.height||9999)<700 || innerWidth<760;
+var N=small?12288:(innerWidth>1680?32768:24576);
+
+/* ---------- renderer ---------- */
+var cv=document.createElement('canvas'); cv.className='fx-canvas'; cv.setAttribute('aria-hidden','true');
+var site=$('.site')||document.body; site.insertBefore(cv, site.firstChild);
+var renderer=null;
+try{ renderer=new T.WebGLRenderer({canvas:cv, antialias:false, alpha:false, powerPreference:'high-performance'}); }catch(e){ renderer=null; }
+if(!renderer||!renderer.getContext()){ cv.remove(); nofx(); return; }
+renderer.setClearColor(0x050505,1);
+var scene=new T.Scene();
+var cam=new T.PerspectiveCamera(30,1,10,20000);
+var TANH=Math.tan(15*Math.PI/180);
+
+/* ---------- per-particle data ---------- */
+var aLogo=new Float32Array(N*3), aRnd=new Float32Array(N*4), aVen=new Float32Array(N*4), aIdx=new Float32Array(N);
+var seed=20260927;
+function rnd(){ seed=(seed*1664525+1013904223)>>>0; return seed/4294967296; }
+for(var i=0;i<N;i++){
+  aIdx[i]=i; aRnd[i*4]=rnd(); aRnd[i*4+1]=rnd(); aRnd[i*4+2]=rnd(); aRnd[i*4+3]=rnd();
+  aVen[i*4+3]=-1;
+}
+// logo contour: samples along the hero wordmark outlines, in viewBox units; z = letter + position along the stroke
+(function(){
+  var svg=$('.hero-wm'); if(!svg) return;
+  var S=[];
+  $$('.hero-wm path.draw').forEach(function(p){
+    var g=p.parentNode, li=parseFloat((g&&g.style&&g.style.getPropertyValue('--i'))||0)||0;
+    var L=0; try{ L=p.getTotalLength(); }catch(e){ L=0; }
+    if(!L) return;
+    var n=Math.max(12, Math.round(L/2.35));
+    for(var k=0;k<n;k++){ var pt=p.getPointAtLength(k/n*L); S.push(pt.x, pt.y, li+(k/n)*0.999); }
+  });
+  var m=S.length/3; if(!m) return;
+  for(var i=0;i<N;i++){ var s=(i%m)*3; aLogo[i*3]=S[s]; aLogo[i*3+1]=S[s+1]; aLogo[i*3+2]=S[s+2]; }
+})();
+
+var geo=new T.BufferGeometry();
+geo.setAttribute('position', new T.BufferAttribute(aLogo,3));
+geo.setAttribute('aRnd', new T.BufferAttribute(aRnd,4));
+geo.setAttribute('aVen', new T.BufferAttribute(aVen,4));
+geo.setAttribute('aIdx', new T.BufferAttribute(aIdx,1));
+
+var VS=`
+attribute vec4 aRnd; attribute vec4 aVen; attribute float aIdx;
+uniform float uTime,uBeat,uT,uStag,uTurb,uPx,uD,uMouseOn,uSweep,uN,uA,uB,uHit;
+uniform vec2 uRes,uMouse;
+uniform vec4 uPing,uHovL;
+uniform vec4 uCA,uCB,uKA,uKB,uEA,uEB;
+uniform mat3 uRA,uRB;
+varying float vI;
+#define PI 3.14159265
+#define TAU 6.28318531
+float h1(float n){return fract(sin(n*127.1+11.7)*43758.5453);}
+float hovK(){ float l=floor(position.z+0.001); return l<0.5?uHovL.x:(l<1.5?uHovL.y:(l<2.5?uHovL.z:uHovL.w)); }
+vec2 logoXY(vec4 C){return vec2(C.x+(position.x/746.52-0.5)*C.z,C.y+(0.5-position.y/129.68)*C.w);}
+vec3 gridPos(vec4 E,out float band){
+  float cols=floor((E.z-12.0)/24.0)+1.0,rows=floor((E.w-12.0)/24.0)+1.0;
+  float cell=mod(aIdx,cols*rows);
+  float gx=mod(cell,cols),gy=floor(cell/cols);
+  float lx=12.0+gx*24.0,ly=12.0+gy*24.0;
+  float bx=mod(uTime,8.0)/8.0*(E.z+480.0)-240.0;
+  band=max(0.0,1.0-abs(lx-bx)/140.0)*0.45;
+  return vec3(E.x-E.z*0.5+lx,E.y+E.w*0.5-ly,0.0);
+}
+vec3 form(float id,vec4 C,mat3 R,vec4 K,vec4 E,out float I,out float gw){
+  vec4 r=aRnd; gw=0.5; I=0.3;
+  float s=min(C.z,C.w)*0.5*K.x;
+  if(id<0.5){   // CLOUD - deep field the intro starts from
+    I=0.16+0.26*r.w;
+    return vec3(C.x+(r.x-0.5)*C.z*3.2,C.y+(r.y-0.5)*C.w*3.2,-500.0-r.z*r.z*3600.0);
+  }
+  if(id<1.5){   // GRID - the brand dot matrix; a ring of light leaves the centre on every bar
+    float band; vec3 p=gridPos(C,band);
+    float bp=fract(uBeat*0.25);
+    float ring=exp(-pow((length(p.xy-C.xy)-bp*max(C.z,C.w)*0.75)/34.0,2.0))*(1.0-bp);
+    I=0.03+band*0.62+ring*0.3; gw=1.0;
+    float hk=hovK()*step(r.w,0.42);
+    if(hk>0.001){ p=mix(p,vec3(logoXY(E),(r.z-0.5)*10.0),hk); I=mix(I,0.95,hk); gw=mix(1.0,0.3,hk); }
+    return p;
+  }
+  if(id<2.5){   // LOGO - dotted contour of the wordmark
+    I=K.x; gw=0.35; return vec3(logoXY(C),(r.z-0.5)*10.0);
+  }
+  if(id<3.5){   // FLOOR - the dancefloor, breathing at 132 BPM
+    float cols=112.0; float rows=floor(uN/cols);
+    float gx=mod(aIdx,cols),gz=floor(aIdx/cols);
+    float fz=gz/max(rows-1.0,1.0);
+    float z=320.0-pow(fz,1.25)*4400.0;
+    float x=(gx/(cols-1.0)-0.5)*C.z*2.8;
+    float ph=fract(uBeat);
+    float w1=sin(x*0.0042+uTime*0.8)*cos(z*0.0026-uTime*0.55);
+    float rr=length(vec2(x*0.8,z+1500.0));
+    float rip=exp(-pow((rr-ph*2800.0)/150.0,2.0))*(1.0-ph);
+    float y=-C.w*0.40+w1*K.x+rip*K.y;
+    I=0.06+0.2*(1.0-fz)+0.42*rip+0.14*max(w1,0.0); gw=0.6;
+    return vec3(x,y,z);
+  }
+  if(id<4.5){   // SOUND - rings pushed out by every kick
+    float Kr=34.0; float ph=fract(uBeat);
+    float k=floor(sqrt(r.x)*Kr);
+    float rr=(k+ph)/Kr; float th=r.y*TAU;
+    float kick=exp(-ph*5.0);
+    float amp=0.12+0.2*kick;
+    float y=amp*sin(TAU*(rr*2.4-ph))*(1.0-rr)*(0.35+rr*1.6);
+    vec3 q=vec3(cos(th)*rr,y,sin(th)*rr);
+    float front=exp(-pow((rr-ph)/0.035,2.0));                    // the wavefront of this beat
+    I=(0.22+2.0*max(y,0.0)+0.25*(1.0-rr)*kick+0.55*front)*(0.45+0.55*(1.0-smoothstep(0.82,1.0,rr)));
+    if(rr>0.985) I=-1.0;
+    return vec3(C.xy,0.0)+R*(q*s);
+  }
+  if(id<5.5){   // VISION - beams sweeping from a truss
+    float B=7.0; float b=floor(r.x*B); float fb=b/(B-1.0)-0.5;
+    float bar=uBeat*0.25;
+    float sw=sin(TAU*bar*0.5);
+    float pc=mod(bar*0.25,3.0);
+    float wA=max(0.0,1.0-abs(pc))+max(0.0,1.0-abs(pc-3.0));
+    float wB=max(0.0,1.0-abs(pc-1.0)); float wC=max(0.0,1.0-abs(pc-2.0));
+    float pan=wA*0.3*sw+wB*fb*0.8*sw+wC*(mod(b,2.0)<0.5?1.0:-1.0)*0.34*sw;
+    float tilt=0.32*sin(TAU*bar*0.25+b*0.9);
+    vec3 src=vec3(fb*1.7,1.0,0.0);
+    vec3 dir=normalize(vec3(sin(pan),-cos(pan),tilt));
+    float L=(-1.0-src.y)/dir.y;
+    float cur=mod(floor(uBeat),B); float ph=fract(uBeat);
+    float hot=abs(b-cur)<0.5?(1.0-ph):0.0;
+    float part=r.y; vec3 q;
+    if(part<0.05){ q=vec3((r.z-0.5)*1.95,1.05,0.0); I=0.34; }
+    else if(part<0.17){ float a=r.z*TAU; float rd=sqrt(r.w); q=src+dir*L+vec3(cos(a),0.0,sin(a))*rd*0.1; I=0.58+0.3*hot; }
+    else { float u=pow((part-0.17)/0.83,0.9);
+      vec3 t1=normalize(cross(dir,vec3(0.0,0.0,1.0))); vec3 t2=normalize(cross(dir,t1));
+      float rad=0.006+0.055*u; float a=r.z*TAU; float rd=sqrt(r.w);
+      q=src+dir*(u*L)+(t1*cos(a)+t2*sin(a))*rd*rad;
+      I=0.58-0.26*u+0.34*hot; }
+    I+=uHit;
+    gw=0.45;
+    return vec3(C.xy,0.0)+R*(q*s);
+  }
+  if(id<6.5){   // CROWD - a limited floor that jumps on the beat
+    if(r.w<0.07){
+      float Wd=1.0,Dd=0.56; float per=4.0*Wd+4.0*Dd; float d=r.x*per; vec3 q;
+      if(d<2.0*Wd) q=vec3(-Wd+d,0.0,-Dd);
+      else if(d<2.0*Wd+2.0*Dd) q=vec3(Wd,0.0,-Dd+(d-2.0*Wd));
+      else if(d<4.0*Wd+2.0*Dd) q=vec3(Wd-(d-2.0*Wd-2.0*Dd),0.0,Dd);
+      else q=vec3(-Wd,0.0,Dd-(d-4.0*Wd-2.0*Dd));
+      I=fract(d*12.0)<0.55?0.3:-1.0; gw=0.4;
+      return vec3(C.xy,0.0)+R*(q*s);
+    }
+    float P=K.y; float pid=floor(r.x*P);
+    float cols=14.0; float rows=ceil(P/cols);
+    float cx=mod(pid,cols),cz=floor(pid/cols);
+    float hA=h1(pid*1.7),hB=h1(pid*3.1+2.0),hC=h1(pid*5.3+7.0);
+    float x=((cx+0.5+(hA-0.5)*0.75)/cols-0.5)*1.84;
+    float z=((cz+0.5+(hB-0.5)*0.75)/rows-0.5)*0.98;
+    float ph=fract(uBeat+hC*0.14);
+    float jump=(0.012+0.02*hA)*(1.0-pow(2.0*ph-1.0,2.0));
+    float wave=sin(TAU*uBeat*0.25/8.0-x*1.8);
+    float up=smoothstep(0.5,0.92,wave)*step(0.3,hB);
+    float Hh=0.15+0.025*hC; vec3 q; float part=r.y;
+    if(part<0.6){ float yy=part/0.6*Hh*0.7; float a=r.z*TAU; float rad=0.012*(1.0-0.25*yy/Hh);
+      q=vec3(x+cos(a)*rad,yy+jump,z+sin(a)*rad); I=0.36; }
+    else if(part<0.8){ float a=r.z*TAU; float c2=fract(r.w*7.13)*2.0-1.0; float sn=sqrt(1.0-c2*c2);
+      q=vec3(x,Hh*0.86+jump,z)+vec3(sn*cos(a),c2,sn*sin(a))*0.015; I=0.6; }
+    else { float side=part<0.9?-1.0:1.0; float u=fract((part-0.8)*10.0);
+      vec3 sh=vec3(x+side*0.016,Hh*0.7+jump,z);
+      vec3 hd=sh+vec3(side*0.007,-0.075,0.0); vec3 hu=sh+vec3(side*0.03,0.09,0.0);
+      q=mix(sh,mix(hd,hu,up),u); I=mix(0.36,0.96,up); }
+    gw=0.45;
+    return vec3(C.xy,0.0)+R*(q*s);
+  }
+  if(id<7.5){   // TIME - a dial of the night, 00:00 to 06:00
+    float h=K.y; float part=r.x; float a=r.y; float b=r.z; vec2 q; float th;
+    if(part<0.2){ th=a*TAU; q=vec2(sin(th),cos(th)); I=0.3; }
+    else if(part<0.5){ float m=floor(a*360.0); th=m/360.0*TAU;
+      float major=1.0-step(0.5,mod(m,60.0)); float qu=1.0-step(0.5,mod(m,15.0));
+      float len=major>0.5?0.17:(qu>0.5?0.085:0.04);
+      q=vec2(sin(th),cos(th))*(0.965-b*len);
+      I=major>0.5?0.92:(m/360.0<=h?0.62:0.26); }
+    else if(part<0.78){ th=a*TAU; q=vec2(sin(th),cos(th))*(0.8+(b-0.5)*0.014); I=a<=h?0.95:-1.0; }
+    else if(part<0.92){ th=h*TAU; q=vec2(sin(th),cos(th))*(b*0.74); I=0.92; }
+    else if(part<0.95){ th=floor(uBeat)/60.0*TAU; float a2=a*TAU; q=vec2(sin(th),cos(th))*0.9+vec2(cos(a2),sin(a2))*0.012*b; I=0.95; }
+    else { float L=(b-0.5)*0.16; q=a<0.5?vec2(L,0.0):vec2(0.0,L); I=0.7; }
+    gw=0.45;
+    return vec3(C.xy,0.0)+R*(vec3(q,(r.w-0.5)*0.02)*s);
+  }
+  if(id<8.5){   // DUST - a deep, slow field
+    float zz=fract(r.z+uTime*0.014);
+    I=r.w<0.42?(0.1+0.32*r.x*zz):-1.0; gw=0.6;
+    return vec3(C.x+(r.x-0.5)*C.z*2.4,C.y+(r.y-0.5)*C.w*2.4,mix(-3400.0,700.0,zz));
+  }
+  if(id<9.5){   // VENUE - Slalom, read by the radar sweep
+    vec3 q=aVen.xyz; float typ=aVen.w;
+    if(typ<-0.5){ float th=r.x*TAU; float c2=r.y*2.0-1.0; float sn=sqrt(1.0-c2*c2); q=vec3(sn*cos(th),c2*0.2,sn*sin(th))*0.8; typ=0.0; }
+    vec3 p=vec3(C.xy,0.0)+R*(q*s);
+    I=typ>1.5?0.5:(typ>0.5?0.3:0.16);
+    vec2 d=p.xy-C.xy; float ang=atan(d.x,d.y); float lag=mod(uSweep-ang,TAU);
+    I+=lag<0.1?0.5:(lag<0.55?0.26:(lag<1.5?0.1:0.0));
+    gw=0.4; return p;
+  }
+  if(r.w<K.y){ I=mix(K.x,0.95,hovK()); gw=0.35; return vec3(logoXY(C),(r.z-0.5)*10.0); }   // FOOT - contour + matrix
+  float band; vec3 p=gridPos(E,band); I=0.03+band*0.62; gw=1.0; return p;
+}
+void main(){
+  float IA,IB,gA,gB;
+  vec3 pA=form(uA,uCA,uRA,uKA,uEA,IA,gA);
+  vec3 pB=pA; IB=IA; gB=gA;
+  if(uT>0.0005) pB=form(uB,uCB,uRB,uKB,uEB,IB,gB);
+  float st=clamp(0.5-pA.y/uRes.y,0.0,1.0)*0.72+aRnd.w*0.28;   // the morph runs top to bottom, like a scan
+  if(abs(uB-2.0)<0.5) st=position.z*0.1875+aRnd.w*0.25;       // intro: the letters arrive in drawing order
+  float ti=clamp((uT-uStag*st)/max(1.0-uStag,0.001),0.0,1.0);
+  float e=ti*ti*(3.0-2.0*ti);
+  vec3 p=mix(pA,pB,e);
+  float w=sin(PI*e);
+  vec2 tv=pB.xy-pA.xy;
+  p.xy+=vec2(-tv.y,tv.x)*0.22*w*(aRnd.x-0.35);                 // travel on arcs: a coherent swarm, not noise
+  p+=vec3(sin(aRnd.x*37.0+uTime*0.9+e*3.0),sin(aRnd.y*31.0+uTime*0.8+e*2.0),sin(aRnd.z*29.0+uTime*0.7))*w*uTurb;
+  float I=mix(max(IA,-0.3),max(IB,-0.3),e);
+  float gw=mix(gA,gB,e);
+  vec4 cp=projectionMatrix*modelViewMatrix*vec4(p,1.0);
+  vec2 sp=cp.xy/cp.w*uRes*0.5;
+  vec2 dm=sp-uMouse; float dl=length(dm);
+  float rep=uMouseOn*(1.0-smoothstep(0.0,120.0,dl));
+  sp+=(dl>0.01?dm/dl:vec2(0.0))*rep*20.0*gw;
+  float pa=uTime-uPing.z; float pband=0.0;
+  if(pa>=0.0&&pa<1.3){
+    vec2 pd=sp-uPing.xy; float pl=length(pd);
+    pband=exp(-pow((pl-pa*880.0)/28.0,2.0))*(1.0-pa/1.3);
+    sp+=(pl>0.01?pd/pl:vec2(0.0))*pband*18.0;
+  }
+  cp.xy=sp/(uRes*0.5)*cp.w;
+  gl_Position=cp;
+  float glow=uMouseOn*max(0.0,1.0-dl/170.0);
+  if(I>=0.0) I=max(max(I,glow*0.9*gw),pband*0.97);
+  vI=I;
+  float persp=uD/max(uD-p.z,60.0);
+  float sz=mix(uKA.w,uKB.w,e);
+  gl_PointSize=I<0.02?1.0:clamp(sz*uPx*persp,1.0,sz*uPx*2.6);
+}
+`;
+
+var FS=`
+precision mediump float;
+varying float vI;
+void main(){
+  if(vI<0.02) discard;
+  float g=vI<0.08?0.118:(vI<0.22?0.2:(vI<0.38?0.302:(vI<0.56?0.478:(vI<0.8?0.604:0.949))));
+  gl_FragColor=vec4(g,g,g*0.9959,1.0);
+}
+`;
+
+function v4(){ return {value:new T.Vector4(0,0,1,1)}; }
+var U={
+  uTime:{value:0}, uBeat:{value:0}, uT:{value:0}, uStag:{value:0}, uTurb:{value:0}, uPx:{value:1}, uD:{value:1000},
+  uMouseOn:{value:0}, uSweep:{value:0}, uN:{value:N}, uA:{value:1}, uB:{value:1}, uHit:{value:0},
+  uRes:{value:new T.Vector2(1,1)}, uMouse:{value:new T.Vector2(-9999,-9999)}, uPing:{value:new T.Vector4(0,0,-99,0)}, uHovL:{value:new T.Vector4(0,0,0,0)},
+  uCA:v4(), uCB:v4(), uKA:v4(), uKB:v4(), uEA:v4(), uEB:v4(),
+  uRA:{value:new T.Matrix3()}, uRB:{value:new T.Matrix3()}
+};
+var mat;
+try{
+  mat=new T.ShaderMaterial({vertexShader:VS, fragmentShader:FS, uniforms:U, depthTest:true, depthWrite:true, transparent:false});
+}catch(e){ cv.remove(); nofx(); return; }
+var pts=new T.Points(geo,mat); pts.frustumCulled=false; scene.add(pts);
+try{
+  renderer.compile(scene,cam);
+  var cprog=renderer.properties.get(mat).currentProgram, gl=renderer.getContext();
+  if(!cprog || (cprog.diagnostics && cprog.diagnostics.runnable===false) || (cprog.program && !gl.getProgramParameter(cprog.program, gl.LINK_STATUS))) throw new Error('fx shader');
+}catch(e){ cv.remove(); nofx(); return; }
+
+/* ---------- page anchors ---------- */
+var el={
+  dots:$('.hero .dots'), hwm:$('.hero-wm'), concept:$('#concept'), reel:$('.reel'), pin:$('.reel-pin'), stage:$('.reel-stage'),
+  ticket:$('.ticket'), tix:$('.tix'), venue:$('.venue'), radar:$('.radar svg'), info:$('#info'), foot:$('.foot'), fwm:$('.foot-wm'),
+  key:$('.reel-key'), paras:$$('.reel .story-body p'), rn:$('.reel-n b'), bars:$$('.reel-bars i'), cap:$('.reel-cap'), clock:$('.reel-clock b'),
+  bpm:$('.hud-bpm'), sweep:$('.radar .sweepl')
+};
+if(!el.dots||!el.hwm||!el.reel||!el.stage||!el.fwm){ cv.remove(); nofx(); return; }
+
+var _m4=new T.Matrix4(), _eu=new T.Euler();
+function mk(o){ o.C=[0,0,1,1]; o.E=[0,0,1,1]; o.K=o.K||[1,0,0,2]; o.R=new T.Matrix3(); return o; }
+var sCloud=mk({id:0, view:1, K:[1,0,0,1.6]});
+var sLogo=mk({id:2, el:el.hwm, K:[0.95,0,0,2]});
+var SC=[
+  mk({id:1, name:'hero', el:el.dots, K:[1,0,0,2]}),
+  mk({id:3, name:'concept', view:1, K:[22,40,0,1.9]}),
+  mk({id:4, name:'sound', stage:1, K:[0.98,0,0,1.8], rot:function(t,m){ return [0.58+m.y*0.12, t*0.1+m.x*0.35]; }}),
+  mk({id:5, name:'vision', stage:1, K:[0.9,0,0,1.8], rot:function(t,m){ return [0.06+m.y*0.08, 0.28*Math.sin(t*0.12)+m.x*0.4]; }}),
+  mk({id:6, name:'crowd', stage:1, K:[1.06,150,0,1.8], rot:function(t,m){ return [0.58+m.y*0.12, 0.38*Math.sin(t*0.07)+m.x*0.4]; }}),
+  mk({id:7, name:'time', stage:1, K:[0.84,0,0,1.9], rot:function(t,m){ return [m.y*0.3+0.08*Math.sin(t*0.4), m.x*0.4+0.1*Math.sin(t*0.27)]; }}),
+  mk({id:8, name:'ticket', view:1, K:[1,0,0,1.6]}),
+  mk({id:9, name:'venue', el:el.radar, K:[0.78,0,0,1.6], rot:function(t,m){ return [0.95+m.y*0.15, t*0.16+m.x*0.5]; }}),
+  mk({id:3, name:'info', view:1, K:[12,24,0,1.8]}),
+  mk({id:10, name:'foot', el:el.fwm, ext:el.foot, K:[0.62,0,0,2]})   // no particle contour on the footer logo
+];
+var REEL0=2, TIMEI=5;
+var HOLD=SC.map(function(){ return [0,0]; });
+
+var W=1, HC=1, D=1000, DPR=1, pinA=0, pinB=1;
+function center(C, r){ C[0]=r.left+r.width/2-W/2; C[1]=HC/2-(r.top+r.height/2); C[2]=Math.max(1,r.width); C[3]=Math.max(1,r.height); }
+function anchor(sc, t){
+  if(sc.name==='crowd') sc.K[0]=(el.stage.clientWidth<el.stage.clientHeight*1.05)?0.9:1.06;
+  if(sc.view){ sc.C[0]=0; sc.C[1]=0; sc.C[2]=W; sc.C[3]=HC; }
+  else center(sc.C, (sc.stage?el.stage:sc.el).getBoundingClientRect());
+  if(sc.stage){ sc.C[3]=Math.max(1, sc.C[3]-64); sc.C[2]=Math.max(1, sc.C[2]-24); }
+  if(sc.name==='hero') center(sc.E, el.hwm.getBoundingClientRect());
+  if(sc.ext){
+    var rf=sc.ext.getBoundingClientRect(), rd=el.dots.getBoundingClientRect();
+    sc.E[0]=rd.left+rd.width/2-W/2; sc.E[1]=HC/2-(rf.top+rf.height/2); sc.E[2]=rd.width; sc.E[3]=rf.height;
+  }
+  var a=sc.rot?sc.rot(t, par):[0,0];
+  _eu.set(a[0],a[1],0,'XYZ'); _m4.makeRotationFromEuler(_eu); sc.R.setFromMatrix4(_m4);
+}
+function layout(){
+  var y0=window.scrollY||0, vh=HC, max=Math.max(0, document.documentElement.scrollHeight-innerHeight);
+  function top(e){ return e.getBoundingClientRect().top+y0; }
+  var pinTop=parseFloat(getComputedStyle(el.pin).top)||0;
+  pinA=top(el.reel)-pinTop; pinB=pinA+Math.max(10, el.reel.offsetHeight-el.pin.offsetHeight);
+  var Q=(pinB-pinA)/4, Tr=vh*0.42, Tq=Q*0.36;
+  var S=[                                   // [scroll where the scene is fully formed, length of the morph that leads to it]
+    [0,0],
+    [top(el.concept)-vh*0.42, Tr],
+    [pinA-vh*0.04, Tr],
+    [pinA+Q+Tq/2, Tq],
+    [pinA+2*Q+Tq/2, Tq],
+    [pinA+3*Q+Tq/2, Tq],
+    [pinB+vh*0.3, Tr*0.8],
+    [top(el.venue)-vh*0.26, Tr],
+    [top(el.info)-vh*0.28, Tr],
+    [top(el.fwm)-vh*0.55, Tr*0.9]
+  ];
+  var n=S.length, k;
+  for(k=1;k<n;k++){
+    S[k][0]=Math.max(S[k][0], S[k-1][0]+8);
+    if(k===n-1) S[k][0]=Math.min(S[k][0], Math.max(S[k-1][0]+8, max-4));
+    S[k][1]=Math.max(4, Math.min(S[k][1], S[k][0]-S[k-1][0]-4));
+  }
+  var H=[];
+  for(k=0;k<n;k++) H.push([S[k][0], k<n-1 ? S[k+1][0]-S[k+1][1] : 1e9]);
+  HOLD=H;
+}
+function size(){
+  W=document.documentElement.clientWidth||innerWidth; HC=cv.clientHeight||innerHeight;
+  DPR=Math.min(window.devicePixelRatio||1, small?1.75:2);
+  renderer.setPixelRatio(DPR); renderer.setSize(W, HC, false);
+  D=(HC/2)/TANH;
+  cam.aspect=W/HC; cam.position.set(0,0,D); cam.near=10; cam.far=D+9000; cam.lookAt(0,0,0); cam.updateProjectionMatrix();
+  U.uRes.value.set(W,HC); U.uPx.value=DPR; U.uD.value=D;
+  layout();
+}
+var lastW=0, lastH=0;
+function onResize(){
+  var w=document.documentElement.clientWidth, h=cv.clientHeight||innerHeight;
+  if(w===lastW && Math.abs(h-lastH)<2) { layout(); return; }
+  lastW=w; lastH=h; size();
+}
+size(); lastW=W; lastH=HC;
+window.addEventListener('resize', onResize);
+if(window.ResizeObserver){ var lt=0; new ResizeObserver(function(){ clearTimeout(lt); lt=setTimeout(layout,120); }).observe(document.body); }
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layout);
+window.addEventListener('load', layout);
+
+/* ---------- pointer ---------- */
+var mouse={x:-9999,y:-9999,tx:-9999,ty:-9999,on:0,ton:0}, par={x:0,y:0,tx:0,ty:0}, lastIn=performance.now(), br=0;
+['pointermove','pointerdown','keydown','wheel','touchstart','scroll'].forEach(function(ev){ window.addEventListener(ev, function(){ lastIn=performance.now(); }, {passive:true}); });
+window.addEventListener('pointermove', function(e){
+  mouse.cx=e.clientX; mouse.cy=e.clientY;          // kept in client space: converted each frame, so a resize never leaves the glow behind
+  mouse.tx=e.clientX-W/2; mouse.ty=HC/2-e.clientY;
+  if(mouse.x<-9000){ mouse.x=mouse.tx; mouse.y=mouse.ty; }
+  mouse.ton=1; par.tx=(e.clientX/W-0.5)*2; par.ty=(e.clientY/HC-0.5)*2;
+}, {passive:true});
+function off(){ mouse.ton=0; hovT=[0,0,0,0]; }
+var hovT=[0,0,0,0], hov=[0,0,0,0], lettersH=$$('.hero-wm .L'), lettersF=$$('.foot-wm .L');
+function letterAt(list, x, y){
+  for(var i=0;i<list.length;i++){ var r=list[i].getBoundingClientRect(); if(x>=r.left-6&&x<=r.right+6&&y>=r.top-6&&y<=r.bottom+6) return parseFloat(list[i].style.getPropertyValue('--i'))||i; }
+  return -1;
+}
+var hovQ=false, hx=0, hyy=0;
+window.addEventListener('pointermove', function(e){
+  if(e.pointerType!=='mouse') return;
+  hx=e.clientX; hyy=e.clientY;
+  if(hovQ) return; hovQ=true;
+  requestAnimationFrame(function(){
+    hovQ=false;
+    var l=-1;   // no particles gather on either wordmark
+    for(var i=0;i<4;i++) hovT[i]=i===l?1:0;
+  });
+}, {passive:true});
+function pingable(e){
+  var tg=e.target;
+  return !(e.button>0 || paused() || (tg&&tg.closest&&tg.closest('a,button,input,select,textarea,label,[role="button"],.menu,.mapview,.drinkview')));
+}
+function ping(x,y){ U.uPing.value.set(x-W/2, HC/2-y, U.uTime.value, 1); }
+var tap=null;
+window.addEventListener('pointerdown', function(e){
+  if(!pingable(e)) return;
+  if(e.pointerType==='mouse') ping(e.clientX,e.clientY);          // a click sends a radar ring through the particles
+  else tap={x:e.clientX, y:e.clientY, t:performance.now()};       // on touch, only a real tap does (never a scroll)
+}, {passive:true});
+window.addEventListener('pointerup', function(e){
+  if(!tap||e.pointerType==='mouse') return;
+  if(Math.abs(e.clientX-tap.x)<10 && Math.abs(e.clientY-tap.y)<10 && performance.now()-tap.t<350) ping(e.clientX,e.clientY);
+  tap=null;
+}, {passive:true});
+document.documentElement.addEventListener('mouseleave', off);
+window.addEventListener('pointerup', function(e){ if(e.pointerType!=='mouse') off(); }, {passive:true});
+window.addEventListener('pointercancel', off, {passive:true});
+window.addEventListener('blur', off);
+
+/* ---------- venue point cloud (decoded when the page is idle) ---------- */
+function loadVenue(){
+  var Dd=window.__SLALOM_PTS__; if(!Dd||!Dd.b64) return;
+  try{
+    var bin=atob(Dd.b64), n=Dd.meta.n, bytes=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    var q=new Uint16Array(bytes.buffer,0,n*3), fl=new Uint8Array(bytes.buffer,n*6,n);
+    var mn=Dd.meta.min, sc=Dd.meta.scale;
+    var by=[[],[],[]];
+    for(i=0;i<n;i++) by[fl[i]&3].push(i);
+    var want=[Math.round(N*0.12), Math.round(N*0.3), 0]; want[2]=N-want[0]-want[1];
+    var s2=4242;
+    function r2(){ s2=(s2*1664525+1013904223)>>>0; return s2/4294967296; }
+    var pick=[];
+    for(var t=0;t<3;t++){
+      var arr=by[t].slice(), m=Math.min(want[t], arr.length);
+      for(var k=0;k<m;k++){ var j=k+Math.floor(r2()*(arr.length-k)); var tmp=arr[k]; arr[k]=arr[j]; arr[j]=tmp; pick.push(arr[k]); }
+    }
+    while(pick.length<N) pick.push(pick[Math.floor(r2()*pick.length)]);
+    for(k=pick.length-1;k>0;k--){ var j2=Math.floor(r2()*(k+1)); var t2=pick[k]; pick[k]=pick[j2]; pick[j2]=t2; }
+    var cx=-0.66, cy=2.2, cz=0.15, S=1/20.6;
+    for(i=0;i<N;i++){
+      var p=pick[i];
+      aVen[i*4]=(mn[0]+q[p*3]*sc[0]-cx)*S; aVen[i*4+1]=(mn[1]+q[p*3+1]*sc[1]-cy)*S; aVen[i*4+2]=(mn[2]+q[p*3+2]*sc[2]-cz)*S;
+      aVen[i*4+3]=fl[p]&3;
+    }
+    geo.attributes.aVen.needsUpdate=true;
+  }catch(e){}
+}
+setTimeout(function(){ if(window.requestIdleCallback) requestIdleCallback(loadVenue,{timeout:2500}); else loadVenue(); }, 2600);
+
+/* ---------- reel text ---------- */
+var KEYS=['SOUND','VISION','CROWD','TIME'];
+var CAPS=['01 — L-ACOUSTICS','02 — PRECISE LIGHT','03 — LIMITED CAPACITY','04 — SIX HOURS'];
+var CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+function scrambleTo(node, word){
+  if(!node) return;
+  cancelAnimationFrame(node._sr); var t0=null, n=word.length, dur=560;
+  function step(t){
+    if(t0===null) t0=t; var p=Math.min(1,(t-t0)/dur), s='';
+    for(var i=0;i<n;i++) s+=p>(i/n)*0.6+0.4?word[i]:CH[(Math.random()*CH.length)|0];
+    node.textContent=s; if(p<1) node._sr=requestAnimationFrame(step);
+  }
+  node._sr=requestAnimationFrame(step);
+}
+var reelF=0, clockTxt='', hit=0, lastHit=-1e9;
+function pad2(v){ return (v<10?'0':'')+v; }
+function reelCalc(y){
+  var p=(y-pinA)/(pinB-pinA);
+  return { f:Math.max(0,Math.min(3,Math.floor(p*4))), h:Math.max(0,Math.min(1,(p-0.75)/0.22)) };
+}
+function reelApply(R){
+  var f=R.f;
+  if(f!==reelF){
+    reelF=f;
+    el.paras.forEach(function(q,k){ q.classList.toggle('on',k===f); });
+    scrambleTo(el.key, KEYS[f]);
+    if(el.rn) el.rn.textContent='0'+(f+1);
+    el.bars.forEach(function(b,k){ b.className=k<f?'done':(k===f?'on':''); });
+    if(el.cap) el.cap.textContent=CAPS[f];
+    el.stage.classList.toggle('t4', f===3);
+    var nowT=performance.now();
+    if(f===1 && nowT-lastHit>2000){ lastHit=nowT; hit=1; }
+  }
+  var mins=Math.round(R.h*360), tx=pad2(Math.floor(mins/60))+':'+pad2(mins%60);
+  if(tx!==clockTxt && el.clock){ clockTxt=tx; el.clock.textContent=tx; }
+}
+
+/* ---------- intro timeline ---------- */
+var mode='scroll';   // the wordmark intro is pure SVG: no particles on the logo
+var iu=0, ifr=0, fl={go:false, end:false};
+function introState(dt){
+  if(ifr++>2) iu+=Math.min(dt,0.1);   // the first frames (shader warm-up) never eat the intro
+  var u=iu;
+  if(!fl.go && u>=0.42){ fl.go=true; root.classList.add('fx-go'); }
+  if(!fl.end && u>=1.5){ fl.end=true; if(hooks.flash) hooks.flash(); if(hooks.reveal) hooks.reveal(true); }
+  if(u<1.1) return [sCloud, sLogo, u/1.1, 0.55, 0];
+  if(u<1.5) return [sLogo, sLogo, 0, 0, 0];
+  if(u<2.25) return [sLogo, SC[0], (u-1.5)/0.75, 0.4, Math.min(W,HC)*0.05];
+  mode='scroll'; return null;
+}
+root.classList.remove('fx-go');
+if(mode!=='intro') root.classList.add('fx-go');
+setTimeout(function(){ root.classList.add('fx-go'); }, 1600);   // failsafe: the wordmark always draws
+
+/* ---------- frame ---------- */
+var t0=performance.now(), lastT=t0, sy=window.scrollY||0, raf=0, alive=true, beatOn=false;
+function paused(){
+  if(root.classList.contains('ov-open')) return true;
+  var m=document.getElementById('menu'); return !!(m && !m.hidden);
+}
+function setSlot(sc, C, K, E, R, idU){ U[idU].value=sc.id; C.value.set(sc.C[0],sc.C[1],sc.C[2],sc.C[3]); K.value.set(sc.K[0],sc.K[1],sc.K[2],sc.K[3]); E.value.set(sc.E[0],sc.E[1],sc.E[2],sc.E[3]); R.value.copy(sc.R); }
+function frame(now){
+  if(!alive) return;
+  raf=requestAnimationFrame(frame);
+  try{ step(now); }catch(err){ alive=false; cancelAnimationFrame(raf); cv.remove(); nofx(); }
+}
+function step(now){
+  var dt=Math.min(0.05,(now-lastT)/1000); lastT=now;
+  if(paused()) return;
+  var t=(now-t0)/1000, beat=t/SPB;
+  U.uTime.value=t; U.uBeat.value=beat;
+  var y=window.scrollY||0; sy+=(y-sy)*Math.min(1,dt*10); if(Math.abs(y-sy)<0.5) sy=y;
+  if(mouse.cx!==undefined){ mouse.tx=mouse.cx-W/2; mouse.ty=HC/2-mouse.cy; }
+  mouse.on+=(mouse.ton-mouse.on)*Math.min(1,dt*6);
+  mouse.x+=(mouse.tx-mouse.x)*Math.min(1,dt*14); mouse.y+=(mouse.ty-mouse.y)*Math.min(1,dt*14);
+  par.x+=(par.tx-par.x)*Math.min(1,dt*2.5); par.y+=(par.ty-par.y)*Math.min(1,dt*2.5);
+  U.uMouse.value.set(mouse.x,mouse.y); U.uMouseOn.value=mouse.on;
+  for(var hi=0;hi<4;hi++) hov[hi]+=(hovT[hi]-hov[hi])*Math.min(1,dt*(hovT[hi]>hov[hi]?5:3.5));
+  U.uHovL.value.set(hov[0],hov[1],hov[2],hov[3]);
+  var sweep=(t/5)%1*Math.PI*2; U.uSweep.value=sweep;
+  var RS=reelCalc(sy); SC[TIMEI].K[1]=RS.h;
+  hit=Math.max(0,hit-dt*4.5); U.uHit.value=hit>0.66?0.45:(hit>0.33?0.22:0.0);   // stepped decay: flat, never a gradient
+  if(mode==='intro' && y>HC*0.4){ fl.go=fl.end=true; root.classList.add('fx-go'); if(hooks.reveal) hooks.reveal(true); mode='scroll'; }
+  var st=mode==='intro'?introState(dt):null, A, B, bt, stag=0.55, turb=Math.min(W,HC)*0.035;
+  if(st){ A=st[0]; B=st[1]; bt=st[2]; stag=st[3]; turb=st[4]; }
+  else{
+    var n=HOLD.length, ia=n-1, ib=n-1; bt=0;
+    for(var k=0;k<n;k++){
+      if(sy<=HOLD[k][1]){
+        if(sy>=HOLD[k][0]||k===0){ ia=ib=k; bt=0; }
+        else { ia=k-1; ib=k; bt=(sy-HOLD[k-1][1])/Math.max(1,HOLD[k][0]-HOLD[k-1][1]); }
+        break;
+      }
+    }
+    A=SC[ia]; B=SC[ib];
+  }
+  // left alone on the hero, the dots gather on the logo every 14 s, then let go
+  var idle=-1, bT=0;   // no idle gathering on the hero logo
+  if(idle>0){ var ph2=idle%14; bT=ph2<1.3?ph2/1.3:(ph2<3.1?1:(ph2<4.4?1-(ph2-3.1)/1.3:0)); }
+  br+=(bT-br)*Math.min(1,dt*(bT>br?6:3));
+  if(br>0.002 && !st && A===SC[0] && B===SC[0]){ B=sLogo; bt=br; stag=0.55; turb=0; }
+  bt=Math.max(0,Math.min(1,bt));
+  if(bt>=0.999){ A=B; bt=0; }
+  if(bt<=0.0005) B=A;
+  anchor(A,t); if(B!==A) anchor(B,t);
+  setSlot(A,U.uCA,U.uKA,U.uEA,U.uRA,'uA'); setSlot(B,U.uCB,U.uKB,U.uEB,U.uRB,'uB');
+  U.uT.value=bt; U.uStag.value=stag; U.uTurb.value=turb;
+  renderer.render(scene,cam);
+  // DOM writes last, after every layout read of this frame
+  if(el.sweep) el.sweep.style.transform='rotate('+(sweep*180/Math.PI).toFixed(2)+'deg)';
+  reelApply(RS);
+  var on=(beat%1)<0.16; if(on!==beatOn&&el.bpm){ beatOn=on; el.bpm.classList.toggle('on',on); }
+}
+raf=requestAnimationFrame(frame);
+
+cv.addEventListener('webglcontextlost', function(e){ e.preventDefault(); alive=false; cancelAnimationFrame(raf); cv.remove(); nofx(); });
+
+window.OnyxFX={
+  skip:function(){ if(mode==='intro'){ iu=Math.max(iu,1.5); fl.go=true; fl.end=true; root.classList.add('fx-go'); } },
+  holds:function(){ return {hold:HOLD, pinA:pinA, pinB:pinB}; },
+  layout:layout,
+  beat:function(){ return (performance.now()-t0)/1000/SPB; }
+};
+}
+})();
+</script>
 <script>(function(){
   var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var FINE = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var H = window.__onyx || (window.__onyx = {});
+  function isFx(){ return document.documentElement.classList.contains('fx'); }
   function $(s, c){ return (c || document).querySelector(s); }
   function $$(s, c){ return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
   var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -1049,6 +1768,7 @@ window.SlalomMap={mount:mount};
     }
     el._sr = requestAnimationFrame(step);
   }
+  H.scramble = scramble;
   $$('.nav a, .rule p, [data-hover]').forEach(function(el){
     el.addEventListener('mouseenter', function(){ scramble(el, 520); });
   });
@@ -1098,19 +1818,30 @@ window.SlalomMap={mount:mount};
     $$('[data-anim]').forEach(function(el){ io.observe(el); });
   }
   function heroScramble(){ $$('.hero [data-scramble]').forEach(function(s){ scramble(s, 1100); }); }
+  function hudType(){ $$('.hud > span').forEach(function(s, i){ if (s.classList.contains('hud-bpm')) return; setTimeout(function(){ s.setAttribute('data-final', s.textContent); scramble(s, 600); }, i * 90); }); }
   var root = document.documentElement;
+  var flashEl = $('.flash'), lastFlash = 0;
+  function flash(){
+    if (RM || !flashEl) return;
+    var n = Date.now(); if (n - lastFlash < 2000) return;   // never more than one flash every 2 s
+    lastFlash = n; flashEl.classList.remove('go'); void flashEl.offsetWidth; flashEl.classList.add('go');
+  }
+  H.flash = flash;
   if (root.classList.contains('intro')){
     var revealed = false, t0 = Date.now();
-    var reveal = function(){
+    var reveal = function(fromFx){
       if (revealed) return; revealed = true;
       root.classList.remove('intro');
+      if (fromFx !== true && window.OnyxFX) window.OnyxFX.skip();
       setTimeout(heroScramble, 250);
+      setTimeout(hudType, 350);
       ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function(ev){ window.removeEventListener(ev, early); });
     };
+    H.reveal = reveal;
     var early = function(){ if (Date.now() - t0 > 300) reveal(); };
     setTimeout(reveal, 2000);
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function(ev){ window.addEventListener(ev, early, { passive: true }); });
-    var sk = $('.intro-skip'); if (sk) sk.addEventListener('click', reveal);
+    var sk = $('.intro-skip'); if (sk) sk.addEventListener('click', function(){ reveal(); });
   } else {
     setTimeout(heroScramble, 450);
   }
@@ -1252,6 +1983,19 @@ window.SlalomMap={mount:mount};
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  /* --- section marks on the frame edge --- */
+  var marks = $('.vf .marks'), mkEls = [];
+  if (marks){
+    $$('main > section').forEach(function(sec){ var i = document.createElement('i'); marks.appendChild(i); mkEls.push({ s: sec, i: i }); });
+    var placeMarks = function(){
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      mkEls.forEach(function(m){ var top = m.s.getBoundingClientRect().top + window.scrollY - window.innerHeight * .45; m.i.style.top = (max > 0 ? Math.min(1, Math.max(0, top / max)) * 100 : 0).toFixed(2) + '%'; });
+    };
+    placeMarks(); window.addEventListener('resize', placeMarks); window.addEventListener('load', placeMarks);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeMarks);
+    setTimeout(placeMarks, 1500);
+  }
+
   /* --- current section in the HUD and nav --- */
   var hsec = $('.hud-sec'), navLinks = $$('.nav a');
   if ('IntersectionObserver' in window){
@@ -1259,7 +2003,9 @@ window.SlalomMap={mount:mount};
       entries.forEach(function(e){
         if (!e.isIntersecting) return;
         var s = e.target, idx = s.getAttribute('data-index'), name = s.getAttribute('data-name');
-        if (hsec) hsec.textContent = idx === '00' ? 'ONYX · LILLE' : idx + ' / 04 — ' + name;
+        var txt = idx === '00' ? 'ONYX · LILLE' : idx + ' / 04 — ' + name;
+        if (hsec && hsec.getAttribute('data-final') !== txt){ hsec.setAttribute('data-final', txt); if (RM) hsec.textContent = txt; else scramble(hsec, 520); }
+        mkEls.forEach(function(m){ m.i.classList.toggle('on', m.s === s); });
         navLinks.forEach(function(a){
           if (a.getAttribute('data-sec') === s.id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
         });
@@ -1278,26 +2024,65 @@ window.SlalomMap={mount:mount};
     tickClock(); setInterval(tickClock, 1000);
   }
 
-  /* --- crosshair cursor --- */
-  var cursor = $('.cursor'), cr = cursor ? $('.cr', cursor) : null, mx = -9999, my = -9999, cTick = false;
+  /* --- crosshair cursor + focus lock: brackets snap around what you point at --- */
+  var cursor = $('.cursor'), lock = $('.lock'), cr = lock ? $('.cr', lock) : null, mx = -9999, my = -9999;
   function pad4(n){ n = Math.max(0, Math.round(n)); return ('0000' + n).slice(-4); }
-  if (cursor && FINE){
+  if (cursor && lock && FINE){
+    var lks = $$('.lk', lock), tgt = null, lab = '', LK = null, cRaf = 0, recheck = false;
+    var SEL = 'a, button, select, input, textarea, [role="button"], .smap-lb';
+    var label = function(t){
+      var v = (t.getAttribute('aria-label') || t.textContent || '').replace(/\(opens[^)]*\)/ig, '').replace(/\s+/g, ' ').trim().toUpperCase();
+      if (!v && t.tagName === 'INPUT') v = (t.name || 'FIELD').toUpperCase();
+      return v.length > 26 ? v.slice(0, 25) + '…' : v;
+    };
+    var cFrame = function(){
+      cRaf = 0;
+      if (recheck){   // after a scroll, the element under the pointer may have changed
+        recheck = false;
+        var under = mx > -9000 ? document.elementFromPoint(mx, my) : null, nt = under && under.closest ? under.closest(SEL) : null;
+        if (nt !== tgt){ tgt = nt; lab = nt ? label(nt) : ''; }
+      }
+      var hot = !!(tgt && tgt.isConnected), x0, y0, x1, y1;
+      if (hot){ var r = tgt.getBoundingClientRect(); if (r.width < 1 || r.height < 1) hot = false; else { x0 = r.left - 6; y0 = r.top - 6; x1 = r.right + 6; y1 = r.bottom + 6; } }
+      if (!hot){ x0 = mx - 11; y0 = my - 11; x1 = mx + 11; y1 = my + 11; }
+      if (!LK) LK = [x0, y0, x1, y1];
+      var k = RM ? 1 : .3, moving = false, T = [x0, y0, x1, y1];
+      for (var q = 0; q < 4; q++){ var d = T[q] - LK[q]; LK[q] += d * k; if (Math.abs(d) > .4) moving = true; else LK[q] = T[q]; }
+      lks[0].style.transform = 'translate(' + LK[0].toFixed(1) + 'px,' + LK[1].toFixed(1) + 'px)';
+      lks[1].style.transform = 'translate(' + (LK[2] - 10).toFixed(1) + 'px,' + LK[1].toFixed(1) + 'px)';
+      lks[2].style.transform = 'translate(' + LK[0].toFixed(1) + 'px,' + (LK[3] - 10).toFixed(1) + 'px)';
+      lks[3].style.transform = 'translate(' + (LK[2] - 10).toFixed(1) + 'px,' + (LK[3] - 10).toFixed(1) + 'px)';
+      cursor.style.setProperty('--cx', mx + 'px');
+      cursor.style.setProperty('--cy', my + 'px');
+      lock.style.setProperty('--cx', mx + 'px');
+      lock.style.setProperty('--cy', my + 'px');
+      cursor.classList.toggle('hot', hot);
+      lock.classList.toggle('hot', hot);
+      cr.textContent = hot && lab ? lab : 'X ' + pad4(mx) + ' · Y ' + pad4(my);
+      if (moving) cRaf = requestAnimationFrame(cFrame);
+    };
     window.addEventListener('pointermove', function(e){
       if (e.pointerType !== 'mouse') return;
       mx = e.clientX; my = e.clientY;
-      var hot = !!(e.target.closest && e.target.closest('a, button'));
-      if (cTick) return;
-      cTick = true;
-      requestAnimationFrame(function(){
-        cTick = false;
-        cursor.style.setProperty('--cx', mx + 'px');
-        cursor.style.setProperty('--cy', my + 'px');
-        cr.textContent = 'X ' + pad4(mx) + ' · Y ' + pad4(my);
-        cursor.classList.add('on');
-        cursor.classList.toggle('hot', hot);
-      });
+      var t = e.target.closest ? e.target.closest(SEL) : null;
+      if (t !== tgt){ tgt = t; lab = t ? label(t) : ''; }
+      cursor.classList.add('on'); lock.classList.add('on');
+      if (!cRaf) cRaf = requestAnimationFrame(cFrame);
     }, { passive: true });
-    document.documentElement.addEventListener('mouseleave', function(){ cursor.classList.remove('on'); });
+    window.addEventListener('scroll', function(){ if (!cursor.classList.contains('on')) return; recheck = true; if (!cRaf) cRaf = requestAnimationFrame(cFrame); }, { passive: true });
+    var kbd = false;
+    window.addEventListener('keydown', function(e){ if (e.key === 'Tab') kbd = true; }, true);
+    window.addEventListener('pointerdown', function(){ kbd = false; }, true);
+    document.addEventListener('focusin', function(e){
+      if (!kbd || !e.target.closest) return;
+      var t = e.target.closest('a, button, select, input, textarea, [role="button"]');
+      if (!t) return;
+      var r = t.getBoundingClientRect(); if (r.width < 1) return;
+      tgt = t; lab = label(t); mx = r.left + r.width / 2; my = r.top + r.height / 2;
+      cursor.classList.add('on'); lock.classList.add('on');
+      if (!cRaf) cRaf = requestAnimationFrame(cFrame);
+    });
+    document.documentElement.addEventListener('mouseleave', function(){ cursor.classList.remove('on'); lock.classList.remove('on'); });
   }
 
   /* --- magnetic buttons --- */
@@ -1312,19 +2097,21 @@ window.SlalomMap={mount:mount};
     });
   }
 
-  /* --- hero dot matrix: cursor glow + slow scan band --- */
-  var cv = $('.dots');
-  if (cv && cv.getContext){
-    var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, heroOn = true, raf = null;
+  /* --- hero dot matrix: cursor glow + slow scan band (fallback when WebGL is off) --- */
+  function startDots(){
+  var dcv = $('.dots');
+  if (dcv && dcv.getContext && !dcv._on){
+    dcv._on = true;
+    var ctx = dcv.getContext('2d'), W = 0, H = 0, dpr = 1, heroOn = true, raf = null;
     function size(){
-      var r = cv.getBoundingClientRect();
+      var r = dcv.getBoundingClientRect();
       dpr = Math.min(window.devicePixelRatio || 1, 2); W = r.width; H = r.height;
-      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+      dcv.width = Math.round(W * dpr); dcv.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     function shade(v){ var g = Math.round(30 + 124 * v); return 'rgb(' + g + ',' + g + ',' + g + ')'; }
     function draw(t){
-      var r = cv.getBoundingClientRect(), lx = mx - r.left, ly = my - r.top, sp = 24;
+      var r = dcv.getBoundingClientRect(), lx = mx - r.left, ly = my - r.top, sp = 24;
       var band = RM ? -9999 : ((t / 1000) % 8) / 8 * (W + 480) - 240;
       ctx.clearRect(0, 0, W, H);
       for (var y = sp / 2; y < H; y += sp){
@@ -1346,11 +2133,14 @@ window.SlalomMap={mount:mount};
         new IntersectionObserver(function(entries){
           heroOn = entries[0].isIntersecting;
           if (heroOn && !raf) raf = requestAnimationFrame(frame);
-        }).observe(cv);
+        }).observe(dcv);
       }
       raf = requestAnimationFrame(frame);
     }
   }
+  }
+  if (!isFx()) startDots();
+  H.nofx = startDots;
 
   /* --- 3D map tab --- */
   var mv = $('#map'), mvIn = mv ? $('.mapview-in', mv) : null, mapApi = null, mapLoading = false, lastFocus = null;
@@ -1529,6 +2319,35 @@ window.SlalomMap={mount:mount};
   }
   if (location.hash === '#contact') openContact();
 
+  /* --- scan reveals: a hairline of light prints each block once --- */
+  var rvs = $$('[data-rv]');
+  if (isFx() && 'IntersectionObserver' in window){
+    var rio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var t = e.target; rio.unobserve(t); t.classList.add('rv');
+        var fin = function(ev){ if (ev.target !== t || ev.animationName !== 'rvClip') return; t.classList.add('rv-done'); t.removeEventListener('animationend', fin); };
+        t.addEventListener('animationend', fin);
+        setTimeout(function(){ t.classList.add('rv-done'); }, 1600);
+      });
+    }, { threshold: .08, rootMargin: '0px 0px -6% 0px' });
+    rvs.forEach(function(t){ rio.observe(t); });
+  } else rvs.forEach(function(t){ t.classList.add('rv', 'rv-done'); });
+
+  /* --- ticket: tilts with the pointer, a scan pass reads it --- */
+  var tk = $('.ticket');
+  if (tk && FINE && !RM){
+    tk.addEventListener('pointerenter', function(){ tk.classList.remove('pass'); void tk.offsetWidth; tk.classList.add('pass'); });
+    if (isFx()){
+      tk.addEventListener('pointermove', function(e){
+        var r = tk.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        tk.classList.add('tilt');
+        tk.style.transform = 'perspective(1400px) rotateX(' + (-y * 5).toFixed(2) + 'deg) rotateY(' + (x * 7).toFixed(2) + 'deg)';
+      });
+      tk.addEventListener('pointerleave', function(){ tk.classList.remove('tilt'); tk.style.transform = ''; });
+    }
+  }
+
   /* --- mobile menu --- */
   var mb = $('.menu-btn'), menu = $('#menu');
   if (mb && menu){
@@ -1545,5 +2364,5 @@ window.SlalomMap={mount:mount};
   }
 })();
 </script>
-</body>
-</html>
+
+</body></html>
