@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <style>
 /* ONYX — clair et posé, dans l'esprit d'un back-office de caisse : barre latérale blanche, fond gris très léger, cartes blanches,
    un seul bleu pour l'action et les données, le gris pour la comparaison. Layout : en-tête + barre latérale + contenu. */
@@ -279,7 +280,7 @@ tr.off td:not(:first-child){opacity:.45}
   aside.side{display:none}
   header.top{height:52px;padding:0 14px}
   .logo img{height:16px}
-  .who svg,.who > span{display:none}
+  .who svg,.who > span,#savebadge{display:none}
   .who .ghost{padding:5px 8px;font-size:12px}
   main.content{padding:14px 12px 96px}
   .ph{gap:10px;margin-bottom:8px}
@@ -475,19 +476,19 @@ function seedDemo(){
 }
 function seed(){
   const b = seedDemo();
-  return {clubs:[b.club], clubId:"demo", cur:{demo:b.current}, locked:LOCKED.slice(), view:"tableau", filtreSecu:"tout", cmp:""};
+  return {clubs:[b.club], clubId:"demo", cur:{demo:b.current}, view:"tableau", filtreSecu:"tout", cmp:""};
 }
-
-/* ============ état ============ */
-const KEY = "onyx-demo-v6";
-try { ["onyx-demo-v1","onyx-demo-v2","onyx-demo-v3","onyx-demo-v4","onyx-demo-v5"].forEach(k => localStorage.removeItem(k)); } catch(e){}
-let S;
-try { S = JSON.parse(localStorage.getItem(KEY)); } catch(e){ S = null; }
-if (!S || !S.clubs) S = seed();
+const KEY = "onyx-demo-local";
+try { ["onyx-demo-v1","onyx-demo-v2","onyx-demo-v3","onyx-demo-v4","onyx-demo-v5","onyx-demo-v6"].forEach(k => localStorage.removeItem(k)); } catch(e){}
+let MODE = null, AUTH = null, SAVED = {}, PERSIST = {state:"ok", msg:""};
+let S = {clubs:[], clubId:null, cur:{}, view:"tableau", filtreSecu:"tout", cmp:""};
+const PREF = "onyx-prefs";
+function loadPrefs(){ try { const p = JSON.parse(localStorage.getItem(PREF)) || {}; ["clubId","cur","view","cmp","periode","prodMode"].forEach(k => { if (p[k] !== undefined) S[k] = p[k]; }); S.cur = S.cur || {}; } catch(e){} }
+function savePrefs(){ try { localStorage.setItem(PREF, JSON.stringify({clubId:S.clubId, cur:S.cur, view:S.view, cmp:S.cmp, periode:S.periode, prodMode:S.prodMode})); } catch(e){} }
 let saveT;
-function save(){ clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} S._saved = Date.now(); }, 300); }
+function save(){ clearTimeout(saveT); saveT = setTimeout(() => { if (MODE === "demo"){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} } else if (MODE === "online"){ savePrefs(); persist(); } }, 600); }
 const club = () => S.clubs.find(c => c.id === S.clubId) || S.clubs[0];
-const cur = () => { const c = club(); return c.soirees.find(s => s.id === S.cur[c.id]) || c.soirees[0]; };
+const cur = () => { const c = club(); if (!c) return null; return c.soirees.find(s => s.id === S.cur[c.id]) || c.soirees.filter(s => s.date < "2026-11-17").sort((a, b) => b.date.localeCompare(a.date))[0] || c.soirees[0]; };
 function setPath(path, val){
   const parts = path.split("."); let o = parts[0] === "s" ? cur() : parts[0] === "c" ? club() : parts[0] === "cfg" ? club().config : S;
   for (let i = 1; i < parts.length - 1; i++){ const k = parts[i]; o = o[/^\d+$/.test(k) ? +k : k]; }
@@ -870,9 +871,9 @@ function vEquipe(c){
   <tr><th>Actif</th><th>Nom</th><th>Prénom</th><th>Poste</th><th>E-mail</th><th>Accès</th><th>Mot de passe</th><th></th></tr>
   ${c.equipe.map((e, i) => `<tr class="${e.actif === false ? "off" : ""}"><td><button class="sw2 ${e.actif === false ? "" : "on"}" role="switch" aria-checked="${e.actif !== false}" aria-label="Compte de ${esc(fullName(e))} ${e.actif === false ? "désactivé" : "activé"}" data-act="toggleEmp" data-i="${i}"><i></i></button></td><td>${inp("c.equipe." + i + ".nom", e.nom, "")}</td><td>${inp("c.equipe." + i + ".prenom", e.prenom, "")}</td><td>${inp("c.equipe." + i + ".poste", e.poste, "wide")}</td>
     <td>${inp("c.equipe." + i + ".email", e.email, "wide", 'type="email" autocomplete="off" placeholder="prenom@exemple.fr"')}</td><td>${sel("c.equipe." + i + ".acces", e.acces, ACCES)}</td>
-    <td>${e.pass ? `<span class="tag g">créé</span> <button class="ghost sm" data-act="resetPass" data-i="${i}">Réinitialiser</button>` : `<span class="tag w">${e.email ? "à créer à la 1re connexion" : "e-mail manquant"}</span>`}</td>
+    <td>${e.user_id ? `<span class="tag g">compte actif</span>${e.email ? ` <button class="ghost sm" data-act="resetPass" data-i="${i}">Lien mot de passe</button>` : ""}` : `<span class="tag w">${e.email ? "invité, pas encore inscrit" : "e-mail manquant"}</span>`}</td>
     <td><button class="xbtn" data-act="delEmp" data-i="${i}" aria-label="Retirer ce membre" title="Retirer">×</button></td></tr>`).join("") || '<tr><td colspan="8" class="empty">Ajoute les membres de ton équipe.</td></tr>'}
-  </table></div><div class="note">Chaque membre se connecte avec son adresse e-mail. À la première connexion, il crée son mot de passe (8 caractères minimum). Il ne voit ensuite que les onglets de son accès. Un compte désactivé ne peut plus se connecter, et sa session ouverte est fermée.</div></div>`;
+  </table></div><div class="note">Ajoute l'adresse e-mail de chaque membre. La personne crée son compte sur onyx-lab.fr avec cette adresse, confirme son e-mail, puis accède automatiquement à ${esc(c.nom)}, avec les seuls onglets de son accès. Un compte désactivé ne peut plus rien voir ni modifier.</div></div>`;
 }
 
 function vConn(c){
@@ -908,7 +909,7 @@ function vRegl(c){
     ${cfg.paliers.map((p, i) => `<tr><td>${i === cfg.paliers.length - 1 ? "Au-delà de " + int(cfg.paliers[i - 1].max) : inp("cfg.paliers." + i + ".max", p.max, "num s")}</td><td class="r">${inp("cfg.paliers." + i + ".entree", p.entree, "num xs")}</td><td class="r">${inp("cfg.paliers." + i + ".bar", p.bar, "num xs")}</td><td class="r">${inp("cfg.paliers." + i + ".secu", p.secu, "num xs")}</td></tr>`).join("")}</table></div></div>
 </div>
 <div class="panel" style="margin-top:16px"><h3>Données et confidentialité</h3><div class="row"><button class="ghost sm" data-act="exportData">Copier toutes les données (JSON)</button><button class="ghost sm" data-act="legal" data-v="confid">Politique de confidentialité</button></div><div class="note">Main courante de sécurité : décris les faits sans nommer les clients. Les données de cet établissement peuvent être exportées à tout moment (droit à la portabilité).</div></div>
-<div class="panel" style="margin-top:16px"><h3>Démo</h3><div class="row"><button class="ghost sm danger" data-act="reset">Réinitialiser toute la démo</button><button class="ghost sm danger" data-act="delClub">Supprimer cet établissement</button><span class="note" style="margin:0">Les données de cette démo restent dans ce navigateur.</span></div></div>`;
+<div class="panel" style="margin-top:16px"><h3>${MODE === "demo" ? "Démo" : "Zone sensible"}</h3><div class="row">${MODE === "demo" ? '<button class="ghost sm danger" data-act="reset">Réinitialiser toute la démo</button>' : ""}<button class="ghost sm danger" data-act="delClub">Supprimer cet établissement</button><span class="note" style="margin:0">${MODE === "demo" ? "Les données de cette démo restent dans ce navigateur." : "La suppression efface définitivement l'établissement, son équipe et toutes ses soirées."}</span></div></div>`;
 }
 
 const WIDGETS = [
@@ -974,7 +975,7 @@ function vAffichage(c){
 </div>`;
 }
 
-/* ============ accès par code ============ */
+/* ============ comptes et accès ============ */
 const ROLE_VIEWS = {
   "Administrateur": null,
   "Direction": ["tableau","billetterie","bar","securite","personnel","synthese","saison","affichage"],
@@ -982,15 +983,16 @@ const ROLE_VIEWS = {
   "Chef sécurité": ["securite","affichage"],
   "Saisie": ["bar","securite"],
   "Lecture": ["tableau","synthese"]};
-const SKEY = "onyx-session";
-let SESSION = null; try { SESSION = JSON.parse(sessionStorage.getItem(SKEY)); } catch(e){}
 let tries = 0, lockUntil = 0, lastAct = Date.now();
-const me = () => { if (!SESSION) return null; const c = S.clubs.find(x => x.id === SESSION.clubId); const m = c && c.equipe.find(x => x.id === SESSION.memberId); return m && m.actif !== false ? {c, m} : null; };
+const me = () => {
+  const c = club(); if (!c) return null;
+  if (MODE === "demo"){ const m = c.equipe.find(x => x.acces === "Administrateur") || c.equipe[0]; return m ? {c, m} : null; }
+  if (MODE !== "online" || !AUTH) return null;
+  const m = c.equipe.find(x => x.user_id === AUTH.id && x.actif !== false); return m ? {c, m} : null; };
 function allowed(v){ const u = me(); if (!u) return false; const r = ROLE_VIEWS[u.m.acces]; return r === null || r === undefined ? u.m.acces === "Administrateur" : r.includes(v); }
 const allViews = () => [...VIEWS, ...CVIEWS].map(x => x[0]);
 const fullName = m => [m.prenom, m.nom].filter(Boolean).join(" ") || m.email || "—";
 const normMail = v => String(v || "").trim().toLowerCase();
-function findByEmail(mail){ for (const c of S.clubs){ const m = c.equipe.find(x => normMail(x.email) === mail); if (m) return {c, m}; } return null; }
 async function unlockBlob(blob, pass){
   try {
     const ub = s => Uint8Array.from(atob(s), ch => ch.charCodeAt(0));
@@ -1000,89 +1002,94 @@ async function unlockBlob(blob, pass){
     return JSON.parse(new TextDecoder().decode(pt));
   } catch(e){ return null; }
 }
-async function hashPass(pw, salt){
-  const enc = new TextEncoder(), key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", salt:enc.encode(salt), iterations:150000, hash:"SHA-256"}, key, 256);
-  return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, "0")).join("");
-}
+const shell = inner => `<div class="login"><div class="lbox ${document.getElementById("intro") ? "late" : ""}"><img src="${LOGO}" alt="ONYX" class="llogo">${inner}<div class="lfoot">${legalLinks()}</div></div></div>`;
 function vLogin(){
-  const locked = Date.now() < lockUntil, st = S._login || {step:"mail"};
-  const step = st.step;
-  const body = step === "key"
-    ? `<p style="margin:0">Première connexion sur cet appareil avec <b>${esc(st.mail)}</b>. Saisis la clé de ton établissement, fournie par ton administrateur.</p>
-       <label><span class="lab">Clé de l'établissement</span><input class="in" id="lg-key" type="password" autocomplete="off" autocapitalize="characters" placeholder="ONYX-XXXX-XXXX-XXXX-XXXX" ${locked ? "disabled" : ""}></label>
-       <div class="note" style="margin:0">Les données de l'établissement sont chiffrées dans le site. La clé ne sert qu'une fois par appareil.</div>
-       <button class="btn" type="submit" ${locked ? "disabled" : ""}>Déverrouiller</button><button class="ghost" type="button" data-act="loginBack">Changer d'adresse</button>`
-    : step === "mail"
-    ? `<label><span class="lab">Adresse e-mail</span><input class="in" id="lg-mail" type="email" autocomplete="username" inputmode="email" value="${esc(st.mail || "")}" placeholder="prenom@etablissement.fr"></label><button class="btn" type="submit">Continuer</button>`
-    : step === "create"
-    ? `<p style="margin:0">Bienvenue ${esc(st.name)}. Crée ton mot de passe pour <b>${esc(st.mail)}</b>.</p>
-       <label><span class="lab">Nouveau mot de passe</span><input class="in" id="lg-p1" type="password" autocomplete="new-password" minlength="8"></label>
-       <label><span class="lab">Confirme le mot de passe</span><input class="in" id="lg-p2" type="password" autocomplete="new-password" minlength="8"></label>
-       <div class="note" style="margin:0">8 caractères minimum, avec au moins une lettre et un chiffre.</div>
-       <button class="btn" type="submit">Créer mon mot de passe</button><button class="ghost" type="button" data-act="loginBack">Changer d'adresse</button>`
-    : `<p style="margin:0"><b>${esc(st.mail)}</b></p>
-       <label><span class="lab">Mot de passe</span><input class="in" id="lg-pass" type="password" autocomplete="current-password" ${locked ? "disabled" : ""}></label>
-       <button class="btn" type="submit" ${locked ? "disabled" : ""}>Se connecter</button><button class="ghost" type="button" data-act="loginBack">Changer d'adresse</button>
-       <div class="note" style="margin:0">Mot de passe oublié : demande à ton administrateur de le réinitialiser dans Équipe.</div>`;
-  return `<div class="login"><div class="lbox ${document.getElementById("intro") ? "late" : ""}">
-    <img src="${LOGO}" alt="ONYX" class="llogo">
-    <h1>${step === "create" || step === "key" ? "Première connexion" : "Connexion"}</h1>
-    <form id="login-form" class="form" style="grid-template-columns:1fr;margin-top:14px" novalidate>${body}
-      <div class="lerr" id="lg-err" role="alert">${locked ? "Trop d'essais. Réessaie dans 30 secondes." : esc(st.err || "")}</div></form>
-    <div class="lfoot">${legalLinks()}</div>
-  </div></div>`;
+  const st = S._login || {step:"login"}, step = st.step, err = `<div class="lerr" id="lg-err" role="alert">${esc(st.err || "")}</div>`;
+  const demoBtn = `<button class="ghost" type="button" data-act="demo">Découvrir la démo (club fictif)</button>`;
+  if (!sbInit()) return shell(`<h1>ONYX</h1><p class="note">La connexion aux comptes fonctionne sur <b>onyx-lab.fr</b>. Ici, tu peux parcourir la démo.</p><div class="form" style="grid-template-columns:1fr;margin-top:14px">${demoBtn}</div>`);
+  const mail = `<label><span class="lab">Adresse e-mail</span><input class="in" id="lg-mail" type="email" autocomplete="username" inputmode="email" value="${esc(st.mail || "")}" placeholder="prenom@etablissement.fr"></label>`;
+  let h = "", body = "";
+  if (step === "login"){ h = "Connexion"; body = `${mail}<label><span class="lab">Mot de passe</span><input class="in" id="lg-pass" type="password" autocomplete="current-password"></label>
+    <button class="btn" type="submit">Se connecter</button>${err}
+    <div class="row" style="justify-content:space-between"><a href="#" data-act="lgStep" data-v="signup">Créer un compte</a><a href="#" data-act="lgStep" data-v="forgot">Mot de passe oublié</a></div>${demoBtn}`; }
+  if (step === "signup"){ h = "Créer un compte"; body = `${mail}<label><span class="lab">Mot de passe</span><input class="in" id="lg-p1" type="password" autocomplete="new-password"></label>
+    <label><span class="lab">Confirme le mot de passe</span><input class="in" id="lg-p2" type="password" autocomplete="new-password"></label>
+    <div class="note" style="margin:0">8 caractères minimum, avec au moins une lettre et un chiffre. Utilise l'adresse que ton administrateur a ajoutée dans Équipe, ou crée ton propre établissement.</div>
+    <button class="btn" type="submit">Créer mon compte</button>${err}<a href="#" data-act="lgStep" data-v="login">J'ai déjà un compte</a>`; }
+  if (step === "forgot"){ h = "Mot de passe oublié"; body = `${mail}<div class="note" style="margin:0">Tu vas recevoir un lien pour choisir un nouveau mot de passe.</div><button class="btn" type="submit">Envoyer le lien</button>${err}<a href="#" data-act="lgStep" data-v="login">Retour à la connexion</a>`; }
+  if (step === "newpass"){ h = "Nouveau mot de passe"; body = `<label><span class="lab">Nouveau mot de passe</span><input class="in" id="lg-p1" type="password" autocomplete="new-password"></label><label><span class="lab">Confirme</span><input class="in" id="lg-p2" type="password" autocomplete="new-password"></label><button class="btn" type="submit">Enregistrer</button>${err}`; }
+  if (step === "sent"){ h = "Vérifie ta boîte mail"; body = `<p style="margin:0">${esc(st.msg)}</p><a href="#" data-act="lgStep" data-v="login">Retour à la connexion</a>`; }
+  return shell(`<h1>${h}</h1><form id="login-form" class="form" style="grid-template-columns:1fr;margin-top:14px" novalidate>${body}</form>`);
 }
 async function doLogin(){
-  const st = S._login || {step:"mail"};
-  const fail = msg => { S._login = {...st, err:msg}; render(); };
-  if (st.step === "mail"){
-    const mail = normMail($("#lg-mail").value);
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) return fail("Saisis une adresse e-mail valide.");
-    const f = findByEmail(mail);
-    if (!f && (S.locked || []).length){ S._login = {step:"key", mail}; render(); return; }
-    if (!f) return fail("Adresse inconnue. Demande à ton administrateur de t'ajouter dans Équipe.");
-    if (f.m.actif === false) return fail("Ce compte est désactivé. Contacte ton administrateur.");
-    S._login = {step:f.m.pass ? "pass" : "create", mail, name:f.m.prenom || fullName(f.m)}; render(); return;
-  }
-  if (st.step === "key"){
-    const key = ($("#lg-key").value || "").trim().toUpperCase(); if (!key) return fail("Saisis la clé de l'établissement.");
-    let opened = 0;
-    for (const blob of (S.locked || []).slice()){ const club0 = await unlockBlob(blob, key); if (club0){ S.clubs.push(club0.club); S.cur[club0.club.id] = club0.current; S.locked = S.locked.filter(x => x !== blob); opened++; } }
-    if (!opened){ tries++; if (tries >= 5){ lockUntil = Date.now() + 30000; tries = 0; setTimeout(render, 30500); } return fail("Clé incorrecte."); }
-    save(); const f2 = findByEmail(st.mail);
-    if (!f2) return fail("Établissement déverrouillé, mais cette adresse n'y figure pas.");
-    if (f2.m.actif === false) return fail("Ce compte est désactivé. Contacte ton administrateur.");
-    S._login = {step:f2.m.pass ? "pass" : "create", mail:st.mail, name:f2.m.prenom || fullName(f2.m)}; render(); return;
-  }
-  const f = findByEmail(st.mail); if (!f) return fail("Adresse inconnue.");
-  if (f.m.actif === false) return fail("Ce compte est désactivé. Contacte ton administrateur.");
-  if (st.step === "create"){
-    const p1 = $("#lg-p1").value, p2 = $("#lg-p2").value;
-    if (p1.length < 8 || !/[a-zA-Z]/.test(p1) || !/\d/.test(p1)) return fail("Le mot de passe doit faire 8 caractères minimum, avec au moins une lettre et un chiffre.");
-    if (p1 !== p2) return fail("Les deux mots de passe ne correspondent pas.");
-    const salt = uid() + uid(); f.m.pass = {salt, hash:await hashPass(p1, salt)}; save();
-  } else {
-    if (Date.now() < lockUntil) return;
-    const pw = $("#lg-pass").value;
-    if (!pw || await hashPass(pw, f.m.pass.salt) !== f.m.pass.hash){
-      tries++; if (tries >= 5){ lockUntil = Date.now() + 30000; tries = 0; setTimeout(render, 30500); }
-      return fail("Mot de passe incorrect.");
+  const st = S._login || {step:"login"};
+  const fail = msg => { S._login = {...st, err:msg, mail:($("#lg-mail") || {}).value || st.mail}; render(); };
+  if (Date.now() < lockUntil) return fail("Trop d'essais. Réessaie dans 30 secondes.");
+  const mail = normMail(($("#lg-mail") || {}).value || st.mail);
+  const okMail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail);
+  const pwOk = p => p.length >= 8 && /[a-zA-Z]/.test(p) && /\d/.test(p);
+  try {
+    if (st.step === "login"){
+      if (!okMail) return fail("Saisis une adresse e-mail valide.");
+      const {data, error} = await sb.auth.signInWithPassword({email:mail, password:$("#lg-pass").value});
+      if (error){ tries++; if (tries >= 5){ lockUntil = Date.now() + 30000; tries = 0; } return fail(friendlyErr(error)); }
+      tries = 0; return enterOnline(data.user);
     }
-  }
-  tries = 0; S._login = null; SESSION = {clubId:f.c.id, memberId:f.m.id}; try { sessionStorage.setItem(SKEY, JSON.stringify(SESSION)); } catch(e){}
-  S.clubId = f.c.id; lastAct = Date.now(); if (!allowed(S.view)) S.view = allViews().find(allowed) || "tableau"; location.hash = S.view; render();
+    if (st.step === "signup"){
+      const p1 = $("#lg-p1").value, p2 = $("#lg-p2").value;
+      if (!okMail) return fail("Saisis une adresse e-mail valide.");
+      if (!pwOk(p1)) return fail("Le mot de passe doit faire 8 caractères minimum, avec au moins une lettre et un chiffre.");
+      if (p1 !== p2) return fail("Les deux mots de passe ne correspondent pas.");
+      const {data, error} = await sb.auth.signUp({email:mail, password:p1, options:{emailRedirectTo:SITE}});
+      if (error) return fail(friendlyErr(error));
+      if (data.session) return enterOnline(data.user);
+      S._login = {step:"sent", mail, msg:"Un e-mail de confirmation a été envoyé à " + mail + ". Clique sur le lien qu'il contient pour activer ton compte, puis connecte-toi."}; render(); return;
+    }
+    if (st.step === "forgot"){
+      if (!okMail) return fail("Saisis une adresse e-mail valide.");
+      const {error} = await sb.auth.resetPasswordForEmail(mail, {redirectTo:SITE});
+      if (error) return fail(friendlyErr(error));
+      S._login = {step:"sent", mail, msg:"Si un compte existe pour " + mail + ", un lien pour choisir un nouveau mot de passe vient d'être envoyé."}; render(); return;
+    }
+    if (st.step === "newpass"){
+      const p1 = $("#lg-p1").value, p2 = $("#lg-p2").value;
+      if (!pwOk(p1)) return fail("Le mot de passe doit faire 8 caractères minimum, avec au moins une lettre et un chiffre.");
+      if (p1 !== p2) return fail("Les deux mots de passe ne correspondent pas.");
+      const {data, error} = await sb.auth.updateUser({password:p1});
+      if (error) return fail(friendlyErr(error));
+      toast("Mot de passe enregistré."); return enterOnline(data.user);
+    }
+  } catch(e){ return fail(friendlyErr(e)); }
 }
-function logout(){ SESSION = null; try { sessionStorage.removeItem(SKEY); } catch(e){} S._screen = false; S._more = false; render(); }
+function vOnboard(){
+  if (S._busy) return shell(`<h1>Un instant</h1><p>${esc(S._busy)}</p>`);
+  return shell(`<h1>Bienvenue</h1><p class="note" style="margin-top:4px">Connecté avec ${esc(AUTH && AUTH.email)}. Aucun établissement n'est encore relié à ce compte.</p>
+    <div class="form" style="grid-template-columns:1fr;margin-top:12px">
+      <b>Créer mon établissement</b>
+      <label><span class="lab">Nom</span><input class="in" id="ob-n" placeholder="ex. Le Hangar"></label>
+      <div class="form" style="grid-template-columns:1fr 1fr"><label><span class="lab">Ville</span><input class="in" id="ob-v"></label><label><span class="lab">Jauge</span><input class="in num" id="ob-j" inputmode="numeric"></label></div>
+      <button class="btn" data-act="createClub">Créer l'établissement</button>
+      <b style="margin-top:10px">Restaurer une sauvegarde chiffrée</b>
+      <label><span class="lab">Clé de l'établissement</span><input class="in" id="ob-k" type="password" autocomplete="off" placeholder="ONYX-XXXX-XXXX-XXXX-XXXX"></label>
+      <button class="ghost" data-act="importLocked">Restaurer</button>
+      <div class="note" style="margin:0">Tu as été invité par un établissement ? Ton administrateur doit avoir saisi exactement cette adresse dans Équipe. Actualise ensuite la page.</div>
+      <button class="ghost" data-act="logout">Se déconnecter</button></div>`);
+}
+function vNoAccess(){
+  const c = club();
+  return shell(`<h1>Accès indisponible</h1><p>Ton compte ${esc(AUTH && AUTH.email)} n'a pas ou plus accès à ${esc(c ? c.nom : "cet établissement")}. Contacte ton administrateur.</p>
+    ${S.clubs.length > 1 ? `<label class="form" style="grid-template-columns:1fr"><span class="lab">Autre établissement</span><select class="in" id="f-club3" data-sel="club">${S.clubs.map(x => `<option value="${x.id}" ${x.id === (c || {}).id ? "selected" : ""}>${esc(x.nom)}</option>`).join("")}</select></label>` : ""}
+    <div class="form" style="grid-template-columns:1fr;margin-top:12px"><button class="ghost" data-act="logout">Se déconnecter</button></div>`);
+}
 ["click","keydown","touchstart"].forEach(t => document.addEventListener(t, () => { lastAct = Date.now(); }, {passive:true}));
-setInterval(() => { if (SESSION && !S._screen && Date.now() - lastAct > 20*60*1000){ logout(); toast("Session verrouillée après 20 minutes d'inactivité."); } }, 30000);
+setInterval(() => { if (MODE && !S._screen && Date.now() - lastAct > 20*60*1000){ logout(); toast("Session fermée après 20 minutes d'inactivité."); } }, 30000);
 
 /* ============ pages légales ============ */
 function legalLinks(){ return `<a href="#" data-act="legal" data-v="mentions">Mentions légales</a> · <a href="#" data-act="legal" data-v="confid">Confidentialité</a> · <a href="#" data-act="legal" data-v="cgu">Conditions d'utilisation</a>`; }
 const LEGAL = {
   mentions:["Mentions légales", `
 <p><b>Éditeur du service ONYX</b><br>Martin Galloo, entrepreneur individuel — SIRET : [à compléter]<br>Adresse : [à compléter]<br>Contact : [adresse e-mail de contact à compléter]<br>Directeur de la publication : Martin Galloo.</p>
-<p><b>Hébergement</b><br>Version de démonstration : page hébergée sur claude.ai par Anthropic PBC.<br>Version en ligne : [nom, adresse et téléphone de l'hébergeur à compléter].</p>
+<p><b>Hébergement</b><br>Site : GitHub Pages, GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.<br>Données : Supabase, serveurs situés à Paris (région AWS eu-west-3).</p>
 <p><b>Propriété intellectuelle</b><br>Le logiciel ONYX, sa marque, son logo et son interface sont protégés. Toute reproduction sans autorisation est interdite. Les données saisies restent la propriété de l'établissement qui les saisit.</p>`],
   confid:["Politique de confidentialité", `
 <p><b>Qui est responsable ?</b><br>Chaque établissement qui utilise ONYX est responsable des données qu'il y saisit (son équipe, ses soirées, sa main courante de sécurité). L'éditeur d'ONYX agit pour son compte, en sous-traitant au sens de l'article 28 du RGPD, dans le cadre d'un contrat de traitement des données.</p>
@@ -1091,7 +1098,7 @@ const LEGAL = {
 <p><b>Combien de temps ?</b><br>Chiffres d'exploitation : 10 ans (pièces comptables). Main courante de sécurité : 12 mois, puis suppression. Comptes de l'équipe : jusqu'au départ de la personne. [Durées à valider par l'établissement.]</p>
 <p><b>Vos droits</b><br>Accès, rectification, effacement, limitation, opposition et portabilité : écrire à [adresse de contact]. En cas de désaccord, vous pouvez saisir la CNIL (cnil.fr).</p>
 <p><b>Cookies et stockage</b><br>ONYX n'utilise ni cookie publicitaire ni mesure d'audience. Il garde seulement, dans le navigateur, la session de connexion et les réglages d'affichage, strictement nécessaires au service : aucun consentement n'est requis pour ce stockage.</p>
-<p><b>Sécurité</b><br>Connexion par e-mail et mot de passe personnel (8 caractères minimum), conservé sous forme d'empreinte PBKDF2. Droits selon le poste, comptes désactivables, verrouillage après 20 minutes d'inactivité et blocage temporaire après 5 mots de passe faux. Dans la version en ligne : connexion chiffrée (HTTPS), vérification des droits côté serveur, jetons Shotgun chiffrés, sauvegardes, journal des accès.</p>`],
+<p><b>Sécurité</b><br>Connexion chiffrée (HTTPS). Comptes par e-mail et mot de passe personnel (8 caractères minimum), confirmés par e-mail ; les mots de passe sont gérés par Supabase et ne sont jamais visibles par ONYX. Les droits sont vérifiés par la base de données elle-même : chaque personne ne lit et ne modifie que les données de son établissement, selon son poste. Comptes désactivables, déconnexion après 20 minutes d'inactivité. Le jeton Shotgun reste sur l'appareil qui l'a saisi.</p>`],
   cgu:["Conditions d'utilisation", `
 <p><b>Objet</b><br>ONYX aide les établissements de nuit à suivre leurs soirées : billetterie, bar, sécurité, personnel et résultats.</p>
 <p><b>Accès</b><br>Chaque utilisateur se connecte avec son adresse e-mail et crée son mot de passe à la première connexion ; il ne doit pas le partager. L'administrateur de l'établissement ajoute les membres, choisit leurs droits et désactive leur compte à leur départ.</p>
@@ -1171,6 +1178,126 @@ function sgApply(c, st){
 }
 setInterval(() => { const u = me(); if (!u || u.m.acces !== "Administrateur" && u.m.acces !== "Direction") return; for (const c of S.clubs) if (sgToken(c.id) && c.connexions.shotgun.auto !== false) sgSync(c, true); }, 3*60*1000);
 
+/* ============ base de données en ligne (Supabase) ============ */
+const SB_URL = "https://zdrjhepkyvoscfibbclf.supabase.co", SB_KEY = "sb_publishable_GUlgWc9Wf9Dw1ChqjR0U-Q_MqtHQeEh";
+const ONLINE_OK = /(^|\.)onyx-lab\.fr$|\.github\.io$|^localhost$/.test(location.hostname);
+const SITE = location.origin + location.pathname;
+let sb = null;
+function sbInit(){ if (sb) return sb; try { if (ONLINE_OK && window.supabase) sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}}); } catch(e){ sb = null; } return sb; }
+const stable = v => JSON.stringify(v, (k, x) => x && typeof x === "object" && !Array.isArray(x) ? Object.keys(x).sort().reduce((o, kk) => (o[kk] = x[kk], o), {}) : x);
+const clubRow = c => ({nom:c.nom, ville:c.ville || "", jauge:Math.round(n(c.jauge)), config:c.config, connexions:c.connexions, affichage:c.affichage || null});
+const memRow = (c, m) => ({id:m.id, club_id:c.id, email:normMail(m.email) || null, nom:m.nom || "", prenom:m.prenom || "", poste:m.poste || "", acces:m.acces, actif:m.actif !== false});
+function snapshot(){ SAVED = {}; for (const c of S.clubs){ SAVED["c:" + c.id] = {club:c.id, j:stable(clubRow(c))}; for (const m of c.equipe) SAVED["m:" + m.id] = {club:c.id, j:stable(memRow(c, m))}; for (const s of c.soirees) SAVED["s:" + s.id] = {club:c.id, j:stable(s)}; } }
+function friendlyErr(e){ const m = (e && (e.message || e.error_description)) || String(e || "");
+  if (/Invalid login credentials/i.test(m)) return "E-mail ou mot de passe incorrect.";
+  if (/Email not confirmed/i.test(m)) return "Adresse pas encore confirmée : clique sur le lien reçu par e-mail.";
+  if (/already registered|already been registered/i.test(m)) return "Un compte existe déjà avec cet e-mail : connecte-toi.";
+  if (/rate limit|too many/i.test(m)) return "Trop de tentatives ou d'e-mails envoyés. Réessaie dans quelques minutes.";
+  if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return "Connexion internet indisponible.";
+  if (/row-level security|permission denied/i.test(m)) return "Ton accès ne permet pas cette modification.";
+  return m; }
+function setBadge(){ const b = document.getElementById("savebadge"); if (!b) return; b.textContent = MODE === "demo" ? "Démo · enregistré sur cet appareil" : PERSIST.state === "busy" ? "Enregistrement…" : PERSIST.state === "err" ? "Non enregistré" : "Enregistré en ligne"; b.className = "lab " + (PERSIST.state === "err" ? "neg" : ""); }
+let persisting = false, persistAgain = false;
+async function persist(){
+  if (MODE !== "online" || !sb) return;
+  if (persisting){ persistAgain = true; return; }
+  persisting = true; PERSIST.state = "busy"; setBadge(); let err = null;
+  try {
+    for (const c of S.clubs){
+      const mine = c.equipe.find(x => x.user_id === AUTH.id && x.actif !== false), role = mine ? mine.acces : "";
+      const isAdm = role === "Administrateur", canW = role && role !== "Lecture", canDel = isAdm || role === "Direction";
+      const ck = "c:" + c.id, cj = stable(clubRow(c));
+      if (isAdm && (!SAVED[ck] || SAVED[ck].j !== cj)){ const {error} = await sb.from("clubs").update(clubRow(c)).eq("id", c.id); if (error) err = error; else SAVED[ck] = {club:c.id, j:cj}; }
+      if (isAdm){
+        const ids = new Set(c.equipe.map(m => "m:" + m.id));
+        for (const m of c.equipe){ const k = "m:" + m.id, j = stable(memRow(c, m)); if (!SAVED[k] || SAVED[k].j !== j){ const {error} = await sb.from("membres").upsert(memRow(c, m)); if (error) err = error; else SAVED[k] = {club:c.id, j}; } }
+        for (const k of Object.keys(SAVED)) if (k.startsWith("m:") && SAVED[k].club === c.id && !ids.has(k)){ const {error} = await sb.from("membres").delete().eq("id", k.slice(2)); if (error) err = error; else delete SAVED[k]; }
+      }
+      if (canW){
+        const ids = new Set(c.soirees.map(s => "s:" + s.id));
+        for (const s of c.soirees){ const k = "s:" + s.id, j = stable(s); if (!SAVED[k] || SAVED[k].j !== j){ const {error} = await sb.from("soirees").upsert({id:s.id, club_id:c.id, date:s.date, data:s}); if (error) err = error; else SAVED[k] = {club:c.id, j}; } }
+        if (canDel) for (const k of Object.keys(SAVED)) if (k.startsWith("s:") && SAVED[k].club === c.id && !ids.has(k)){ const {error} = await sb.from("soirees").delete().eq("id", k.slice(2)); if (error) err = error; else delete SAVED[k]; }
+      }
+    }
+  } catch(e){ err = e; }
+  persisting = false; PERSIST.state = err ? "err" : "ok"; PERSIST.msg = err ? friendlyErr(err) : ""; setBadge();
+  if (err) toast("Enregistrement impossible : " + PERSIST.msg);
+  if (persistAgain){ persistAgain = false; persist(); }
+}
+async function fetchAll(table, cols){ let out = [], from = 0; for (;;){ const {data, error} = await sb.from(table).select(cols).range(from, from + 999); if (error) throw error; out = out.concat(data || []); if (!data || data.length < 1000) break; from += 1000; } return out; }
+async function loadAll(){
+  await sb.rpc("claim_membership");
+  const [clubs, mem, soi] = await Promise.all([fetchAll("clubs", "*"), fetchAll("membres", "*"), fetchAll("soirees", "id,club_id,date,data")]);
+  S.clubs = clubs.map(c => ({id:c.id, nom:c.nom, ville:c.ville, jauge:c.jauge, config:{...defaultConfig(), ...(c.config || {})},
+    connexions:{...(c.connexions || {}), shotgun:{orgId:"", connected:false, journal:[], ...((c.connexions || {}).shotgun || {})}, trivec:{mode:"excel", journal:[], ...((c.connexions || {}).trivec || {})}},
+    affichage:c.affichage || undefined,
+    equipe:mem.filter(m => m.club_id === c.id).map(m => ({id:m.id, email:m.email || "", nom:m.nom, prenom:m.prenom, poste:m.poste, acces:m.acces, actif:m.actif, user_id:m.user_id})),
+    soirees:soi.filter(s => s.club_id === c.id).map(s => ({...s.data, id:s.id})).sort((a, b) => b.date.localeCompare(a.date))}));
+  loadPrefs();
+  if (!S.clubs.some(c => c.id === S.clubId)) S.clubId = (S.clubs.find(c => c.equipe.some(m => m.user_id === AUTH.id && m.actif !== false)) || S.clubs[0] || {}).id || null;
+  snapshot();
+}
+let rtChan = null, reloadT = null, pendingRender = false;
+function softRender(){ const ae = document.activeElement; if (ae && ae.matches && ae.matches("input,select,textarea") && !S._screen){ pendingRender = true; return; } render(); }
+document.addEventListener("focusout", () => { if (pendingRender){ pendingRender = false; setTimeout(softRender, 50); } });
+function scheduleReload(){ clearTimeout(reloadT); reloadT = setTimeout(async () => { await persist(); try { await loadAll(); } catch(e){} softRender(); }, 1500); }
+function onSoiree(p){
+  if (p.eventType === "DELETE"){ const id = p.old && p.old.id; for (const c of S.clubs){ const i = c.soirees.findIndex(s => s.id === id); if (i >= 0){ c.soirees.splice(i, 1); delete SAVED["s:" + id]; } } softRender(); return; }
+  const r = p.new, c = S.clubs.find(x => x.id === r.club_id); if (!c) return;
+  const k = "s:" + r.id, obj = {...r.data, id:r.id}, j = stable(obj);
+  if (SAVED[k] && SAVED[k].j === j) return;
+  const idx = c.soirees.findIndex(s => s.id === r.id);
+  if (idx >= 0 && SAVED[k] && stable(c.soirees[idx]) !== SAVED[k].j) return;
+  if (idx >= 0) c.soirees[idx] = obj; else { c.soirees.push(obj); c.soirees.sort((a, b) => b.date.localeCompare(a.date)); }
+  SAVED[k] = {club:c.id, j}; softRender();
+}
+function subscribeRT(){ if (rtChan || !sb) return; rtChan = sb.channel("onyx-db").on("postgres_changes", {event:"*", schema:"public", table:"soirees"}, onSoiree).on("postgres_changes", {event:"*", schema:"public", table:"membres"}, scheduleReload).on("postgres_changes", {event:"*", schema:"public", table:"clubs"}, scheduleReload).subscribe(); }
+async function enterOnline(user){
+  AUTH = user; MODE = "online"; S._login = null; S._loading = true; render();
+  try { await loadAll(); subscribeRT(); } catch(e){ toast("Chargement impossible : " + friendlyErr(e)); }
+  S._loading = false; lastAct = Date.now(); route();
+}
+function startDemo(){ MODE = "demo"; try { sessionStorage.setItem("onyx-mode", "demo"); } catch(e){} let st = null; try { st = JSON.parse(localStorage.getItem(KEY)); } catch(e){} S = st && st.clubs ? st : seed(); S._login = null; lastAct = Date.now(); route(); }
+async function logout(){
+  if (MODE === "online" && sb){ clearTimeout(saveT); await persist(); if (rtChan){ sb.removeChannel(rtChan); rtChan = null; } await sb.auth.signOut(); }
+  try { sessionStorage.removeItem("onyx-mode"); } catch(e){}
+  MODE = null; AUTH = null; SAVED = {}; S = {clubs:[], clubId:null, cur:{}, view:"tableau", filtreSecu:"tout", cmp:""}; render();
+}
+async function createClubOnline(nom, ville, jauge, cout){
+  const {data:cid, error} = await sb.rpc("create_club", {p_nom:nom, p_ville:ville || "", p_jauge:Math.round(n(jauge))});
+  if (error){ toast("Création impossible : " + friendlyErr(error)); return; }
+  if (cout) await sb.from("clubs").update({config:{...defaultConfig(), coutSalle:n(cout)}}).eq("id", cid);
+  S.clubId = cid; savePrefs(); await loadAll(); toast("Établissement « " + nom + " » créé."); route();
+}
+async function importLocked(key){
+  const d = await unlockBlob(LOCKED[0], String(key || "").trim().toUpperCase());
+  if (!d){ toast("Clé incorrecte."); return; }
+  const c0 = d.club; S._busy = "Restauration de " + c0.nom + " en cours…"; render();
+  try {
+    const {data:cid, error} = await sb.rpc("create_club", {p_nom:c0.nom, p_ville:c0.ville, p_jauge:c0.jauge}); if (error) throw error;
+    const con = {...c0.connexions, shotgun:{...c0.connexions.shotgun, connected:false, journal:[]}};
+    let r = await sb.from("clubs").update({config:c0.config, connexions:con}).eq("id", cid); if (r.error) throw r.error;
+    const my = normMail(AUTH.email), meRow = c0.equipe.find(m => normMail(m.email) === my);
+    if (meRow){ r = await sb.from("membres").update({nom:meRow.nom || "", prenom:meRow.prenom || "", poste:meRow.poste || ""}).eq("club_id", cid).eq("user_id", AUTH.id); if (r.error) throw r.error; }
+    const others = c0.equipe.filter(m => m !== meRow).map(m => ({club_id:cid, email:normMail(m.email) || null, nom:m.nom || "", prenom:m.prenom || "", poste:m.poste || "", acces:m.acces, actif:m.actif !== false}));
+    if (others.length){ r = await sb.from("membres").insert(others); if (r.error) throw r.error; }
+    for (let i = 0; i < c0.soirees.length; i += 10){ r = await sb.from("soirees").insert(c0.soirees.slice(i, i + 10).map(s => ({id:s.id, club_id:cid, date:s.date, data:s}))); if (r.error) throw r.error; }
+    S.clubId = cid; S.cur[cid] = d.current; savePrefs(); await loadAll(); subscribeRT();
+    toast(c0.nom + " restauré : " + c0.soirees.length + " soirées en ligne.");
+  } catch(e){ toast("Restauration interrompue : " + friendlyErr(e)); }
+  S._busy = null; route();
+}
+async function boot(){
+  let demo = false; try { demo = sessionStorage.getItem("onyx-mode") === "demo"; } catch(e){}
+  if (demo){ startDemo(); return; }
+  if (!sbInit()){ render(); return; }
+  sb.auth.onAuthStateChange((ev, session) => {
+    if (ev === "PASSWORD_RECOVERY"){ MODE = null; S._login = {step:"newpass"}; render(); }
+  });
+  const {data} = await sb.auth.getSession();
+  if (data && data.session && !(S._login && S._login.step === "newpass")) enterOnline(data.session.user); else render();
+}
+
 /* ============ rendu ============ */
 function stat(t, v, sub, cls = ""){ return `<div class="panel kpi"><div class="t"><span>${t}</span></div><div><div class="v ${cls}">${v}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div></div>`; }
 const MOB_MAIN = ["tableau","billetterie","bar","securite"], MOB_MORE = ["personnel","synthese","saison","affichage","equipe","connexions","reglages"];
@@ -1178,7 +1305,8 @@ const VIC = {tableau:"dash", billetterie:"ticket", securite:"shield", bar:"glass
 let lastViewKey = "";
 const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 function render(){
-  if (!me()){ $("#app").innerHTML = vLogin(); const f = $("#login-form"); if (f) f.addEventListener("submit", e => { e.preventDefault(); doLogin(); }); const cd = $("#lg-mail") || $("#lg-key") || $("#lg-p1") || $("#lg-pass"); if (cd && !cd.disabled) cd.focus(); return; }
+  const gate = !MODE ? vLogin() : (MODE === "online" && S._loading) ? shell('<h1>Chargement…</h1><p class="note">Récupération de tes données.</p>') : (MODE === "online" && (!S.clubs.length || S._busy)) ? vOnboard() : !me() ? vNoAccess() : null;
+  if (gate){ $("#app").innerHTML = gate; const f = $("#login-form"); if (f) f.addEventListener("submit", e => { e.preventDefault(); doLogin(); }); const cd = $("#lg-mail") || $("#lg-p1") || $("#lg-pass") || $("#ob-n"); if (cd && !cd.value) cd.focus(); return; }
   if (S._screen){ $("#app").innerHTML = screenHTML(club(), false); return; }
   const a = document.activeElement, ak = a && a.id;
   if (!allowed(S.view)) S.view = allViews().find(allowed) || "tableau";
@@ -1216,15 +1344,16 @@ function render(){
   const navA = ([id, l]) => !allowed(id) ? "" : `<a href="#${id}" title="${l}" class="${v === id ? "on" : ""}">${ic(VIC[id])}${l}</a>`;
   const vkey = [S.view, S.clubId, s && s.id, S.periode, S.cmp, S.repKey].join("|"), animate = vkey !== lastViewKey; lastViewKey = vkey;
   $("#app").innerHTML = `<header class="top"><div class="logo"><img src="${LOGO}" alt="ONYX"><small>démo</small></div>
-    <div class="who">${ic("user")}<span>${esc(fullName(u.m))}<small class="lab" style="display:block;text-transform:none;font-weight:500">${esc(u.m.acces)}</small></span><button class="ghost sm" data-act="logout">Se déconnecter</button></div></header>
+    <div class="who">${ic("user")}<span>${esc(fullName(u.m))}<small class="lab" style="display:block;text-transform:none;font-weight:500">${esc(u.m.acces)}</small></span><span id="savebadge" class="lab"></span><button class="ghost sm" data-act="logout">Se déconnecter</button></div></header>
   <div class="layout"><aside class="side" aria-label="Navigation">
     <div class="club">${ic("store")}${!isAdmin ? `<b style="text-transform:uppercase;font-size:13px">${esc(c.nom)}</b>` : `<select id="f-club" data-sel="club" aria-label="Établissement">${S.clubs.map(x => `<option value="${x.id}" ${x.id === c.id ? "selected" : ""}>${esc(x.nom)}</option>`).join("")}<option value="__new">+ Ajouter un établissement</option></select>`}</div>
     ${VIEWS.map(navA).join("")}${CVIEWS.some(x => allowed(x[0])) ? '<div class="grp">Établissement</div>' : ""}${CVIEWS.map(navA).join("")}
-  </aside><main class="content">${head}${body}<footer>ONYX · pilotage de soirées pour clubs · v0.8 · ${legalLinks()}</footer></main></div>
+  </aside><main class="content">${head}${body}<footer>ONYX · pilotage de soirées pour clubs · v0.9 · ${legalLinks()}</footer></main></div>
   ${S._more ? `<div class="sheet" role="dialog" aria-label="Plus"><label class="lab" for="f-club2">Établissement</label><select class="in" id="f-club2" data-sel="club" style="width:100%;margin:6px 0 10px">${S.clubs.map(x => `<option value="${x.id}" ${x.id === c.id ? "selected" : ""}>${esc(x.nom)} · ${esc(x.ville)}</option>`).join("")}<option value="__new">+ Ajouter un établissement</option></select>
     ${MOB_MORE.filter(allowed).map(id => [id, ([...VIEWS, ...CVIEWS].find(x => x[0] === id) || [])[1]]).map(([id, l]) => `<a href="#${id}" class="${v === id ? "on" : ""}">${ic(VIC[id])}${l}</a>`).join("")}</div>` : ""}
   <nav class="bnav" aria-label="Navigation principale">${MOB_MAIN.filter(allowed).map(id => `<a href="#${id}" class="${v === id ? "on" : ""}">${ic(VIC[id])}<span>${id === "tableau" ? "Accueil" : (VIEWS.find(x => x[0] === id) || [])[1]}</span></a>`).join("")}<button data-act="more" class="${S._more || MOB_MORE.includes(v) ? "on" : ""}" aria-expanded="${!!S._more}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>Plus</span></button></nav>`;
   if (ak){ const el = document.getElementById(ak); if (el) el.focus(); }
+  setBadge();
   if (animate && !reduceMotion){ const mc = document.querySelector("main.content"); if (mc){ mc.classList.add("anim"); countUp(mc); } }
 }
 function countUp(root){
@@ -1256,12 +1385,14 @@ $("#modal").addEventListener("click", e => {
   if (m === "okSoiree"){ const d = $("#ns-d").value, nm = $("#ns-n").value.trim(); if (!d || !nm){ toast("Indique une date et un nom."); return; }
     const s = emptySoiree(c, d, nm, $("#ns-st").value, $("#ns-o").value, $("#ns-f").value); c.soirees.push(s); S.cur[c.id] = s.id; S.view = "tableau"; }
   if (m === "okClub"){ const nm = $("#nc-n").value.trim(); if (!nm){ toast("Indique le nom de l'établissement."); return; }
+    if (MODE === "online"){ const v = $("#nc-v").value.trim(), j2 = $("#nc-j").value, co = $("#nc-c").value; closeModal(); createClubOnline(nm, v, j2, co); return; }
     const nc = {id:uid(), nom:nm, ville:$("#nc-v").value.trim() || "—", jauge:n($("#nc-j").value), config:{...defaultConfig(), coutSalle:n($("#nc-c").value)}, equipe:[], connexions:{shotgun:{orgId:"", connected:false, journal:[]}, trivec:{mode:"excel", journal:[]}}, soirees:[]};
     const u0 = me(); if (u0) nc.equipe.push({id:uid(), nom:u0.m.nom, prenom:u0.m.prenom, poste:u0.m.poste, email:"", acces:"Administrateur", pass:null, actif:true});
     S.clubs.push(nc); S.clubId = nc.id; S.view = "tableau"; }
   if (m === "okDelSoiree"){ c.soirees = c.soirees.filter(x => x.id !== S.cur[c.id]); S.cur[c.id] = (c.soirees[0] || {}).id; }
+  if (m === "okDelClub" && MODE === "online"){ closeModal(); sb.from("clubs").delete().eq("id", c.id).then(async ({error}) => { if (error) return toast("Suppression impossible : " + friendlyErr(error)); S.clubId = null; await loadAll(); route(); }); return; }
   if (m === "okDelClub"){ if (S.clubs.length > 1){ S.clubs = S.clubs.filter(x => x.id !== c.id); S.clubId = S.clubs[0].id; } else toast("Il faut garder au moins un établissement."); }
-  if (m === "okReset"){ S = seed(); }
+  if (m === "okReset" && MODE === "demo"){ S = seed(); }
   closeModal(); save(); location.hash = S.view; render();
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#modal").hidden) closeModal(); });
@@ -1329,6 +1460,10 @@ document.addEventListener("change", async e => {
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-act]"); if (!b) return;
   const act = b.dataset.act, c = club(), s = cur(), i = +b.dataset.i;
+  if (act === "demo"){ e.preventDefault(); startDemo(); return; }
+  if (act === "lgStep"){ e.preventDefault(); S._login = {step:b.dataset.v, mail:(S._login || {}).mail}; render(); return; }
+  if (act === "createClub"){ const nm = ($("#ob-n").value || "").trim(); if (!nm){ toast("Indique le nom de l'établissement."); return; } createClubOnline(nm, $("#ob-v").value.trim(), $("#ob-j").value, 0); return; }
+  if (act === "importLocked"){ importLocked($("#ob-k").value); return; }
   if (act === "screenOn"){ S._screen = true; render(); try { document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(() => {}); } catch(e){} return; }
   if (act === "screenOff"){ S._screen = false; if (location.hash === "#ecran") location.hash = "affichage"; try { document.fullscreenElement && document.exitFullscreen(); } catch(e){} render(); return; }
   if (["wUp","wDown","wOn","wOff"].includes(act)){ const w = affCfg(c).widgets, v = b.dataset.v, i2 = w.indexOf(v);
@@ -1357,8 +1492,8 @@ document.addEventListener("click", e => {
   if (act === "addInt"){ const t = $("#i-t").value.trim(); if (!t){ toast("Décris l'intervention."); return; }
     s.interventions.push({id:uid(), h:$("#i-h").value, texte:t, agents:$("#i-a").value.trim(), sortie:$("#i-s").checked, police:$("#i-po").checked, secours:$("#i-se").checked, par:$("#i-p").value.trim()}); toast("Fiche d'intervention validée."); }
   if (act === "copy"){ const txt = recap(s, c, calc(s, c)); navigator.clipboard.writeText(txt).then(() => toast("Récap copié."), () => toast("Copie refusée : sélectionne le texte du récap en bas de page.")); return; }
-  if (act === "addEmp") c.equipe.push({id:uid(), nom:"", prenom:"", poste:"", email:"", acces:"Saisie", pass:null, actif:true});
-  if (act === "resetPass"){ c.equipe[i].pass = null; toast("Mot de passe réinitialisé : la personne en créera un nouveau à sa prochaine connexion."); }
+  if (act === "addEmp") c.equipe.push({id:(crypto.randomUUID ? crypto.randomUUID() : uid()), nom:"", prenom:"", poste:"", email:"", acces:"Saisie", actif:true});
+  if (act === "resetPass"){ const em = c.equipe[i].email; if (MODE !== "online"){ toast("En démo, aucun e-mail n'est envoyé."); return; } sb.auth.resetPasswordForEmail(em, {redirectTo:SITE}).then(({error}) => toast(error ? "Envoi impossible : " + friendlyErr(error) : "Lien envoyé à " + em + ".")); return; }
   if (act === "toggleEmp"){ const t = c.equipe[i], u1 = me(); if (u1 && t === u1.m){ toast("Tu ne peux pas désactiver ton propre compte."); return; }
     if (t.actif !== false && t.acces === "Administrateur" && c.equipe.filter(m => m.acces === "Administrateur" && m.actif !== false).length === 1){ toast("Il faut garder au moins un administrateur actif."); return; }
     t.actif = t.actif === false; toast(fullName(t) + (t.actif ? " peut de nouveau se connecter." : " ne peut plus se connecter.")); }
@@ -1372,16 +1507,16 @@ document.addEventListener("click", e => {
   if (act === "sgForget"){ try { localStorage.removeItem(sgTokKey(c.id)); } catch(e2){} c.connexions.shotgun.connected = false; sgLog(c, true, "Jeton retiré de cet appareil"); }
   save(); render();
 });
-function route(){ const h = location.hash.slice(1); if (!me()){ render(); return; } if (h === "ecran"){ S._screen = true; render(); return; } if ([...VIEWS, ...CVIEWS].some(x => x[0] === h)) S.view = h; if (![...VIEWS, ...CVIEWS].some(x => x[0] === S.view)) S.view = "tableau"; S._more = false; render(); }
+function route(){ const h = location.hash.slice(1); if (!me()){ render(); return; } if (/access_token|error_description/.test(h)) history.replaceState(null, "", location.pathname); if (h === "ecran"){ S._screen = true; render(); return; } if ([...VIEWS, ...CVIEWS].some(x => x[0] === h)) S.view = h; if (![...VIEWS, ...CVIEWS].some(x => x[0] === S.view)) S.view = "tableau"; S._more = false; render(); }
 let wasSmall = window.innerWidth < 700;
 window.addEventListener("resize", () => { const sm = window.innerWidth < 700; if (sm !== wasSmall){ wasSmall = sm; render(); } });
 window.addEventListener("hashchange", route);
 setInterval(() => { document.querySelectorAll("[data-clock]").forEach(e => e.textContent = new Date().toLocaleTimeString("fr-FR", {hour:"2-digit", minute:"2-digit", second:"2-digit"})); }, 1000);
 setInterval(() => { if (S._screen || S.view === "affichage"){ const ae = document.activeElement; if (!ae || !ae.matches("input,select,textarea")) render(); } }, 15000);
-window.addEventListener("storage", e => { if (e.key !== KEY || !e.newValue) return; try { const keep = {_screen:S._screen, _more:S._more, view:S.view}; S = Object.assign(JSON.parse(e.newValue), keep); render(); } catch(err){} });
+window.addEventListener("storage", e => { if (MODE !== "demo" || e.key !== KEY || !e.newValue) return; try { const keep = {_screen:S._screen, _more:S._more, view:S.view}; S = Object.assign(JSON.parse(e.newValue), keep); render(); } catch(err){} });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && S._screen){ S._screen = false; render(); } });
 (() => { const im = document.getElementById("intro-img"), it = document.getElementById("intro"); if (!it) return; im.src = LOGO; it.style.setProperty("--logo", `url("${LOGO}")`); setTimeout(() => it.remove(), 2300); })();
-route();
+boot();
 </script>
 </body>
 </html>
