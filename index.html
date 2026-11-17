@@ -688,7 +688,7 @@ function vBillet(s, c, k){
 </div>
 <div class="panel" style="margin-top:16px"><h3><span>Détail par tarif</span><button class="ghost sm" data-act="addTarif">+ Ajouter un tarif</button></h3><div class="tw"><table>
   <tr><th>Tarif</th><th>Canal</th><th class="r">Billets</th><th class="r">Prix TTC</th><th class="r">Total TTC</th><th class="r">Total HT</th><th></th></tr>
-  ${tar.map((t, i) => `<tr><td>${inp("s.tarifs." + i + ".nom", t.nom, "wide")}</td><td>${sel("s.tarifs." + i + ".canal", t.canal, CANAUX)}</td><td class="r">${inp("s.tarifs." + i + ".billets", t.billets, "num xs")}</td><td class="r">${inp("s.tarifs." + i + ".prix", t.prix, "num xs")}</td><td class="r">${eur(n(t.billets)*n(t.prix))}</td><td class="r">${eur(n(t.billets)*n(t.prix)/tvaB)}</td><td><button class="xbtn" data-act="del" data-arr="tarifs" data-i="${i}" aria-label="Retirer ce tarif" title="Retirer">×</button></td></tr>`).join("") || '<tr><td colspan="7" class="empty">Aucun tarif.</td></tr>'}
+  ${tar.map((t, i) => `<tr><td>${inp("s.tarifs." + i + ".nom", t.nom, "wide")}${t.sg ? ' <span class="tag a" title="Mis à jour par Shotgun">Shotgun</span>' : ""}</td><td>${sel("s.tarifs." + i + ".canal", t.canal, CANAUX)}</td><td class="r">${inp("s.tarifs." + i + ".billets", t.billets, "num xs")}</td><td class="r">${inp("s.tarifs." + i + ".prix", t.prix, "num xs")}</td><td class="r">${eur(n(t.billets)*n(t.prix))}</td><td class="r">${eur(n(t.billets)*n(t.prix)/tvaB)}</td><td><button class="xbtn" data-act="del" data-arr="tarifs" data-i="${i}" aria-label="Retirer ce tarif" title="Retirer">×</button></td></tr>`).join("") || '<tr><td colspan="7" class="empty">Aucun tarif.</td></tr>'}
   ${tar.length ? `<tr class="tot"><td colspan="2">Total</td><td class="r">${int(k.billets + k.supp)}</td><td></td><td class="r">${eur(k.ttcB)}</td><td class="r">${eur(k.htB)}</td><td></td></tr>` : ""}
 </table></div></div>
 <div class="grid g2" style="margin-top:16px">
@@ -878,13 +878,14 @@ function vEquipe(c){
 function vConn(c){
   const sg = c.connexions.shotgun, tv = c.connexions.trivec;
   const j = arr => arr.length ? arr.slice().reverse().map(x => `<div><b class="${x.ok ? "pos" : "wrn"}">${esc(x.t)}</b> · ${esc(x.d)}</div>`).join("") : '<div class="note">Aucun échange pour l\'instant.</div>';
-  return `<div class="banner">Démo : les connexions sont enregistrées mais pas appelées. Dans la version en ligne, ONYX interroge Shotgun et Trivec depuis son serveur, avec le jeton chiffré, et met les soirées à jour toutes les quelques minutes. L'import de fichiers (Billetterie et Bar) fonctionne déjà ici.</div>
+  return `<div class="banner">Shotgun se connecte directement depuis ce site. Trivec : import du rapport Excel dans l'onglet Bar (la sonde caisse en direct demandera la version serveur).</div>
 <div class="grid g2" style="margin-top:14px">
-  <div class="panel"><div class="conn"><div><h4>Shotgun</h4><div class="note" style="margin-top:4px">Soirées, billets vendus par tarif, scans à l'entrée, courbe des ventes.</div></div><span class="tag ${sg.connected ? "g" : ""}">${sg.connected ? "connecté" : "non connecté"}</span></div>
+  <div class="panel"><div class="conn"><div><h4>Shotgun</h4><div class="note" style="margin-top:4px">Billets vendus par tarif, scans à l'entrée et courbe des ventes, mis à jour automatiquement toutes les 3 minutes.</div></div><span class="tag ${sgToken(c.id) ? "g" : ""}">${sgToken(c.id) ? "connecté" : "non connecté"}</span></div>
     <div class="form" style="margin-top:16px;grid-template-columns:1fr"><label><span class="lab">Organizer ID</span>${inp("c.connexions.shotgun.orgId", sg.orgId, "", 'placeholder="ex. 174513"')}</label>
-    <label><span class="lab">API token</span><input class="in" type="password" id="sg-token" placeholder="${sg.connected ? "•••••••• enregistré" : "Smartboard › Settings › Integrations › Shotgun APIs"}" autocomplete="off"></label></div>
-    <div class="row" style="margin-top:12px"><button class="btn sm" data-act="sgConnect">Enregistrer la connexion</button>${sg.connected ? '<button class="ghost sm" data-act="sgSync">Synchroniser</button>' : ""}</div>
-    <div class="note">Le jeton n'est jamais réaffiché ni gardé dans cette démo.</div>
+    <label><span class="lab">Jeton API</span><input class="in" type="password" id="sg-token" autocomplete="off" placeholder="${sgToken(c.id) ? "•••••••• enregistré sur cet appareil" : "Smartboard › Settings › Integrations › Shotgun APIs"}"></label></div>
+    <div class="row" style="margin-top:12px"><button class="btn sm" data-act="sgConnect">${sgToken(c.id) ? "Remplacer le jeton" : "Connecter Shotgun"}</button>${sgToken(c.id) ? `<button class="ghost sm" data-act="sgSync" ${sgBusy ? "disabled" : ""}>${sgBusy ? "Synchronisation…" : "Synchroniser maintenant"}</button><button class="ghost sm danger" data-act="sgForget">Déconnecter</button>` : ""}</div>
+    ${sg.last ? `<div class="note">Dernière synchronisation : ${esc(new Date(sg.last).toLocaleString("fr-FR"))}.</div>` : ""}
+    <div class="note">Le jeton reste uniquement dans ce navigateur : il n'est ni dans le code du site, ni dans les exports. La première synchronisation reprend les 4 derniers mois, les suivantes seulement les nouveaux billets.</div>
     <h3 style="margin-top:18px">Journal</h3><div class="journal">${j(sg.journal)}</div></div>
   <div class="panel"><div class="conn"><div><h4>Trivec</h4><div class="note" style="margin-top:4px">CA bar TTC/HT, ventes par caisse, par heure et par produit.</div></div><span class="tag ${tv.mode === "sonde" ? "a" : "g"}">${tv.mode === "sonde" ? "sonde" : "import Excel"}</span></div>
     <div class="form" style="margin-top:16px;grid-template-columns:1fr"><label><span class="lab">Mode</span>${sel("c.connexions.trivec.mode", tv.mode, [["excel","Import du rapport Excel (Domino › Rapports › Olap › Export Excel)"],["sonde","Sonde caisse en temps réel (petit logiciel sur le poste Trivec)"]])}</label></div>
@@ -1100,6 +1101,76 @@ const LEGAL = {
 <p><b>Droit applicable</b><br>Droit français. Tribunaux compétents : [ressort à compléter].</p>`]};
 function showLegal(k){ const [t, body] = LEGAL[k]; modal(`<h2>${t}</h2><div class="legal">${body}</div><p class="note">Modèle rédigé pour la démo : à faire valider par un juriste avant la mise en vente.</p><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-m="close">Fermer</button></div>`); }
 
+/* ============ Shotgun (API directe depuis le navigateur) ============ */
+const SG_API = "https://api.shotgun.live/tickets";
+const sgTokKey = cid => "onyx-sg-token-" + cid, sgDataKey = cid => "onyx-sg-data-" + cid;
+const sgToken = cid => { try { return localStorage.getItem(sgTokKey(cid)) || ""; } catch(e){ return ""; } };
+function sgStore(cid){ try { return JSON.parse(localStorage.getItem(sgDataKey(cid))) || {after:"", tickets:{}}; } catch(e){ return {after:"", tickets:{}}; } }
+function sgSave(cid, st){ try { localStorage.setItem(sgDataKey(cid), JSON.stringify(st)); return true; } catch(e){ return false; } }
+const SG_CANAL = {online:"En ligne", duplicata:"En ligne", invitation:"Invitation", onsite:"Sur place", venue:"Sur place", distributor:"Autre billetterie"};
+let sgBusy = false;
+function sgLog(c, ok, d){ const j = c.connexions.shotgun.journal; j.push({ok, t:new Date().toLocaleString("fr-FR"), d}); if (j.length > 30) j.splice(0, j.length - 30); }
+function soireeDateOf(iso){ const d = new Date(new Date(iso).getTime() - 8*3600e3); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+async function sgSync(c, silent){
+  if (sgBusy) return; const org = String(c.connexions.shotgun.orgId || "").trim(), tok = sgToken(c.id);
+  if (!org || !tok){ if (!silent) toast("Renseigne l'Organizer ID et le jeton Shotgun."); return; }
+  sgBusy = true; c.connexions.shotgun.status = "Synchronisation en cours…"; if (S.view === "connexions") render();
+  const st = sgStore(c.id);
+  if (!st.after){ const d = new Date(Date.now() - 120*864e5); st.after = d.toISOString(); }
+  let url = SG_API + "?organizer_id=" + encodeURIComponent(org) + "&include_cohosted_events=1&after=" + encodeURIComponent(st.after), pages = 0, n = 0;
+  try {
+    while (url && pages < 400){
+      const r = await fetch(url, {headers:{Authorization:"Bearer " + tok}});
+      if (r.status === 401 || r.status === 403) throw new Error("Jeton refusé par Shotgun. Vérifie l'Organizer ID et génère un nouveau jeton.");
+      if (r.status === 429){ await new Promise(res => setTimeout(res, 20000)); continue; }
+      if (!r.ok) throw new Error("Shotgun a répondu " + r.status + ".");
+      const js = await r.json(), data = js.data || [];
+      for (const t of data){
+        st.tickets[t.ticket_id] = [t.event_id, t.event_start_time, t.deal_title || "Billet", t.deal_channel || "online", t.deal_price || 0, t.ticket_status, t.ordered_at, t.ticket_scanned_at ? 1 : 0];
+        st.after = t.ticket_updated_at ? t.ticket_updated_at.replace(" ", "T") : st.after; n++;
+      }
+      pages++;
+      const next = js.pagination && js.pagination.next;
+      if (!data.length || !next) break;
+      const nu = new URL(next); nu.searchParams.delete("token"); url = nu.toString();
+      await new Promise(res => setTimeout(res, 700));
+    }
+    const changed = sgApply(c, st);
+    if (!sgSave(c.id, st)){ const cut = Date.now() - 120*864e5; for (const [id, t] of Object.entries(st.tickets)) if (new Date(t[1]).getTime() < cut) delete st.tickets[id]; sgSave(c.id, st); }
+    c.connexions.shotgun.connected = true; c.connexions.shotgun.last = new Date().toISOString();
+    c.connexions.shotgun.status = ""; if (n || !silent) sgLog(c, true, `${n} billet${n > 1 ? "s" : ""} reçu${n > 1 ? "s" : ""}, ${changed} soirée${changed > 1 ? "s" : ""} mise${changed > 1 ? "s" : ""} à jour`);
+    if (!silent) toast(`Shotgun synchronisé : ${n} billets reçus.`);
+  } catch(e){
+    c.connexions.shotgun.status = ""; const msg = e.message && e.message.startsWith("Jeton") || e.message.startsWith("Shotgun") ? e.message : "Shotgun injoignable (connexion internet ?).";
+    sgLog(c, false, msg); if (!silent) toast(msg);
+  }
+  sgBusy = false; save(); render();
+}
+function sgApply(c, st){
+  const ev = {};
+  for (const t of Object.values(st.tickets)){ (ev[t[0]] = ev[t[0]] || {start:t[1], list:[]}).list.push(t); }
+  let changed = 0;
+  for (const [eid, e] of Object.entries(ev)){
+    const date = soireeDateOf(e.start);
+    let s = c.soirees.find(x => String(x.shotgunEventId) === String(eid)) || c.soirees.find(x => x.date === date && !x.shotgunEventId);
+    if (!s){ s = emptySoiree(c, date, "Événement Shotgun n° " + eid, "", new Date(e.start).toTimeString().slice(0, 5), "06:00"); c.soirees.push(s); }
+    s.shotgunEventId = eid;
+    const valid = e.list.filter(t => t[5] === "valid");
+    const tar = {};
+    for (const t of valid){ const canal = /suppl/i.test(t[2]) ? "Supplément" : (SG_CANAL[t[3]] || "En ligne"); const k = t[2] + "|" + canal; const o = tar[k] || (tar[k] = {nom:t[2], canal, billets:0, tot:0}); o.billets++; o.tot += t[4]/100; }
+    const fromSg = Object.values(tar).map(o => ({nom:o.nom, canal:o.canal, billets:o.billets, prix:o.billets ? Math.round(o.tot/o.billets*100)/100 : 0, sg:true}));
+    s.tarifs = [...fromSg, ...(s.tarifs || []).filter(t => !t.sg && t.canal === "Autre billetterie")];
+    s.scannes = valid.filter(t => t[7]).length || s.scannes;
+    const st0 = new Date(e.start).getTime(), hb = valid.map(t => (st0 - new Date(t[6]).getTime())/36e5).sort((a, b) => b - a);
+    const step = Math.max(1, Math.ceil(hb.length/200));
+    s.ventes = hb.filter((_, i) => i % step === 0 || i === hb.length - 1).map((h, i, arr) => [Math.round(h*100)/100, Math.min(hb.length, (i === arr.length - 1 ? hb.length : i*step + 1))]);
+    s.ventesDemo = false; changed++;
+  }
+  c.soirees.sort((a, b) => b.date.localeCompare(a.date));
+  return changed;
+}
+setInterval(() => { const u = me(); if (!u || u.m.acces !== "Administrateur" && u.m.acces !== "Direction") return; for (const c of S.clubs) if (sgToken(c.id) && c.connexions.shotgun.auto !== false) sgSync(c, true); }, 3*60*1000);
+
 /* ============ rendu ============ */
 function stat(t, v, sub, cls = ""){ return `<div class="panel kpi"><div class="t"><span>${t}</span></div><div><div class="v ${cls}">${v}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div></div>`; }
 const MOB_MAIN = ["tableau","billetterie","bar","securite"], MOB_MORE = ["personnel","synthese","saison","affichage","equipe","connexions","reglages"];
@@ -1149,7 +1220,7 @@ function render(){
   <div class="layout"><aside class="side" aria-label="Navigation">
     <div class="club">${ic("store")}${!isAdmin ? `<b style="text-transform:uppercase;font-size:13px">${esc(c.nom)}</b>` : `<select id="f-club" data-sel="club" aria-label="Établissement">${S.clubs.map(x => `<option value="${x.id}" ${x.id === c.id ? "selected" : ""}>${esc(x.nom)}</option>`).join("")}<option value="__new">+ Ajouter un établissement</option></select>`}</div>
     ${VIEWS.map(navA).join("")}${CVIEWS.some(x => allowed(x[0])) ? '<div class="grp">Établissement</div>' : ""}${CVIEWS.map(navA).join("")}
-  </aside><main class="content">${head}${body}<footer>ONYX · pilotage de soirées pour clubs · démo v0.7 · ${legalLinks()}</footer></main></div>
+  </aside><main class="content">${head}${body}<footer>ONYX · pilotage de soirées pour clubs · v0.8 · ${legalLinks()}</footer></main></div>
   ${S._more ? `<div class="sheet" role="dialog" aria-label="Plus"><label class="lab" for="f-club2">Établissement</label><select class="in" id="f-club2" data-sel="club" style="width:100%;margin:6px 0 10px">${S.clubs.map(x => `<option value="${x.id}" ${x.id === c.id ? "selected" : ""}>${esc(x.nom)} · ${esc(x.ville)}</option>`).join("")}<option value="__new">+ Ajouter un établissement</option></select>
     ${MOB_MORE.filter(allowed).map(id => [id, ([...VIEWS, ...CVIEWS].find(x => x[0] === id) || [])[1]]).map(([id, l]) => `<a href="#${id}" class="${v === id ? "on" : ""}">${ic(VIC[id])}${l}</a>`).join("")}</div>` : ""}
   <nav class="bnav" aria-label="Navigation principale">${MOB_MAIN.filter(allowed).map(id => `<a href="#${id}" class="${v === id ? "on" : ""}">${ic(VIC[id])}<span>${id === "tableau" ? "Accueil" : (VIEWS.find(x => x[0] === id) || [])[1]}</span></a>`).join("")}<button data-act="more" class="${S._more || MOB_MORE.includes(v) ? "on" : ""}" aria-expanded="${!!S._more}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>Plus</span></button></nav>`;
@@ -1294,9 +1365,11 @@ document.addEventListener("click", e => {
   if (act === "delEmp"){ const u1 = me(); if (u1 && c.equipe[i] === u1.m){ toast("Tu ne peux pas retirer ton propre compte."); return; } if (c.equipe[i].acces === "Administrateur" && c.equipe.filter(m => m.acces === "Administrateur").length === 1){ toast("Il faut garder au moins un administrateur."); return; } c.equipe.splice(i, 1); }
   if (act === "addCfgCaisse") c.config.caisses.push("Bar " + (c.config.caisses.length + 1));
   if (act === "delCfgCaisse") c.config.caisses.splice(i, 1);
-  if (act === "sgConnect"){ const id = String(c.connexions.shotgun.orgId || "").trim(), tk = ($("#sg-token") || {}).value || ""; if (!id || (!tk && !c.connexions.shotgun.connected)){ toast("Renseigne l'Organizer ID et le token."); return; }
-    c.connexions.shotgun.connected = true; c.connexions.shotgun.journal.push({ok:true, t:new Date().toLocaleString("fr-FR"), d:"Connexion enregistrée pour l'organisateur " + id + " (démo : aucun appel envoyé)"}); toast("Connexion Shotgun enregistrée."); }
-  if (act === "sgSync"){ c.connexions.shotgun.journal.push({ok:false, t:new Date().toLocaleString("fr-FR"), d:"Synchronisation disponible dans la version en ligne. Ici, importe l'export des commandes dans l'onglet Billetterie."}); }
+  if (act === "sgConnect"){ const id = String(c.connexions.shotgun.orgId || "").trim(), tk = (($("#sg-token") || {}).value || "").trim(); if (!id){ toast("Renseigne l'Organizer ID."); return; } if (!tk){ toast("Colle le jeton API Shotgun."); return; }
+    try { localStorage.setItem(sgTokKey(c.id), tk); } catch(e2){ toast("Ce navigateur refuse d'enregistrer le jeton."); return; }
+    sgLog(c, true, "Jeton enregistré sur cet appareil pour l'organisateur " + id); save(); render(); sgSync(c, false); return; }
+  if (act === "sgSync"){ sgSync(c, false); return; }
+  if (act === "sgForget"){ try { localStorage.removeItem(sgTokKey(c.id)); } catch(e2){} c.connexions.shotgun.connected = false; sgLog(c, true, "Jeton retiré de cet appareil"); }
   save(); render();
 });
 function route(){ const h = location.hash.slice(1); if (!me()){ render(); return; } if (h === "ecran"){ S._screen = true; render(); return; } if ([...VIEWS, ...CVIEWS].some(x => x[0] === h)) S.view = h; if (![...VIEWS, ...CVIEWS].some(x => x[0] === S.view)) S.view = "tableau"; S._more = false; render(); }
