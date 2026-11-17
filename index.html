@@ -338,6 +338,7 @@ tr.off td:not(:first-child){opacity:.45}
   table.ckt .in.num{width:96px}
 }
 .in.ro{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--panel2)}
+.pct{display:inline-block;min-width:52px;margin-left:10px;font-size:12px;color:var(--muted);font-weight:500;text-align:right}
 </style>
 </head>
 <body>
@@ -780,7 +781,10 @@ ${hor.some(v => v != null) ? `<div class="panel" style="margin-top:16px"><h3>Ven
 <details class="panel" style="margin-top:16px"><summary><b>Saisie manuelle du CA bar</b> <span class="lab">· si tu n'as pas le rapport Trivec</span></summary><div class="form" style="margin-top:12px"><label><span class="lab">CA bar TTC (€)</span>${inp("s.bar.ttc", s.bar.ttc)}</label><label><span class="lab">CA bar HT (€)</span>${inp("s.bar.ht", s.bar.ht)}</label><label><span class="lab">Consommations</span>${inp("s.bar.consos", s.bar.consos)}</label></div></details>
 <div class="panel" style="margin-top:16px"><h3>Produits les plus vendus · ${prods.length}</h3>${prods.length ? `<div class="tw" style="max-height:420px;overflow:auto"><table>
   <tr><th>#</th><th>Produit</th><th class="r">Quantité</th><th class="r">Total TTC</th><th class="r">Total HT</th></tr>
-  ${prods.map((p, i) => `<tr><td>${i + 1}</td><td>${esc(p[0])}</td><td class="r">${int(p[1])}</td><td class="r">${eur(n(p[2]))}</td><td class="r">${eur(n(p[3]))}</td></tr>`).join("")}</table></div>` : '<div class="empty">Importe un rapport Trivec pour voir le détail produits.</div>'}</div>`;
+  ${(() => { const htOf = p => n(p[3]) || n(p[2])/1.2, tQ = sum(prods, p => n(p[1])), tT = sum(prods, p => n(p[2])), tH = sum(prods, htOf);
+    const pc = (v, t) => `<span class="pct">${t ? (v/t*100).toLocaleString("fr-FR", {minimumFractionDigits:1, maximumFractionDigits:1}) : "0,0"} %</span>`;
+    return prods.map((p, i) => `<tr><td>${i + 1}</td><td>${esc(p[0])}</td><td class="r">${int(p[1])}${pc(n(p[1]), tQ)}</td><td class="r">${eur(n(p[2]))}${pc(n(p[2]), tT)}</td><td class="r">${eur(htOf(p))}${pc(htOf(p), tH)}</td></tr>`).join("")
+      + `<tr class="tot"><td></td><td>Total</td><td class="r">${int(tQ)}</td><td class="r">${eur(tT)}</td><td class="r">${eur(tH)}</td></tr>`; })()}</table></div>` : '<div class="empty">Importe un rapport Trivec pour voir le détail produits.</div>'}</div>`;
 }
 
 function vPerso(s, c, k){
