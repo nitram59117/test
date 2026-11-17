@@ -3,13 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ONYX démo club</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+<title>ONYX</title>
+<meta name="description" content="ONYX, le pilotage de soirées pour clubs et discothèques : billetterie, bar, caisses, sécurité et résultats.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://zdrjhepkyvoscfibbclf.supabase.co wss://zdrjhepkyvoscfibbclf.supabase.co https://api.shotgun.live; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/supabase.js"></script>
 <style>
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/inter-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/inter-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/inter-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/inter-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/inter-latin-800-normal.woff2) format("woff2")}
 /* ONYX — clair et posé, dans l'esprit d'un back-office de caisse : barre latérale blanche, fond gris très léger, cartes blanches,
    un seul bleu pour l'action et les données, le gris pour la comparaison. Layout : en-tête + barre latérale + contenu. */
 :root{
@@ -247,6 +252,8 @@ tr.off td:not(:first-child){opacity:.45}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,12px)}}
 @keyframes sheetUp{from{transform:translateY(40px);opacity:0}}
 @keyframes shake{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+.acct{background:none;border:0;padding:0;cursor:pointer;display:inline-flex}
+.acct svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.6}
 .wrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2)}
 .ghost[disabled]{opacity:.35;cursor:default}
 .prevbox{container-type:inline-size;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
@@ -280,7 +287,7 @@ tr.off td:not(:first-child){opacity:.45}
   aside.side{display:none}
   header.top{height:52px;padding:0 14px}
   .logo img{height:16px}
-  .who svg,.who > span,#savebadge{display:none}
+  .who > svg,.who > span,#savebadge{display:none}
   .who .ghost{padding:5px 8px;font-size:12px}
   main.content{padding:14px 12px 96px}
   .ph{gap:10px;margin-bottom:8px}
@@ -318,6 +325,19 @@ tr.off td:not(:first-child){opacity:.45}
 }
 @media (max-width:380px){.g4,.g5,.gk{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:700px){
+  table.ckt,table.ckt tbody{display:block}
+  table.ckt tr:first-child{display:none}
+  table.ckt tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  table.ckt td{display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;padding:0;text-align:right}
+  table.ckt td:first-child{grid-column:1/-1;display:block;text-align:left}
+  table.ckt td[data-l]::before{content:attr(data-l);font-size:12px;color:var(--muted);font-weight:500}
+  table.ckt td.ckc{grid-column:1/-1}
+  table.ckt td.ckc .in{width:100%}
+  table.ckt td[colspan]{display:none}
+  table.ckt .in.num{width:96px}
+}
+.in.ro{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--panel2)}
 </style>
 </head>
 <body>
@@ -349,6 +369,7 @@ const CONTRATS = ["CDI","Extra","Auto-entrepreneur","Prestataire","Bénévole"];
 const ACCES = ["Administrateur","Direction","Responsable bar","Chef sécurité","Saisie","Lecture"];
 
 /* ============ calculs ============ */
+const vestPrix = c => { const v = c && c.config ? c.config.prixVestiaire : null; return (v === "" || v == null) ? 2 : n(v); };
 function calc(s, club){
   const cfg = club.config, t = s.tarifs || [];
   const isSupp = x => x.canal === "Supplément";
@@ -363,7 +384,7 @@ function calc(s, club){
   for (const c of CANAUX) canaux[c] = {billets:0, ttc:0};
   for (const x of t){ const c = canaux[x.canal] || (canaux[x.canal] = {billets:0, ttc:0}); c.billets += n(x.billets); c.ttc += n(x.billets)*n(x.prix); }
   const surPlaceTTC = canaux["Sur place"].ttc + canaux["Supplément"].ttc;
-  const vestAttendu = n(s.vestTickets) * n(s.vestPrix);
+  const vestAttendu = n(s.vestTickets) * vestPrix(club);
   const vestTTC = (s.encVest !== "" && s.encVest != null) ? n(s.encVest) : vestAttendu;
   const vestHT = vestTTC / (1 + n(cfg.tvaVest)/100);
   const barTTC = n(s.bar.ttc), barHT = s.bar.ht ? n(s.bar.ht) : barTTC/1.2;
@@ -385,7 +406,7 @@ function calc(s, club){
   const ebe = recettes - depTotal;
   const caisses = [
     {nom:"Billetterie", sub:"ventes sur place", attendu:surPlaceTTC, enc:s.encBillet, k:"s.encBillet"},
-    {nom:"Vestiaire", sub:"tickets × prix", attendu:vestAttendu, enc:s.encVest, k:"s.encVest", vest:true},
+    {nom:"Vestiaire", sub:"tickets vendus", attendu:vestAttendu, enc:s.encVest, k:"s.encVest", vest:true},
     ...(s.caisses || []).map((x, i) => ({nom:x.nom, attendu:n(x.attendu), enc:x.encaisse, k:"s.caisses."+i+".encaisse", ka:"s.caisses."+i+".attendu", i}))
   ].map(c => ({...c, diff: (c.enc === "" || c.enc == null) ? null : n(c.enc) - c.attendu}));
   const consos = s.bar.consos ? n(s.bar.consos) : sum(s.bar.produits, p => p[1]);
@@ -409,7 +430,7 @@ function comparables(s, club){
 /* ============ données de départ ============ */
 function defaultConfig(){
   return {tvaBillet:5.5, sacem:8.8, cnm:3.5, partClub:30, tvaVest:20, sacemAnnexes:2.34, spre:1.65, mpBar:25, coutSalle:0, heuresSup:1,
-    tauxExtra:17.6, minExtra:4, tauxSecu:26.5, minSecu:6, forfaitRegie:300, caisses:["Bar 1","Bar 2"],
+    tauxExtra:17.6, minExtra:4, tauxSecu:26.5, minSecu:6, forfaitRegie:300, caisses:["Bar 1","Bar 2"], seuilEcart:5, prixVestiaire:2,
     paliers:[{max:300, entree:2, bar:4, secu:5},{max:500, entree:2, bar:6, secu:5},{max:700, entree:3, bar:7, secu:6},{max:900, entree:3, bar:8, secu:6},{max:99999, entree:3, bar:10, secu:7}]};
 }
 function persoFromPalier(cfg, p){
@@ -536,6 +557,7 @@ const IC = {
   cal:'<rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4"/>', team:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.3-6 8-6s7 2 8 6"/>',
   plug:'<path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0z"/><path d="M12 18v4"/>', gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 15H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 4.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',
   screen:'<rect x="2.5" y="4" width="19" height="12.5" rx="1.5"/><path d="M8 20.5h8M12 16.5v4"/>',
+  cash:'<rect x="2.5" y="6" width="19" height="12" rx="1.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/>',
   store:'<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0zM5 13v8h14v-8"/>', user:'<circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="10" r="3.2"/><path d="M6 18.5c1.4-2.3 3.5-3.5 6-3.5s4.6 1.2 6 3.5"/>'
 };
 const LOGO = "data:image/png;base64,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";
@@ -565,7 +587,7 @@ function inp(path, val, cls = "num", extra = ""){ return `<input class="in ${cls
 function sel(path, val, opts, extra = ""){ return `<select class="in" id="f-${path.replace(/\./g, "-")}" data-k="${path}" data-t="s" ${extra}>${opts.map(o => { const [v, l] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(v)}" ${String(v) === String(val) ? "selected" : ""}>${esc(l)}</option>`; }).join("")}</select>`; }
 
 /* ============ vues ============ */
-const VIEWS = [["tableau","Tableau de bord"],["billetterie","Billetterie"],["bar","Bar"],["securite","Sécurité"],["personnel","Personnel"],["synthese","Synthèse soirée"]];
+const VIEWS = [["tableau","Tableau de bord"],["billetterie","Billetterie"],["bar","Bar"],["caisses","Check de caisses"],["securite","Sécurité"],["personnel","Personnel"],["synthese","Synthèse soirée"]];
 const CVIEWS = [["saison","Rapports"],["affichage","Affichage"],["equipe","Équipe"],["connexions","Connexions"],["reglages","Réglages"]];
 
 function statusSoiree(s){
@@ -702,7 +724,7 @@ function vBillet(s, c, k){
     <label><span class="lab">Billets scannés</span>${inp("s.scannes", s.scannes)}</label>
     <label><span class="lab">Part ${esc(c.nom)} (%)</span>${inp("s.partClub", s.partClub, "num", 'placeholder="' + c.config.partClub + '"')}</label>
     <label><span class="lab">Tickets vestiaire</span>${inp("s.vestTickets", s.vestTickets)}</label>
-    <label><span class="lab">Prix du ticket (€)</span>${inp("s.vestPrix", s.vestPrix)}</label></div>
+    <label><span class="lab">Prix du ticket</span><div class="in ro">${eur(vestPrix(c))} <a href="#reglages" class="lab">modifier dans Réglages</a></div></label></div>
     <div class="note">La part ${esc(c.nom)} s'applique à la billetterie après SACEM et CNM. Le reste revient à l'organisateur.</div></div>
 </div>`;
 }
@@ -754,12 +776,7 @@ function vBar(s, c, k){
 </div>
 ${hor.some(v => v != null) ? `<div class="panel" style="margin-top:16px"><h3>Ventes du bar par heure et affluence</h3>
   ${hor.some(v => v != null) ? chart({labels:labs, bars:[{name:"CA bar " + dayShort(s.date), values:hor, color:css("--accent")}, ...(cm && (cm.s.bar.horaire || []).length ? [{name:"CA bar " + dayShort(cm.s.date), values:labs.map((_, i) => cm.s.bar.horaire[i] != null ? n(cm.s.bar.horaire[i]) : null), color:css("--cmp")}] : [])], lines:presH.some(v => v != null) ? [{name:"Présents", values:presH, color:css("--accent2"), right:true}] : [], h:250}) : '<div class="empty">Importe un rapport Trivec avec la colonne Heure pour voir les ventes heure par heure.</div>'}</div>` : ""}
-<div class="panel" style="margin-top:14px"><h3><span>Ce qui a été encaissé : billetterie, vestiaire, bars</span><button class="ghost sm" data-act="addCaisse">+ Caisse</button></h3><div class="tw"><table>
-  <tr><th>Caisse</th><th class="r">Attendu</th><th class="r">Encaissé</th><th class="r">Différence</th></tr>
-  ${k.caisses.map(x => `<tr><td>${esc(x.nom)}${x.sub ? ` <span class="lab">· ${esc(x.sub)}</span>` : ""}${x.vest ? ` <span class="row" style="display:inline-flex">${inp("s.vestTickets", s.vestTickets, "num xs")} × ${inp("s.vestPrix", s.vestPrix, "num xs")} €</span>` : ""}</td>
-    <td class="r">${x.ka ? inp(x.ka, s.caisses[x.i].attendu, "num s") : eur(x.attendu)}</td><td class="r">${inp(x.k, x.enc, "num s")}</td><td class="r ${diffCls(x.diff)}"><b>${x.diff == null ? "—" : (x.diff > 0 ? "+" : "") + eur(x.diff)}</b></td></tr>`).join("")}
-  <tr class="tot"><td>Total</td><td class="r">${eur(sum(k.caisses, x => x.attendu))}</td><td class="r">${eur(sum(k.caisses, x => x.enc))}</td><td class="r ${diffCls(sum(k.caisses, x => x.diff || 0))}">${eur(sum(k.caisses, x => x.diff || 0))}</td></tr>
-</table></div></div>
+<div class="panel" style="margin-top:16px"><div class="wx"><div><b>Écart de caisses</b><div class="note" style="margin-top:4px">${int(k.caisses.filter(x => x.diff != null).length)} caisses comptées sur ${k.caisses.length}</div></div><div style="text-align:right"><div class="big ${diffCls(sum(k.caisses, x => x.diff || 0))}" style="font-size:24px">${(sum(k.caisses, x => x.diff || 0) > 0 ? "+" : "") + eur(sum(k.caisses, x => x.diff || 0))}</div><a class="ghost sm" href="#caisses" style="margin-top:6px">Ouvrir le check de caisses</a></div></div></div>
 <details class="panel" style="margin-top:16px"><summary><b>Saisie manuelle du CA bar</b> <span class="lab">· si tu n'as pas le rapport Trivec</span></summary><div class="form" style="margin-top:12px"><label><span class="lab">CA bar TTC (€)</span>${inp("s.bar.ttc", s.bar.ttc)}</label><label><span class="lab">CA bar HT (€)</span>${inp("s.bar.ht", s.bar.ht)}</label><label><span class="lab">Consommations</span>${inp("s.bar.consos", s.bar.consos)}</label></div></details>
 <div class="panel" style="margin-top:16px"><h3>Produits les plus vendus · ${prods.length}</h3>${prods.length ? `<div class="tw" style="max-height:420px;overflow:auto"><table>
   <tr><th>#</th><th>Produit</th><th class="r">Quantité</th><th class="r">Total TTC</th><th class="r">Total HT</th></tr>
@@ -826,7 +843,7 @@ function vSynth(s, c, k){
     <tr class="tot"><td>Recettes nettes ${esc(c.nom)}</td><td class="r">${eur(k.recettes)}</td></tr>
     <tr><td>Dépenses (promo, prod, personnel, salle)</td><td class="r">− ${eur(k.depTotal)}</td></tr>
     <tr class="tot"><td>EBE</td><td class="r ${sgn(k.ebe)}">${eur(k.ebe)}</td></tr>
-    ${s.ebeRef !== "" && s.ebeRef != null ? `<tr class="dim"><td>EBE saisi dans ClubMetrics</td><td class="r">${eur(n(s.ebeRef))}</td></tr>` : ""}
+    ${s.ebeRef !== "" && s.ebeRef != null ? `<tr class="dim"><td>Résultat de référence (tableau d'exploitation)</td><td class="r">${eur(n(s.ebeRef))}</td></tr>` : ""}
     <tr class="dim"><td>Sécurité</td><td class="r">${int(k.recales)} recalés · ${(s.interventions || []).length} interventions</td></tr>
   </table></div></div>
 </div>
@@ -892,6 +909,9 @@ function vConn(c){
     <div class="form" style="margin-top:16px;grid-template-columns:1fr"><label><span class="lab">Mode</span>${sel("c.connexions.trivec.mode", tv.mode, [["excel","Import du rapport Excel (Domino › Rapports › Olap › Export Excel)"],["sonde","Sonde caisse en temps réel (petit logiciel sur le poste Trivec)"]])}</label></div>
     <div class="note">${tv.mode === "sonde" ? "La sonde lit la caisse en local et envoie les ventes à ONYX toutes les minutes : le bar se remplit en direct pendant la soirée." : "Dépose le rapport dans l'onglet Bar de la soirée : CA, produits et ventes par heure se remplissent. Un nouveau dépôt remplace le précédent."}</div>
     <h3 style="margin-top:18px">Journal</h3><div class="journal">${j(tv.journal)}</div></div>
+  <div class="panel"><div class="conn"><div><h4>Tableau d'exploitation</h4><div class="note" style="margin-top:4px">Reprise des anciennes soirées depuis ton tableau Excel ou Google Sheets : billetterie par tarif, dépenses, CA bar et vestiaire, résultat.</div></div><span class="tag g">fichier</span></div>
+    <div class="row" style="margin-top:14px"><label class="btn sm" for="imp-exploit" style="cursor:pointer">Importer un tableau</label><input type="file" id="imp-exploit" accept=".xlsx,.xls,.csv" multiple hidden></div>
+    <div class="note">Dépose le classeur entier (.xlsx, un onglet par soirée) ou un ou plusieurs CSV. Chaque onglet est rattaché à la soirée de la même date ; si elle n'existe pas, elle est créée. Les valeurs déjà saisies dans ONYX ne sont pas écrasées.</div></div>
   <div class="panel"><div class="conn"><div><h4>Planning & pointage</h4><div class="note" style="margin-top:4px">Skello, Combo… : heures réellement pointées pour le coût du personnel.</div></div><span class="tag">à venir</span></div></div>
 </div>`;
 }
@@ -903,7 +923,7 @@ function vRegl(c){
   <div class="panel"><h3>Établissement</h3><div class="form"><label><span class="lab">Nom</span>${inp("c.nom", c.nom, "")}</label><label><span class="lab">Ville</span>${inp("c.ville", c.ville, "")}</label><label><span class="lab">Jauge</span>${inp("c.jauge", c.jauge)}</label></div></div>
   <div class="panel"><h3>Billetterie</h3><div class="form">${f("tvaBillet", "TVA", "%")}${f("sacem", "SACEM", "%")}${f("cnm", "CNM", "%")}${f("partClub", "Part club", "%")}</div><div class="note">La part club s'applique à la billetterie après SACEM et CNM. Elle peut changer soirée par soirée (onglet Billetterie).</div></div>
   <div class="panel"><h3>Bar et vestiaire</h3><div class="form">${f("tvaVest", "TVA vestiaire", "%")}${f("sacemAnnexes", "SACEM annexes", "%")}${f("spre", "SPRE", "%")}${f("mpBar", "Matière première bar", "% du HT")}</div></div>
-  <div class="panel"><h3>Coûts</h3><div class="form">${f("coutSalle", "Coût de la salle", "€ / soirée")}${f("heuresSup", "Mise en place", "h")}${f("tauxExtra", "Taux extra", "€/h")}${f("minExtra", "Min. extra", "h")}${f("tauxSecu", "Taux sécurité", "€ HT/h")}${f("minSecu", "Min. sécurité", "h")}${f("forfaitRegie", "Forfait régisseur", "€")}</div></div>
+  <div class="panel"><h3>Coûts</h3><div class="form">${f("coutSalle", "Coût de la salle", "€ / soirée")}${f("heuresSup", "Mise en place", "h")}${f("tauxExtra", "Taux extra", "€/h")}${f("minExtra", "Min. extra", "h")}${f("tauxSecu", "Taux sécurité", "€ HT/h")}${f("minSecu", "Min. sécurité", "h")}${f("forfaitRegie", "Forfait régisseur", "€")}${f("prixVestiaire", "Prix du ticket vestiaire", "€")}${f("seuilEcart", "Écart de caisse à justifier", "€")}</div></div>
   <div class="panel"><h3><span>Caisses bar</span><button class="ghost sm" data-act="addCfgCaisse">+ Caisse</button></h3><div class="form">${cfg.caisses.map((x, i) => `<label><span class="lab">Caisse ${i + 1}</span><span class="row" style="flex-wrap:nowrap">${inp("cfg.caisses." + i, x, "")}<button class="ghost sm danger" data-act="delCfgCaisse" data-i="${i}" aria-label="Retirer">×</button></span></label>`).join("")}</div><div class="note">Utilisées pour chaque nouvelle soirée.</div></div>
   <div class="panel"><h3>Paliers de personnel</h3><div class="tw"><table><tr><th>Jusqu'à (billets)</th><th class="r">Entrée</th><th class="r">Bar</th><th class="r">Sécurité</th></tr>
     ${cfg.paliers.map((p, i) => `<tr><td>${i === cfg.paliers.length - 1 ? "Au-delà de " + int(cfg.paliers[i - 1].max) : inp("cfg.paliers." + i + ".max", p.max, "num s")}</td><td class="r">${inp("cfg.paliers." + i + ".entree", p.entree, "num xs")}</td><td class="r">${inp("cfg.paliers." + i + ".bar", p.bar, "num xs")}</td><td class="r">${inp("cfg.paliers." + i + ".secu", p.secu, "num xs")}</td></tr>`).join("")}</table></div></div>
@@ -971,17 +991,17 @@ function vAffichage(c){
     </div>
   </div>
   <div class="panel"><h3><span>Aperçu</span><span class="lab">mis à jour en direct</span></h3><div class="prevbox">${screenHTML(c, true)}</div>
-    <div class="note">L'écran se rafraîchit toutes les 15 secondes. Dans cette démo, il suit les saisies faites dans ce navigateur, y compris depuis un autre onglet. En version en ligne, il suivra la caisse et la billetterie en direct.</div></div>
+    <div class="note">L'écran se met à jour en direct à chaque saisie de l'équipe et à chaque synchronisation Shotgun. Pour une télé, connecte-la avec un compte « Lecture » et ajoute #ecran à l'adresse.</div></div>
 </div>`;
 }
 
 /* ============ comptes et accès ============ */
 const ROLE_VIEWS = {
   "Administrateur": null,
-  "Direction": ["tableau","billetterie","bar","securite","personnel","synthese","saison","affichage"],
-  "Responsable bar": ["bar","affichage"],
+  "Direction": ["tableau","billetterie","bar","caisses","securite","personnel","synthese","saison","affichage"],
+  "Responsable bar": ["bar","caisses","affichage"],
   "Chef sécurité": ["securite","affichage"],
-  "Saisie": ["bar","securite"],
+  "Saisie": ["bar","caisses","securite"],
   "Lecture": ["tableau","synthese"]};
 let tries = 0, lockUntil = 0, lastAct = Date.now();
 const me = () => {
@@ -1005,7 +1025,7 @@ async function unlockBlob(blob, pass){
 const shell = inner => `<div class="login"><div class="lbox ${document.getElementById("intro") ? "late" : ""}"><img src="${LOGO}" alt="ONYX" class="llogo">${inner}<div class="lfoot">${legalLinks()}</div></div></div>`;
 function vLogin(){
   const st = S._login || {step:"login"}, step = st.step, err = `<div class="lerr" id="lg-err" role="alert">${esc(st.err || "")}</div>`;
-  const demoBtn = `<button class="ghost" type="button" data-act="demo">Découvrir la démo (club fictif)</button>`;
+  const demoBtn = `<button class="ghost" type="button" data-act="demo">Voir un exemple (club fictif, sans compte)</button>`;
   if (!sbInit()) return shell(`<h1>ONYX</h1><p class="note">La connexion aux comptes fonctionne sur <b>onyx-lab.fr</b>. Ici, tu peux parcourir la démo.</p><div class="form" style="grid-template-columns:1fr;margin-top:14px">${demoBtn}</div>`);
   const mail = `<label><span class="lab">Adresse e-mail</span><input class="in" id="lg-mail" type="email" autocomplete="username" inputmode="email" value="${esc(st.mail || "")}" placeholder="prenom@etablissement.fr"></label>`;
   let h = "", body = "";
@@ -1088,25 +1108,38 @@ setInterval(() => { if (MODE && !S._screen && Date.now() - lastAct > 20*60*1000)
 function legalLinks(){ return `<a href="#" data-act="legal" data-v="mentions">Mentions légales</a> · <a href="#" data-act="legal" data-v="confid">Confidentialité</a> · <a href="#" data-act="legal" data-v="cgu">Conditions d'utilisation</a>`; }
 const LEGAL = {
   mentions:["Mentions légales", `
-<p><b>Éditeur du service ONYX</b><br>Martin Galloo, entrepreneur individuel — SIRET : [à compléter]<br>Adresse : [à compléter]<br>Contact : [adresse e-mail de contact à compléter]<br>Directeur de la publication : Martin Galloo.</p>
-<p><b>Hébergement</b><br>Site : GitHub Pages, GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.<br>Données : Supabase, serveurs situés à Paris (région AWS eu-west-3).</p>
-<p><b>Propriété intellectuelle</b><br>Le logiciel ONYX, sa marque, son logo et son interface sont protégés. Toute reproduction sans autorisation est interdite. Les données saisies restent la propriété de l'établissement qui les saisit.</p>`],
+<p><b>Éditeur</b><br>ONYX, société par actions simplifiée unipersonnelle (SASU) au capital de 100 €<br>Siège social : 102 rue de Paris, 59200 Tourcoing, France<br>RCS Lille Métropole et SIRET : [à compléter dès l'immatriculation]<br>TVA intracommunautaire : [à compléter]<br>Contact : martin@onyx-lab.fr</p>
+<p><b>Directeur de la publication</b><br>Martin Galloo, président.</p>
+<p><b>Hébergement du site</b><br>GitHub, Inc. (GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis. Téléphone : +1 877 448 4820.</p>
+<p><b>Hébergement des données</b><br>Supabase (privacy@supabase.io), base de données située à Paris, France (région AWS eu-west-3).</p>
+<p><b>Propriété intellectuelle</b><br>Le logiciel ONYX, sa marque, son logo et son interface appartiennent à la SASU ONYX. Toute reproduction sans autorisation est interdite. Les données saisies restent la propriété de l'établissement qui les saisit. Bibliothèques tierces : voir vendor/LICENCES.txt.</p>`],
   confid:["Politique de confidentialité", `
-<p><b>Qui est responsable ?</b><br>Chaque établissement qui utilise ONYX est responsable des données qu'il y saisit (son équipe, ses soirées, sa main courante de sécurité). L'éditeur d'ONYX agit pour son compte, en sous-traitant au sens de l'article 28 du RGPD, dans le cadre d'un contrat de traitement des données.</p>
-<p><b>Quelles données ?</b><br>— Comptes de l'équipe : nom, prénom, poste, adresse e-mail, niveau d'accès, statut actif ou désactivé, et empreinte du mot de passe (le mot de passe lui-même n'est jamais conservé).<br>— Chiffres d'exploitation : billetterie, bar, caisses, personnel, dépenses (pas de données personnelles).<br>— Main courante de sécurité : heure, motif, description des faits, agents concernés.<br>— Billetterie : chiffres agrégés uniquement, sans nom d'acheteur.</p>
-<p><b>Règles pour la main courante</b><br>Décrire les faits sans nommer les clients et sans détails de santé au-delà du nécessaire (« malaise, secours appelés »). Ne pas y noter d'informations sur l'origine, la religion, la vie sexuelle ou les opinions des personnes.</p>
-<p><b>Combien de temps ?</b><br>Chiffres d'exploitation : 10 ans (pièces comptables). Main courante de sécurité : 12 mois, puis suppression. Comptes de l'équipe : jusqu'au départ de la personne. [Durées à valider par l'établissement.]</p>
-<p><b>Vos droits</b><br>Accès, rectification, effacement, limitation, opposition et portabilité : écrire à [adresse de contact]. En cas de désaccord, vous pouvez saisir la CNIL (cnil.fr).</p>
-<p><b>Cookies et stockage</b><br>ONYX n'utilise ni cookie publicitaire ni mesure d'audience. Il garde seulement, dans le navigateur, la session de connexion et les réglages d'affichage, strictement nécessaires au service : aucun consentement n'est requis pour ce stockage.</p>
-<p><b>Sécurité</b><br>Connexion chiffrée (HTTPS). Comptes par e-mail et mot de passe personnel (8 caractères minimum), confirmés par e-mail ; les mots de passe sont gérés par Supabase et ne sont jamais visibles par ONYX. Les droits sont vérifiés par la base de données elle-même : chaque personne ne lit et ne modifie que les données de son établissement, selon son poste. Comptes désactivables, déconnexion après 20 minutes d'inactivité. Le jeton Shotgun reste sur l'appareil qui l'a saisi.</p>`],
+<p><b>Rôles</b><br>Chaque établissement client est responsable des traitements qu'il réalise dans ONYX (son équipe, ses soirées, sa main courante). La SASU ONYX agit pour son compte en tant que sous-traitant (article 28 du RGPD), selon un contrat de traitement des données signé avec chaque client. Pour les comptes utilisateurs eux-mêmes, la SASU ONYX est responsable de traitement.</p>
+<p><b>Données traitées</b><br>— Comptes : adresse e-mail, nom, prénom, poste, niveau d'accès, statut actif ou désactivé. Le mot de passe est géré par Supabase sous forme chiffrée : ONYX n'y a jamais accès.<br>— Exploitation : chiffres de billetterie, bar, caisses, personnel et dépenses (pas de données personnelles).<br>— Main courante de sécurité : heure, motif, description factuelle, agents concernés.<br>— Billetterie Shotgun : uniquement tarifs, prix, heures d'achat et scans. Aucun nom, e-mail ni téléphone d'acheteur n'est récupéré.</p>
+<p><b>Finalités et bases légales</b><br>Fournir le service et gérer les accès (exécution du contrat) ; tenir la main courante et piloter l'exploitation (intérêt légitime de l'établissement et obligations de sécurité).</p>
+<p><b>Règles pour la main courante</b><br>Décrire les faits sans nommer les clients et sans détail de santé au-delà du nécessaire (« malaise, secours appelés »). Ne jamais y noter l'origine, la religion, l'orientation ou les opinions d'une personne. Les faits pouvant constituer une infraction relèvent des autorités : la main courante sert à la traçabilité interne, pas au fichage.</p>
+<p><b>Durées de conservation</b><br>Main courante : 12 mois maximum ; au-delà, l'administrateur de l'établissement efface les descriptions et les noms (seuls l'heure et le type d'intervention restent pour les statistiques). Chiffres d'exploitation : 10 ans (pièces comptables). Comptes : jusqu'à leur suppression ; un compte supprimé est effacé immédiatement.</p>
+<p><b>Destinataires et sous-traitants</b><br>Supabase (base de données et authentification, serveurs à Paris), GitHub (hébergement du site). Les transferts éventuels hors de l'Union européenne sont encadrés par les clauses contractuelles types de la Commission européenne. Aucune donnée n'est vendue ni utilisée à des fins publicitaires.</p>
+<p><b>Cookies et traceurs</b><br>Aucun cookie publicitaire, aucune mesure d'audience. La police et les bibliothèques sont hébergées par ONYX : aucun service tiers n'est appelé à l'ouverture du site. Le navigateur garde seulement la session de connexion et tes préférences d'affichage, strictement nécessaires au service, ce qui ne demande pas de consentement.</p>
+<p><b>Sécurité</b><br>Connexion chiffrée (HTTPS), comptes confirmés par e-mail, mots de passe de 8 caractères minimum, droits contrôlés par la base de données elle-même (chaque personne ne lit et ne modifie que les données de son établissement, selon son poste), comptes désactivables, déconnexion après 20 minutes d'inactivité. Le jeton Shotgun reste sur l'appareil qui l'a saisi.</p>
+<p><b>Tes droits</b><br>Accès, rectification, effacement, limitation, opposition et portabilité : depuis « Mon compte » (suppression du compte) ou en écrivant à martin@onyx-lab.fr. Pour les données d'un établissement, adresse-toi d'abord à son administrateur. En cas de désaccord, tu peux saisir la CNIL (cnil.fr).</p>`],
   cgu:["Conditions d'utilisation", `
-<p><b>Objet</b><br>ONYX aide les établissements de nuit à suivre leurs soirées : billetterie, bar, sécurité, personnel et résultats.</p>
-<p><b>Accès</b><br>Chaque utilisateur se connecte avec son adresse e-mail et crée son mot de passe à la première connexion ; il ne doit pas le partager. L'administrateur de l'établissement ajoute les membres, choisit leurs droits et désactive leur compte à leur départ.</p>
+<p><b>Objet</b><br>ONYX aide les établissements de nuit à suivre leurs soirées : billetterie, bar, caisses, sécurité, personnel et résultats.</p>
+<p><b>Comptes</b><br>Chaque utilisateur se connecte avec son adresse e-mail et un mot de passe personnel qu'il ne doit pas partager. L'administrateur de l'établissement ajoute les membres, choisit leurs droits et désactive leur compte à leur départ.</p>
 <p><b>Chiffres</b><br>Les résultats affichés (EBE, marges, écarts de caisse) sont des indicateurs de pilotage calculés à partir des saisies et des imports. Ils ne remplacent ni la comptabilité ni les déclarations officielles.</p>
-<p><b>Responsabilité</b><br>L'établissement est responsable des données qu'il saisit et du respect de ses obligations (RGPD, droit du travail, sécurité). L'éditeur s'engage à mettre en œuvre des moyens raisonnables pour assurer la disponibilité et la sécurité du service.</p>
-<p><b>Démo</b><br>Cette version est une démonstration : les données restent dans le navigateur, les connexions Shotgun et Trivec n'y sont pas actives.</p>
-<p><b>Droit applicable</b><br>Droit français. Tribunaux compétents : [ressort à compléter].</p>`]};
-function showLegal(k){ const [t, body] = LEGAL[k]; modal(`<h2>${t}</h2><div class="legal">${body}</div><p class="note">Modèle rédigé pour la démo : à faire valider par un juriste avant la mise en vente.</p><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-m="close">Fermer</button></div>`); }
+<p><b>Responsabilités</b><br>L'établissement est responsable des données qu'il saisit et du respect de ses obligations (RGPD, droit du travail, sécurité). La SASU ONYX met en œuvre des moyens raisonnables pour assurer la disponibilité et la sécurité du service, sans garantie d'absence d'interruption.</p>
+<p><b>Conditions commerciales</b><br>Les tarifs, la durée d'engagement et le contrat de traitement des données sont précisés dans le contrat signé avec chaque établissement.</p>
+<p><b>Droit applicable</b><br>Droit français. Tribunaux compétents : ceux du ressort du siège de la SASU ONYX.</p>`]};
+function showLegal(k){ const [t, body] = LEGAL[k]; modal(`<h2>${t}</h2><div class="legal">${body}</div><p class="note">Version du 17 novembre 2026.</p><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" data-m="close">Fermer</button></div>`); }
+function showAccount(){
+  const u = me(); if (!u) return;
+  if (MODE !== "online"){ modal(`<h2>Mon compte</h2><p>Mode démo : aucun compte n'est créé.</p><div class="row" style="justify-content:flex-end"><button class="btn" data-m="close">Fermer</button></div>`); return; }
+  modal(`<h2>Mon compte</h2><div class="kv" style="grid-template-columns:1fr"><div><span>E-mail</span><span>${esc(AUTH.email)}</span></div><div><span>Établissement</span><span>${esc(u.c.nom)}</span></div><div><span>Accès</span><span>${esc(u.m.acces)}</span></div></div>
+  <h3 style="margin:18px 0 8px;font-size:15px">Changer de mot de passe</h3><div class="form"><label><span class="lab">Nouveau mot de passe</span><input class="in" id="ac-p1" type="password" autocomplete="new-password"></label><label><span class="lab">Confirme</span><input class="in" id="ac-p2" type="password" autocomplete="new-password"></label></div>
+  <div class="row" style="margin-top:10px"><button class="btn sm" data-m="accPass">Enregistrer le mot de passe</button></div>
+  <h3 style="margin:18px 0 8px;font-size:15px">Supprimer mon compte</h3><p class="note" style="margin:0 0 8px">Ton compte et ton accès aux établissements sont effacés définitivement. Les chiffres des soirées restent à l'établissement.</p>
+  <div class="row"><button class="ghost sm danger" data-m="accDel">Supprimer mon compte</button><button class="ghost sm" data-m="close" style="margin-left:auto">Fermer</button></div>`);
+}
 
 /* ============ Shotgun (API directe depuis le navigateur) ============ */
 const SG_API = "https://api.shotgun.live/tickets";
@@ -1196,7 +1229,7 @@ function friendlyErr(e){ const m = (e && (e.message || e.error_description)) || 
   if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return "Connexion internet indisponible.";
   if (/row-level security|permission denied/i.test(m)) return "Ton accès ne permet pas cette modification.";
   return m; }
-function setBadge(){ const b = document.getElementById("savebadge"); if (!b) return; b.textContent = MODE === "demo" ? "Démo · enregistré sur cet appareil" : PERSIST.state === "busy" ? "Enregistrement…" : PERSIST.state === "err" ? "Non enregistré" : "Enregistré en ligne"; b.className = "lab " + (PERSIST.state === "err" ? "neg" : ""); }
+function setBadge(){ const b = document.getElementById("savebadge"); if (!b) return; b.textContent = MODE === "demo" ? "Démo · enregistré sur cet appareil" : PERSIST.state === "err" ? "Non enregistré" : ""; b.className = "lab " + (PERSIST.state === "err" ? "neg" : ""); }
 let persisting = false, persistAgain = false;
 async function persist(){
   if (MODE !== "online" || !sb) return;
@@ -1233,6 +1266,7 @@ async function loadAll(){
     affichage:c.affichage || undefined,
     equipe:mem.filter(m => m.club_id === c.id).map(m => ({id:m.id, email:m.email || "", nom:m.nom, prenom:m.prenom, poste:m.poste, acces:m.acces, actif:m.actif, user_id:m.user_id})),
     soirees:soi.filter(s => s.club_id === c.id).map(s => ({...s.data, id:s.id})).sort((a, b) => b.date.localeCompare(a.date))}));
+  try { const old = localStorage.getItem("onyx-sg-token-slalom"), sl = S.clubs.find(c => /^slalom$/i.test(c.nom)); if (old && sl && !localStorage.getItem(sgTokKey(sl.id))){ localStorage.setItem(sgTokKey(sl.id), old); localStorage.removeItem("onyx-sg-token-slalom"); } } catch(e){}
   loadPrefs();
   if (!S.clubs.some(c => c.id === S.clubId)) S.clubId = (S.clubs.find(c => c.equipe.some(m => m.user_id === AUTH.id && m.actif !== false)) || S.clubs[0] || {}).id || null;
   snapshot();
@@ -1298,10 +1332,80 @@ async function boot(){
   if (data && data.session && !(S._login && S._login.step === "newpass")) enterOnline(data.session.user); else render();
 }
 
+function caisseRows(s, c, k){
+  const seuil = n(c.config.seuilEcart || 5);
+  return k.caisses.map(x => {
+    const ck = x.vest ? "s.noteVest" : x.i == null ? "s.noteBillet" : "s.caisses." + x.i + ".commentaire";
+    const com = x.vest ? s.noteVest : x.i == null ? s.noteBillet : (s.caisses[x.i] || {}).commentaire;
+    const st = x.diff == null ? ["à saisir", "", "w"] : Math.abs(x.diff) < 0.01 ? ["juste", "g", "g"] : Math.abs(x.diff) <= seuil ? ["écart faible", "a", "a"] : ["à justifier", "b", "b"];
+    return {...x, ck, com:com || "", st, seuil};
+  });
+}
+function vCaisses(s, c, k){
+  const rows = caisseRows(s, c, k), seuil = rows[0] ? rows[0].seuil : 5;
+  const tA = sum(rows, x => x.attendu), tE = sum(rows, x => x.enc), tD = sum(rows, x => x.diff || 0);
+  const aJust = rows.filter(x => x.st[0] === "à justifier"), nonJust = aJust.filter(x => !String(x.com).trim());
+  const diffCls = d => d == null ? "" : Math.abs(d) < 0.01 ? "pos" : d > 0 ? "wrn" : "neg";
+  const u = me();
+  return `<div class="grid g4">
+  ${stat("Attendu", eur(tA), "billetterie, vestiaire et bars")}
+  ${stat("Encaissé", eur(tE), int(rows.filter(x => x.diff != null).length) + " caisses comptées sur " + rows.length)}
+  ${stat("Écart total", (tD > 0 ? "+" : "") + eur(tD), tD < 0 ? "il manque de l'argent" : tD > 0 ? "excédent de caisse" : "caisses justes", diffCls(tD))}
+  ${stat("À justifier", aJust.length, nonJust.length ? nonJust.length + " sans commentaire" : aJust.length ? "toutes commentées" : "écarts au-delà de " + eur(seuil, 0), nonJust.length ? "neg" : "")}
+</div>
+<div class="panel" style="margin-top:16px"><h3><span>Caisses de la soirée</span><span class="row"><button class="ghost sm" data-act="addCaisse">+ Caisse</button><button class="btn sm" data-act="pdfCaisses">Exporter en PDF</button></span></h3><div class="tw"><table class="ckt">
+  <tr><th>Caisse</th><th class="r">Attendu</th><th class="r">Encaissé</th><th class="r">Écart</th><th>Statut</th><th>Commentaire</th></tr>
+  ${rows.map(x => `<tr><td><b>${esc(x.nom)}</b>${x.sub ? ` <span class="lab">· ${esc(x.sub)}</span>` : ""}${x.vest ? `<div class="row" style="margin-top:6px;flex-wrap:nowrap">${inp("s.vestTickets", s.vestTickets, "num xs")} <span class="lab">tickets × ${eur(vestPrix(c))}</span></div>` : ""}</td>
+    <td class="r" data-l="Attendu">${x.ka ? inp(x.ka, s.caisses[x.i].attendu, "num s") : eur(x.attendu)}</td><td class="r" data-l="Encaissé">${inp(x.k, x.enc, "num s")}</td>
+    <td class="r ${diffCls(x.diff)}" data-l="Écart"><b>${x.diff == null ? "—" : (x.diff > 0 ? "+" : "") + eur(x.diff)}</b></td>
+    <td data-l="Statut"><span class="tag ${x.st[2]}">${x.st[0]}</span></td>
+    <td class="ckc">${inp(x.ck, x.com, "wide", 'placeholder="' + (x.st[0] === "à justifier" ? "Explique l'écart" : "Facultatif") + '"')}</td></tr>`).join("")}
+  <tr class="tot"><td>Total</td><td class="r" data-l="Attendu">${eur(tA)}</td><td class="r" data-l="Encaissé">${eur(tE)}</td><td class="r ${diffCls(tD)}" data-l="Écart">${(tD > 0 ? "+" : "") + eur(tD)}</td><td colspan="2"></td></tr>
+</table></div>
+<div class="note">Attendu des bars : rapport Trivec ou saisie. Billetterie : ventes sur place et suppléments de la soirée. Un écart au-delà de ${eur(seuil, 0)} est à justifier (seuil modifiable dans Réglages).</div></div>
+<div class="grid g2" style="margin-top:16px">
+  <div class="panel"><h3>Encaissements sur place</h3><div class="form"><label><span class="lab">Espèces (€)</span>${inp("s.especes", s.especes)}</label><label><span class="lab">Carte bancaire (€)</span>${inp("s.cb", s.cb)}</label></div>
+    <div class="kv" style="margin-top:12px;grid-template-columns:1fr"><div><span>Total sur place</span><span>${eur(n(s.especes) + n(s.cb))}</span></div></div></div>
+  <div class="panel"><h3><span>Validation</span>${s.checkValide ? '<span class="tag g">validé</span>' : '<span class="tag w">non validé</span>'}</h3>
+    <div class="form" style="grid-template-columns:1fr"><label><span class="lab">Contrôlé par</span>${inp("s.checkPar", s.checkPar || (u ? fullName(u.m) : ""), "")}</label>
+    <label><span class="lab">Note</span><textarea class="in" id="f-checkNote" data-k="s.checkNote" data-t="s" rows="3" placeholder="Fond de caisse, remarques, personnes présentes au comptage…">${esc(s.checkNote || "")}</textarea></label></div>
+    <div class="row" style="margin-top:12px">${s.checkValide ? `<span class="note" style="margin:0">Validé par ${esc(s.checkPar || "—")} le ${esc(new Date(s.checkLe).toLocaleString("fr-FR"))}.</span><button class="ghost sm" data-act="checkUndo">Annuler la validation</button>` : `<button class="btn sm" data-act="checkOk" ${nonJust.length ? "disabled title=\"Commente d'abord les écarts à justifier\"" : ""}>Valider le check</button>${nonJust.length ? '<span class="note" style="margin:0">Commente les écarts à justifier pour pouvoir valider.</span>' : ""}`}</div></div>
+</div>`;
+}
+const pdfTxt = v => String(v).replace(/[  ]/g, " ");
+function loadScript(src){ return new Promise((res, rej) => { if (document.querySelector(`script[data-src="${src}"]`)) return res(); const sc = document.createElement("script"); sc.src = src; sc.dataset.src = src; sc.onload = res; sc.onerror = () => rej(new Error("Impossible de charger le module PDF.")); document.head.appendChild(sc); }); }
+async function exportCaissesPDF(s, c, k){
+  try {
+    await loadScript("vendor/jspdf.umd.min.js"); await loadScript("vendor/jspdf.plugin.autotable.min.js");
+    const doc = new window.jspdf.jsPDF({unit:"mm", format:"a4"}), at = window.autoTable;
+    const rows = caisseRows(s, c, k), tA = sum(rows, x => x.attendu), tE = sum(rows, x => x.enc), tD = sum(rows, x => x.diff || 0);
+    const E = v => pdfTxt(eur(v)), D = v => v == null ? "—" : pdfTxt((v > 0 ? "+" : "") + eur(v));
+    doc.addImage(LOGO, "PNG", 14, 12, 34, 34*64/378);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(17); doc.setTextColor(27, 35, 51); doc.text("Check de caisses", 14, 28);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(90, 96, 112);
+    doc.text(pdfTxt(c.nom + (c.ville ? " · " + c.ville : "") + " — " + dayFr(s.date)), 14, 34); doc.text(pdfTxt(s.nom).slice(0, 110), 14, 39);
+    at(doc, {startY:45, head:[["Caisse", "Attendu", "Encaissé", "Écart", "Statut", "Commentaire"]],
+      body:rows.map(x => [pdfTxt(x.nom), E(x.attendu), x.enc === "" || x.enc == null ? "—" : E(n(x.enc)), D(x.diff), x.st[0], pdfTxt(x.com)]),
+      foot:[["Total", E(tA), E(tE), D(tD), "", ""]],
+      styles:{font:"helvetica", fontSize:9, cellPadding:2.2, textColor:[27, 35, 51]}, headStyles:{fillColor:[31, 95, 214], textColor:255}, footStyles:{fillColor:[238, 240, 243], textColor:[27, 35, 51], fontStyle:"bold"},
+      columnStyles:{1:{halign:"right"}, 2:{halign:"right"}, 3:{halign:"right"}, 5:{cellWidth:58}},
+      didParseCell:d => { if (d.section === "body" && d.column.index === 3){ const v = rows[d.row.index].diff; if (v != null && Math.abs(v) >= 0.01) d.cell.styles.textColor = v < 0 ? [217, 45, 32] : [201, 130, 4]; } }});
+    let y = doc.lastAutoTable.finalY + 9; doc.setFontSize(10); doc.setTextColor(27, 35, 51);
+    doc.text(pdfTxt("Encaissé sur place : espèces " + E(n(s.especes)) + " · carte bancaire " + E(n(s.cb)) + " · total " + E(n(s.especes) + n(s.cb))), 14, y); y += 7;
+    if (s.checkNote){ const t = doc.splitTextToSize(pdfTxt("Note : " + s.checkNote), 180); doc.text(t, 14, y); y += t.length*5 + 2; }
+    doc.text(pdfTxt(s.checkValide ? "Validé par " + (s.checkPar || "—") + " le " + new Date(s.checkLe).toLocaleString("fr-FR") : "Check non validé dans ONYX."), 14, y); y += 16;
+    doc.setDrawColor(200); doc.line(14, y, 90, y); doc.line(120, y, 196, y); doc.setFontSize(8); doc.setTextColor(102, 112, 133);
+    doc.text("Signature du responsable de caisse", 14, y + 4); doc.text("Signature de la direction", 120, y + 4);
+    doc.text(pdfTxt("Document généré par ONYX le " + new Date().toLocaleString("fr-FR")), 14, 288);
+    doc.save(("Check-caisses_" + c.nom + "_" + s.date + ".pdf").replace(/[^\w.\-]+/g, "_"));
+    toast("PDF du check de caisses téléchargé.");
+  } catch(e){ toast("Export PDF impossible : " + e.message); }
+}
+
 /* ============ rendu ============ */
 function stat(t, v, sub, cls = ""){ return `<div class="panel kpi"><div class="t"><span>${t}</span></div><div><div class="v ${cls}">${v}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div></div>`; }
-const MOB_MAIN = ["tableau","billetterie","bar","securite"], MOB_MORE = ["personnel","synthese","saison","affichage","equipe","connexions","reglages"];
-const VIC = {tableau:"dash", billetterie:"ticket", securite:"shield", bar:"glass", personnel:"users", estimation:"trend", synthese:"doc", saison:"cal", affichage:"screen", equipe:"team", connexions:"plug", reglages:"gear"};
+const MOB_MAIN = ["tableau","billetterie","bar","securite"], MOB_MORE = ["caisses","personnel","synthese","saison","affichage","equipe","connexions","reglages"];
+const VIC = {tableau:"dash", billetterie:"ticket", securite:"shield", bar:"glass", caisses:"cash", personnel:"users", estimation:"trend", synthese:"doc", saison:"cal", affichage:"screen", equipe:"team", connexions:"plug", reglages:"gear"};
 let lastViewKey = "";
 const reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 function render(){
@@ -1334,7 +1438,7 @@ function render(){
         <label for="f-cmp">Comparée à<span class="field"><select class="in" id="f-cmp" data-k="S.cmp" data-t="s"><option value="" ${auto ? "selected" : ""}>Automatique${auto && cm ? " — " + esc(dayShort(cm.s.date) + " · " + cm.s.nom) : ""}</option><option value="none" ${S.cmp === "none" ? "selected" : ""}>Aucune comparaison</option>${others.map(x => `<option value="${x.id}" ${x.id === S.cmp ? "selected" : ""}>${esc(dayShort(x.date) + " — " + x.nom)}</option>`).join("")}</select><span class="ib">${ic("cal")}</span></span></label>
         <div class="actions"><button class="btn" data-act="newSoiree">+ Nouvelle soirée</button><button class="ghost danger" data-act="delSoiree">Supprimer</button></div>
       </div>`;
-      body = ({tableau:vTableau, billetterie:vBillet, securite:vSecu, bar:vBar, personnel:vPerso, synthese:vSynth})[v](s, c, k);
+      body = ({tableau:vTableau, billetterie:vBillet, securite:vSecu, bar:vBar, caisses:vCaisses, personnel:vPerso, synthese:vSynth})[v](s, c, k);
     }
   } else {
     const seg = v === "saison" ? `<div class="seg" role="group" aria-label="Période">${[["semaine","Semaine"],["mois","Mois"],["annee","Année"],["tout","Tout"]].map(([id, l]) => `<button class="${(S.periode || "mois") === id ? "on" : ""}" data-act="periode" data-v="${id}">${l}</button>`).join("")}</div>` : "";
@@ -1343,12 +1447,12 @@ function render(){
   }
   const navA = ([id, l]) => !allowed(id) ? "" : `<a href="#${id}" title="${l}" class="${v === id ? "on" : ""}">${ic(VIC[id])}${l}</a>`;
   const vkey = [S.view, S.clubId, s && s.id, S.periode, S.cmp, S.repKey].join("|"), animate = vkey !== lastViewKey; lastViewKey = vkey;
-  $("#app").innerHTML = `<header class="top"><div class="logo"><img src="${LOGO}" alt="ONYX"><small>démo</small></div>
-    <div class="who">${ic("user")}<span>${esc(fullName(u.m))}<small class="lab" style="display:block;text-transform:none;font-weight:500">${esc(u.m.acces)}</small></span><span id="savebadge" class="lab"></span><button class="ghost sm" data-act="logout">Se déconnecter</button></div></header>
+  $("#app").innerHTML = `<header class="top"><div class="logo"><img src="${LOGO}" alt="ONYX">${MODE === "demo" ? "<small>démo</small>" : ""}</div>
+    <div class="who"><button class="acct" data-act="account" title="Mon compte">${ic("user")}</button><span>${esc(fullName(u.m))}<small class="lab" style="display:block;text-transform:none;font-weight:500">${esc(u.m.acces)}</small></span><span id="savebadge" class="lab"></span><button class="ghost sm" data-act="logout">Se déconnecter</button></div></header>
   <div class="layout"><aside class="side" aria-label="Navigation">
     <div class="club">${ic("store")}${!isAdmin ? `<b style="text-transform:uppercase;font-size:13px">${esc(c.nom)}</b>` : `<select id="f-club" data-sel="club" aria-label="Établissement">${S.clubs.map(x => `<option value="${x.id}" ${x.id === c.id ? "selected" : ""}>${esc(x.nom)}</option>`).join("")}<option value="__new">+ Ajouter un établissement</option></select>`}</div>
     ${VIEWS.map(navA).join("")}${CVIEWS.some(x => allowed(x[0])) ? '<div class="grp">Établissement</div>' : ""}${CVIEWS.map(navA).join("")}
-  </aside><main class="content">${head}${body}<footer>ONYX · pilotage de soirées pour clubs · v0.9 · ${legalLinks()}</footer></main></div>
+  </aside><main class="content">${head}${body}<footer>ONYX · pilotage de soirées pour clubs · v1.0 · ${legalLinks()}</footer></main></div>
   ${S._more ? `<div class="sheet" role="dialog" aria-label="Plus"><label class="lab" for="f-club2">Établissement</label><select class="in" id="f-club2" data-sel="club" style="width:100%;margin:6px 0 10px">${S.clubs.map(x => `<option value="${x.id}" ${x.id === c.id ? "selected" : ""}>${esc(x.nom)} · ${esc(x.ville)}</option>`).join("")}<option value="__new">+ Ajouter un établissement</option></select>
     ${MOB_MORE.filter(allowed).map(id => [id, ([...VIEWS, ...CVIEWS].find(x => x[0] === id) || [])[1]]).map(([id, l]) => `<a href="#${id}" class="${v === id ? "on" : ""}">${ic(VIC[id])}${l}</a>`).join("")}</div>` : ""}
   <nav class="bnav" aria-label="Navigation principale">${MOB_MAIN.filter(allowed).map(id => `<a href="#${id}" class="${v === id ? "on" : ""}">${ic(VIC[id])}<span>${id === "tableau" ? "Accueil" : (VIEWS.find(x => x[0] === id) || [])[1]}</span></a>`).join("")}<button data-act="more" class="${S._more || MOB_MORE.includes(v) ? "on" : ""}" aria-expanded="${!!S._more}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg><span>Plus</span></button></nav>`;
@@ -1393,6 +1497,10 @@ $("#modal").addEventListener("click", e => {
   if (m === "okDelClub" && MODE === "online"){ closeModal(); sb.from("clubs").delete().eq("id", c.id).then(async ({error}) => { if (error) return toast("Suppression impossible : " + friendlyErr(error)); S.clubId = null; await loadAll(); route(); }); return; }
   if (m === "okDelClub"){ if (S.clubs.length > 1){ S.clubs = S.clubs.filter(x => x.id !== c.id); S.clubId = S.clubs[0].id; } else toast("Il faut garder au moins un établissement."); }
   if (m === "okReset" && MODE === "demo"){ S = seed(); }
+  if (m === "accPass"){ const p1 = $("#ac-p1").value, p2 = $("#ac-p2").value; if (p1.length < 8 || !/[a-zA-Z]/.test(p1) || !/\d/.test(p1)){ toast("8 caractères minimum, avec au moins une lettre et un chiffre."); return; } if (p1 !== p2){ toast("Les deux mots de passe ne correspondent pas."); return; }
+    sb.auth.updateUser({password:p1}).then(({error}) => { toast(error ? "Changement impossible : " + friendlyErr(error) : "Mot de passe modifié."); if (!error) closeModal(); }); return; }
+  if (m === "accDel"){ askConfirm("Supprimer définitivement ton compte " + AUTH.email + " ?", "accDelOk"); return; }
+  if (m === "accDelOk"){ closeModal(); sb.rpc("delete_my_account").then(async ({error}) => { if (error){ toast(/could not find|does not exist|PGRST202/i.test(error.message + (error.code || "")) ? "Pour supprimer ton compte, écris à martin@onyx-lab.fr : il sera effacé sous 48 h." : friendlyErr(error)); return; } toast("Compte supprimé."); await logout(); }); return; }
   closeModal(); save(); location.hash = S.view; render();
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("#modal").hidden) closeModal(); });
@@ -1440,9 +1548,85 @@ async function importShotgun(file){
   return `Export Shotgun importé : ${tot} billets sur ${enLigne.length} tarifs${times.length ? ", courbe des ventes tracée" : ""}.`;
 }
 
+/* ---- tableau d'exploitation (un onglet = une soirée) ---- */
+const MOIS = ["janvier","fevrier","mars","avril","mai","juin","juillet","aout","septembre","octobre","novembre","decembre"];
+const numX = v => { if (typeof v === "number") return v; const t = String(v ?? "").replace(/[^\d,.\-]/g, "").replace(",", "."); const x = parseFloat(t); return isNaN(x) ? null : x; };
+const ymd = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+function frDate(v){
+  if (v instanceof Date && !isNaN(v)) return ymd(new Date(v.getTime() + 12*36e5));
+  if (typeof v === "number" && v > 30000) return ymd(new Date(Math.round((v - 25569)*864e5) + 12*36e5));
+  const s = norm(v), m = s.match(/(\d{1,2})(?:er)?\s+([a-z]+)\s+(\d{4})/);
+  if (m){ const mo = MOIS.indexOf(m[2]); if (mo >= 0) return m[3] + "-" + String(mo + 1).padStart(2, "0") + "-" + m[1].padStart(2, "0"); }
+  const d = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return d ? d[3] + "-" + d[2].padStart(2, "0") + "-" + d[1].padStart(2, "0") : null;
+}
+function parseExploitation(rows){
+  const lab = r => norm(String(r[0] ?? "").replace(/\s+/g, " ").trim());
+  const first = k => { const r = rows.find(r => lab(r) === k); return r ? r[1] : ""; };
+  const date = frDate(first("date")); if (!date) return null;
+  const right = (k, col = 6) => { const r = rows.find(r => norm(String(r[3] ?? "").replace(/\s+/g, " ").trim()) === k); return r ? numX(r[col]) : null; };
+  const rightLab = k => { const r = rows.find(r => norm(String(r[5] ?? "")).trim() === k); return r ? numX(r[6]) : null; };
+  const firstNum = k => { const r = rows.find(r => lab(r) === k); return r ? numX(r[1]) : null; };
+  const tarifs = []; let canal = null;
+  for (const r of rows){
+    const t = norm(String(r[3] ?? "").replace(/\s+/g, " ").trim());
+    if (t.startsWith("billetterie preventes")){ canal = "En ligne"; continue; }
+    if (t.startsWith("billetterie sur place")){ canal = "Sur place"; continue; }
+    if (t.startsWith("code promo") || t.startsWith("frais shotgun") || t.startsWith("total")){ canal = null; continue; }
+    if (!canal || !t) continue;
+    const prix = numX(r[4]), nb = numX(r[5]); if (prix == null || !nb) continue;
+    tarifs.push({nom:String(r[3]).trim(), canal:/supp/.test(t) ? "Supplément" : canal, billets:nb, prix});
+  }
+  const [ouv, ferm] = String(first("horaires") || "").split(/\s*[-–à]\s*/);
+  const ttcB = sum(tarifs, x => x.billets*x.prix), htB = right("total billetterie ht");
+  const sacem = rightLab("sacem"), cnm = rows.filter(r => norm(String(r[5] ?? "")).trim() === "cnm").map(r => numX(r[6]))[0];
+  const contrat = norm(first("type contrat"));
+  return {date, nom:String(first("evenement") || "").trim(), style:String(first("styles") || "").trim(), ouv:/^\d/.test(ouv || "") ? ouv.trim() : "", ferm:/^\d/.test(ferm || "") ? ferm.trim() : "",
+    tarifs, ttcB, sacemPct:htB && sacem ? Math.round(sacem/htB*10000)/100 : null, cnmPct:htB && cnm ? Math.round(cnm/htB*10000)/100 : null,
+    partClub:/cession/.test(contrat) ? 100 : null,
+    artistique:firstNum("artistique"), promo:firstNum("promo"), production:firstNum("production"), secu:firstNum("securite"), extras:firstNum("personnels extra"), salle:firstNum("cout de la salle"),
+    barHT:right("ca bar ht"), vestHT:right("ca vestiaire ht"), resultat:right("resultat")};
+}
+async function readBook(file){
+  if (!window.XLSX) throw new Error("Le lecteur Excel n'a pas pu se charger.");
+  const buf = await file.arrayBuffer();
+  if (/\.csv$/i.test(file.name)){
+    let txt; try { txt = new TextDecoder("utf-8", {fatal:true}).decode(buf); } catch(e){ txt = new TextDecoder("windows-1252").decode(buf); }
+    const FS = (txt.match(/;/g) || []).length > (txt.match(/,/g) || []).length ? ";" : ",";
+    const wb = XLSX.read(txt, {type:"string", FS, raw:true});
+    return [[file.name, XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, raw:true, defval:""})]];
+  }
+  const wb = XLSX.read(buf, {type:"array", cellDates:true});
+  return wb.SheetNames.map(nm => [nm, XLSX.utils.sheet_to_json(wb.Sheets[nm], {header:1, raw:true, defval:""})]);
+}
+async function importExploitation(files){
+  const c = club(), vide = v => v === "" || v == null; let crees = 0, maj = 0, ign = 0; const ecarts = [];
+  for (const f of files) for (const [, rows] of await readBook(f)){
+    const x = parseExploitation(rows); if (!x){ ign++; continue; }
+    let s = c.soirees.find(o => o.date === x.date), neuf = !s;
+    if (neuf){ s = emptySoiree(c, x.date, x.nom ? (c.nom.toUpperCase() + " : " + x.nom) : "Soirée du " + x.date, x.style, x.ouv || "00:00", x.ferm || "06:00"); s.personnel = []; c.soirees.push(s); crees++; } else maj++;
+    const put = (k, v) => { if (v != null && (neuf || vide(s[k]))) s[k] = v; };
+    if (x.tarifs.length && (neuf || !(s.tarifs || []).length)) s.tarifs = x.tarifs;
+    if (x.sacemPct != null) put("sacemPct", x.sacemPct); if (x.cnmPct != null) put("cnmPct", x.cnmPct); if (x.partClub != null) put("partClub", x.partClub);
+    const prod = (x.artistique || 0) + (x.production || 0);
+    if (neuf || vide(s.depenses.production)) if (x.artistique != null || x.production != null) s.depenses.production = Math.round(prod*100)/100;
+    if (x.promo != null && (neuf || vide(s.depenses.promo))) s.depenses.promo = x.promo;
+    put("depSecu", x.secu); put("depExtras", x.extras); if (neuf) s.depAutresPers = 0; put("coutSalle", x.salle);
+    if (x.barHT != null && (neuf || vide(s.bar.ht))){ s.bar.ht = x.barHT; if (vide(s.bar.ttc)) s.bar.ttc = Math.round(x.barHT*1.2*100)/100; }
+    if (x.vestHT != null && (neuf || vide(s.encVest))){ s.encVest = Math.round(x.vestHT*(1 + n(c.config.tvaVest)/100)); if (vide(s.vestTickets)) s.vestTickets = Math.round(s.encVest/vestPrix(c)); }
+    if (x.resultat != null) s.ebeRef = x.resultat;
+    if (x.resultat != null){ const e = calc(s, c).ebe; if (Math.abs(e - x.resultat) > 50) ecarts.push(dayShort(x.date) + " (" + eur(e, 0) + " au lieu de " + eur(x.resultat, 0) + ")"); }
+  }
+  c.soirees.sort((a, b) => b.date.localeCompare(a.date));
+  if (!crees && !maj) throw new Error("aucun onglet de soirée reconnu (ligne DATE introuvable).");
+  return `Tableau d'exploitation importé : ${crees} soirée${crees > 1 ? "s" : ""} créée${crees > 1 ? "s" : ""}, ${maj} complétée${maj > 1 ? "s" : ""}${ign ? ", " + ign + " onglet" + (ign > 1 ? "s" : "") + " ignoré" + (ign > 1 ? "s" : "") : ""}.` + (ecarts.length ? " Résultat différent pour : " + ecarts.slice(0, 4).join(", ") + "." : "");
+}
+
 /* ============ événements ============ */
 document.addEventListener("change", async e => {
   const el = e.target;
+  if (el.id === "imp-exploit"){ const fs = [...el.files]; if (!fs.length) return;
+    try { toast(await importExploitation(fs)); } catch(err){ toast("Import impossible : " + err.message); }
+    el.value = ""; save(); render(); return; }
   if (el.id === "imp-trivec" || el.id === "imp-shotgun"){ const f = el.files[0]; if (!f) return;
     try { toast(el.id === "imp-trivec" ? await importTrivec(f) : await importShotgun(f)); } catch(err){ toast("Import impossible : " + err.message); }
     save(); render(); return; }
@@ -1474,6 +1658,10 @@ document.addEventListener("click", e => {
   if (act === "loginBack"){ S._login = {step:"mail", mail:(S._login || {}).mail}; render(); return; }
   if (act === "legal"){ e.preventDefault(); showLegal(b.dataset.v); return; }
   if (act === "exportData"){ navigator.clipboard.writeText(JSON.stringify(club(), null, 1)).then(() => toast("Données de l'établissement copiées (format JSON)."), () => toast("Copie refusée par le navigateur.")); return; }
+  if (act === "pdfCaisses"){ exportCaissesPDF(s, c, calc(s, c)); return; }
+  if (act === "checkOk"){ const u2 = me(); if (!s.checkPar && u2) s.checkPar = fullName(u2.m); s.checkValide = true; s.checkLe = new Date().toISOString(); toast("Check de caisses validé."); }
+  if (act === "checkUndo"){ s.checkValide = false; s.checkLe = ""; }
+  if (act === "account"){ showAccount(); return; }
   if (act === "more"){ S._more = !S._more; render(); return; }
   if (act === "prodMode"){ S.prodMode = b.dataset.v; save(); render(); return; }
   if (act === "periode"){ S.periode = b.dataset.v; S.repKey = ""; save(); render(); return; }

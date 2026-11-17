@@ -1,0 +1,7 @@
+Bibliothèques tierces hébergées avec ONYX (aucun appel à un service externe au chargement)
+
+- supabase-js 2.118.0 — MIT — https://github.com/supabase/supabase-js
+- SheetJS (xlsx) 0.18.5 — Apache-2.0 — https://sheetjs.com
+- jsPDF 4.2.1 — MIT — https://github.com/parallax/jsPDF
+- jsPDF-AutoTable 5.0.9 — MIT — https://github.com/simonbengtsson/jsPDF-AutoTable
+- Police Inter 5.3.0 (Fontsource) — SIL Open Font License 1.1 — https://rsms.me/inter
