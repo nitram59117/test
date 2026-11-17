@@ -1154,7 +1154,7 @@ const sgToken = cid => { try { return localStorage.getItem(sgTokKey(cid)) || "";
 function sgStore(cid){ try { return JSON.parse(localStorage.getItem(sgDataKey(cid))) || {after:"", tickets:{}}; } catch(e){ return {after:"", tickets:{}}; } }
 function sgSave(cid, st){ try { localStorage.setItem(sgDataKey(cid), JSON.stringify(st)); return true; } catch(e){ return false; } }
 const SG_CANAL = {online:"En ligne", duplicata:"En ligne", invitation:"Invitation", onsite:"Sur place", venue:"Sur place", distributor:"Autre billetterie"};
-let sgBusy = false;
+let sgBusy = false, sgFirst = false;
 function sgLog(c, ok, d){ const j = c.connexions.shotgun.journal; j.push({ok, t:new Date().toLocaleString("fr-FR"), d}); if (j.length > 30) j.splice(0, j.length - 30); }
 function soireeDateOf(iso){ const d = new Date(new Date(iso).getTime() - 8*3600e3); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
 async function sgSync(c, silent){
@@ -1215,7 +1215,8 @@ function sgApply(c, st){
   c.soirees.sort((a, b) => b.date.localeCompare(a.date));
   return changed;
 }
-setInterval(() => { const u = me(); if (!u || u.m.acces !== "Administrateur" && u.m.acces !== "Direction") return; for (const c of S.clubs) if (sgToken(c.id) && c.connexions.shotgun.auto !== false) sgSync(c, true); }, 3*60*1000);
+function sgAutoAll(){ const u = me(); if (!u || u.m.acces !== "Administrateur" && u.m.acces !== "Direction") return; for (const c of S.clubs) if (sgToken(c.id) && c.connexions.shotgun.auto !== false && !sgBusy) sgSync(c, true); }
+setInterval(sgAutoAll, 3*60*1000);
 
 /* ============ base de données en ligne (Supabase) ============ */
 const SB_URL = "https://zdrjhepkyvoscfibbclf.supabase.co", SB_KEY = "sb_publishable_GUlgWc9Wf9Dw1ChqjR0U-Q_MqtHQeEh";
@@ -1273,6 +1274,7 @@ async function loadAll(){
     equipe:mem.filter(m => m.club_id === c.id).map(m => ({id:m.id, email:m.email || "", nom:m.nom, prenom:m.prenom, poste:m.poste, acces:m.acces, actif:m.actif, user_id:m.user_id})),
     soirees:soi.filter(s => s.club_id === c.id).map(s => ({...s.data, id:s.id})).sort((a, b) => b.date.localeCompare(a.date))}));
   try { const old = localStorage.getItem("onyx-sg-token-slalom"), sl = S.clubs.find(c => /^slalom$/i.test(c.nom)); if (old && sl && !localStorage.getItem(sgTokKey(sl.id))){ localStorage.setItem(sgTokKey(sl.id), old); localStorage.removeItem("onyx-sg-token-slalom"); } } catch(e){}
+  if (!sgFirst){ sgFirst = true; setTimeout(sgAutoAll, 3000); }
   loadPrefs();
   if (!S.clubs.some(c => c.id === S.clubId)) S.clubId = (S.clubs.find(c => c.equipe.some(m => m.user_id === AUTH.id && m.actif !== false)) || S.clubs[0] || {}).id || null;
   snapshot();
